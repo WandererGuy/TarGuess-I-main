@@ -1,0 +1,1 @@
+{"password_num":disabled,"maximum_guess_num":1000,"password_guessed_num":0,"start_time":1713921312,"guess_speed":

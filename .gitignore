@@ -1,0 +1,9 @@
+targuess_env/
+PREPROCESS/crawl/new_env/
+*.png
+*.jpg
+PREPROCESS/28M.zip
+PREPROCESS/28M_zing.csv
+PREPROCESS/7M.csv
+PREPROCESS/crawl/example.log
+DELETE_THIS_GIT 

@@ -1,0 +1,5 @@
+conda install conda-forge::gradio
+
+conda install conda-forge::matplotlib
+
+conda install conda-forge::unidecode
