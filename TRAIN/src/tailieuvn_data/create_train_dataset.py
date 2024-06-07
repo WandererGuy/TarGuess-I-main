@@ -1,5 +1,11 @@
-hash_dict = {}
+import traceback
+import csv
+import time 
 import unidecode
+
+hash_dict = {}
+error_count = 0 
+
 def create_hash_dict():
     global hash_dict
     with open ('TRAIN/src/tailieuvn_data/hash_dict.txt', 'r') as f_dict:
@@ -22,10 +28,6 @@ def update_raw_csv():
     csv_file = 'PREPROCESS/0.csv'
     df = pd.read_csv(csv_file)
     new_df = df[['username', 'password', 'email', 'firstname', 'lastname', 'birthday', 'gender', 'address', 'tel']]
-
-
-
-
     new_df['plain_password'] = ''
     new_df['fullname'] = new_df['firstname'] + ' ' + new_df['lastname']
     gender_map = {1: 'Male', 0: 'Female'}
@@ -33,6 +35,7 @@ def update_raw_csv():
 
     # Split the email into two parts at the '@'
     new_df[['email_prefix', 'email_domain']] = new_df['email'].str.split('@', expand=True)
+    new_df['email_prefix'] = new_df['email'] # well guess still need full email
     update_df = new_df[['username', 'password', 'plain_password', 'email_prefix','email_domain',  'fullname', 'birthday', 'gender', 'address', 'tel']]
     update_df.to_csv('TRAIN/src/tailieuvn_data/update_0.csv', index=False)
 
@@ -53,8 +56,6 @@ def fill_plain_pass():
     print("Length of the DataFrame have plain crack:", len(df))
     return df
 
-import traceback
-error_count = 0 
 def fix_birthday(birthday):
     global error_count
     if birthday == 'nan' or birthday == '0':
@@ -76,8 +77,6 @@ def fix_birthday(birthday):
             error_count += 1
             return None
         return f'{y}{m}{d}'
-
-import csv
 
 def export_txt(input_filename):
     output_filename = input_filename.replace('.csv', '.txt')
@@ -101,8 +100,6 @@ def remove_question_marks(input_string):
 
     else:
         return input_string.replace('?', '')
-
-
 
 def finalize(df):
     '''
@@ -130,9 +127,6 @@ def finalize(df):
     new_df['birthday'] = new_df['birthday'].apply(fix_birthday)
     new_df['fullname'] = new_df['fullname'].apply(decode_name)
 
-
-
-
     # Reorder and rename columns
     new_df = new_df[['email_prefix', 'plain_password', 'fullname', 'GID', 'username', 'tel', 'birthday']].rename(
         columns={
@@ -142,29 +136,24 @@ def finalize(df):
             'GID': 'GID',
             'username': 'Account',
             'tel': 'Phone',
-            'birthday': 'Birth',
-            
+            'birthday': 'Birth',     
         }
     )
     new_df['Email'] = new_df['Email'].apply(remove_question_marks)
     new_df['Name'] = new_df['Name'].apply(remove_question_marks)
-
     new_df['Phone'] = new_df['Phone'].apply(remove_question_marks)
     new_df['Birth'] = new_df['Birth'].apply(remove_question_marks)
     new_df['Account'] = new_df['Account'].apply(remove_question_marks)
     new_df['GID'] = new_df['GID'].apply(remove_question_marks)
-
-
-
-
     new_df.to_csv('TRAIN/src/tailieuvn_data/final.csv', index=False)
-                                                                                                                            
-update_raw_csv()
-import time 
-time.sleep(5)
-create_hash_dict()
-df = fill_plain_pass()
 
-finalize(df)
-export_txt('TRAIN/src/tailieuvn_data/final.csv')
-print ('number of error birthday',error_count)
+
+if __name__ == '__main__':
+
+        update_raw_csv()
+        time.sleep(5)
+        create_hash_dict()
+        df = fill_plain_pass()
+        finalize(df)
+        export_txt('TRAIN/src/tailieuvn_data/final.csv')
+        print ('number of error birthday',error_count)

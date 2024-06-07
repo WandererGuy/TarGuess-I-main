@@ -7,7 +7,7 @@ all command execute from TARGUESS-I-main
 # move file output to GUESS, 
 #re-order pattern in file>
 
-train_command.bat > pattern_collect_during_train.txt
+train_command.bat
 
 ---- run app and guess 
 activate_app.bat

@@ -51,6 +51,9 @@ ifstream fin; // training set
 ofstream fout;//output
 int interval = 1000;
 
+// Global ofstream object
+std::ofstream outputFile;
+
 //////////////////////////////////
 
 // Obtain the password pattern based on personal information
@@ -107,7 +110,7 @@ string getPattern(string email, string psw) {
 
 		last = c;
 	}
-						std::cout << "pattern: "<<pat_str<< std::endl;
+	outputFile << "pattern: "<<pat_str<< std::endl;
 
 	return pat_str;
 }
@@ -214,162 +217,178 @@ void sortTable() {
 
 }
 
-int main(int argc, char * argv[]) {
-    std::cout << "********************" << std::endl;
+#include <fstream>
+#include <iostream>
 
-	//////////////// reading config
-	string config_path = "config.ini";
-	if (argc == 3) {
-		if (strcmp(argv[1], "-c") == 0) {
-			config_path = argv[2];
-		} else {
-			cout << "please input the correct parameter (-c filename)" << endl;
+int main(int argc, char * argv[]) {
+        // Write each attribute to the file
+        cout <<  "********************" << std::endl;
+
+
+		//////////////// reading config
+		string config_path = "config.ini";
+		if (argc == 3) {
+			if (strcmp(argv[1], "-c") == 0) {
+				config_path = argv[2];
+			} else {
+				cout << "please input the correct parameter (-c filename)" << endl;
+				return 0;
+			}
+		}
+		map<string, string> config_inf;
+		bool flag = readConfig(config_path, config_inf);
+		if (!flag) {
+			cout << "please input the correct config file" << endl;
 			return 0;
 		}
-	}
-	map<string, string> config_inf;
-	bool flag = readConfig(config_path, config_inf);
-	if (!flag) {
-		cout << "please input the correct config file" << endl;
-		return 0;
-	}
-	cout << "reading config information successfully" << endl;
+		cout << "reading config information successfully" << endl;
 
-	/////////////// finish reading
+		/////////////// finish reading
 
-	/////////////// reading file and initial
-	fin.open(config_inf["training_set_path"].c_str()); // train in pattern
-	fout.open(config_inf["model_output_path"].c_str()); // output
+		/////////////// reading file and initial
+		fin.open(config_inf["training_set_path"].c_str()); // train in pattern
+		fout.open(config_inf["model_output_path"].c_str()); // output
 
-	if (config_inf.find("print_info_interval") != config_inf.end())
-		interval = atoi(config_inf["print_info_interval"].c_str());
+		if (config_inf.find("print_info_interval") != config_inf.end())
+			interval = atoi(config_inf["print_info_interval"].c_str());
 
-	if (!fin.is_open()) {
-		cout << "reading training file failed " << endl;
-		return 0;
-	}
-	string line;
-	ifstream ffin(config_inf["training_set_path"].c_str());
-	while (getline(ffin, line)) {
-		tot++;
-	}
-	ffin.close();
-	cout << "tot psw num: " << tot << endl;
-	cout << "start training" << endl;
+		if (!fin.is_open()) {
+			cout << "reading training file failed " << endl;
+			return 0;
+		}
+		string line;
+		ifstream ffin(config_inf["training_set_path"].c_str());
+		while (getline(ffin, line)) {
+			tot++;
+		}
+		ffin.close();
+		cout << "tot psw num: " << tot << endl;
+		cout << "start training" << endl;
 
-	timer->StartTimer(interval / 1000.0); // Start timing
+		timer->StartTimer(interval / 1000.0); // Start timing
 
-	// The PI assignment that does not exist is ""
-	int count_person = 0 ;
-	while (getline(fin, line)) {
-		// count +=1 
-		count_person += 1;
-		std::cout << "$$$$$$$$$$$$$$$$$$$$$$  count_person : " << count_person << std::endl;
-		int len = line.length();
+		// The PI assignment that does not exist is ""
+		int count_person = 0 ;
+				// Create an ofstream object for writing to a file
+		std::ofstream outputFile("training_output.txt");
 
-		string inf[100];
-		int st = 0, tmp = 0;
+		// Check if the file is open and ready for writing
+		if (outputFile.is_open()) {
+			while (getline(fin, line)) {
+				// count +=1 
+				count_person += 1;
+				outputFile << "$$$$$$$$$$$$$$$$$$$$$$  count_person : " << count_person << std::endl;
+				int len = line.length();
 
-		for (int i = 0; i < len; i++) {
+				string inf[100];
+				int st = 0, tmp = 0;
 
-			if (line[i] == '\t') {
-			// 	inf[tmp++] = line.substr(st, i - st);
-			// 	st = i + 1;
-			// }
-					inf[tmp++] = line.substr(st, i - st);
-					st = i + 1;
+				for (int i = 0; i < len; i++) {
+
+					if (line[i] == '\t') {
+					// 	inf[tmp++] = line.substr(st, i - st);
+					// 	st = i + 1;
+					// }
+							inf[tmp++] = line.substr(st, i - st);
+							st = i + 1;
+						
+						// else {
+						// 	inf[tmp++] = ""; // Handle consecutive tabs
+						// }
+				}
+				// inf[tmp++] = line.substr(st, len - st);
+				}
+
+
+					inf[tmp++] = line.substr(st, len - st);
 				
+
 				// else {
-				// 	inf[tmp++] = ""; // Handle consecutive tabs
+				// 	inf[tmp++] = ""; // Handle case where the last character is a tab
 				// }
+
+
+				person pp;
+
+				// After reading the data, store it in the inf array
+				pp.email = inf[0];
+				pp.psw = inf[1];
+				pp.name = inf[2];
+				pp.gid = inf[3];
+				pp.account = inf[4];
+				pp.phone = inf[5];
+				pp.birth = inf[6];
+
+					// Now printing each attribute
+				outputFile << "Email: " << pp.email << std::endl;
+				outputFile << "Password: " << pp.psw << std::endl;
+				outputFile << "Name: " << pp.name << std::endl;
+				outputFile << "GID: " << pp.gid << std::endl;
+				outputFile << "Account: " << pp.account << std::endl;
+				outputFile << "Phone: " << pp.phone << std::endl;
+				outputFile << "Birth Date: " << pp.birth << std::endl;
+
+				for (int i = 0; i < (int) pp.name.length(); i++) {
+					if (pp.name[i] == '|')
+						pp.name[i] = ' ';
+
+				}
+
+				if (pp.name[pp.name.length() - 1] != ' ') {
+					pp.name += ' ';
+				}
+
+				PI[pp.email] = pp;
+
+				string pat = getPattern(pp.email, pp.psw); // Get the structure of the psw
+
+				addDLSPattern(pp.psw, pat);
+
+
+				p_count[pat]++; // Add this pattern
+				p_total++;
+				CTimer::pi = pp;
+
+			}; 
+			outputFile.close();
+        	std::cout << "Data has been written to training_output.txt\n";
+
+		} else {
+        // Print an error message if the file couldn't be opened
+        std::cout << "Unable to open file for writing.\n";}
+
+		person tmp;
+		CTimer::status = "\"sorting\"";
+		CTimer::pi = tmp;
+		//////////////// training
+
+		sortTable();
+
+		//////// Output the model to a file
+		// Output pattern first 
+		multimap<float, string>::reverse_iterator iter;
+		for (iter = p_sort.rbegin(); iter != p_sort.rend(); iter++)
+			fout << iter->second << '\t' << iter->first << endl;
+		fout << endl;
+		// Then output strings of various types and their lengths
+		for (unsigned int i = 1; i <= d_maxlen; i++) {
+			for (iter = d_sort[i].rbegin(); iter != d_sort[i].rend(); iter++)
+				fout << 'D' << i << '\t' << iter->second << '\t' << iter->first
+						<< endl;
 		}
-		// inf[tmp++] = line.substr(st, len - st);
+		for (unsigned int i = 1; i <= l_maxlen; i++) {
+			for (iter = l_sort[i].rbegin(); iter != l_sort[i].rend(); iter++)
+				fout << 'L' << i << '\t' << iter->second << '\t' << iter->first
+						<< endl;
+		}
+		for (unsigned int i = 1; i <= s_maxlen; i++) {
+			for (iter = s_sort[i].rbegin(); iter != s_sort[i].rend(); iter++)
+				fout << 'S' << i << '\t' << iter->second << '\t' << iter->first
+						<< endl;
 		}
 
+		delete timer;
 
-			inf[tmp++] = line.substr(st, len - st);
-		
-
-		// else {
-		// 	inf[tmp++] = ""; // Handle case where the last character is a tab
-		// }
-
-
-		person pp;
-
-		// After reading the data, store it in the inf array
-		pp.email = inf[0];
-		pp.psw = inf[1];
-		pp.name = inf[2];
-		pp.gid = inf[3];
-		pp.account = inf[4];
-		pp.phone = inf[5];
-		pp.birth = inf[6];
-
-		    // Now printing each attribute
-		std::cout << "Email: " << pp.email << std::endl;
-		std::cout << "Password: " << pp.psw << std::endl;
-		std::cout << "Name: " << pp.name << std::endl;
-		std::cout << "GID: " << pp.gid << std::endl;
-		std::cout << "Account: " << pp.account << std::endl;
-		std::cout << "Phone: " << pp.phone << std::endl;
-		std::cout << "Birth Date: " << pp.birth << std::endl;
-
-		for (int i = 0; i < (int) pp.name.length(); i++) {
-			if (pp.name[i] == '|')
-				pp.name[i] = ' ';
-
-		}
-
-		if (pp.name[pp.name.length() - 1] != ' ') {
-			pp.name += ' ';
-		}
-
-		PI[pp.email] = pp;
-
-		string pat = getPattern(pp.email, pp.psw); // Get the structure of the psw
-
-		addDLSPattern(pp.psw, pat);
-
-
-		p_count[pat]++; // Add this pattern
-		p_total++;
-		CTimer::pi = pp;
-
-	}
-
-	person tmp;
-	CTimer::status = "\"sorting\"";
-	CTimer::pi = tmp;
-	//////////////// training
-
-	sortTable();
-
-	//////// Output the model to a file
-	// Output pattern first 
-	multimap<float, string>::reverse_iterator iter;
-	for (iter = p_sort.rbegin(); iter != p_sort.rend(); iter++)
-		fout << iter->second << '\t' << iter->first << endl;
-	fout << endl;
-	// Then output strings of various types and their lengths
-	for (unsigned int i = 1; i <= d_maxlen; i++) {
-		for (iter = d_sort[i].rbegin(); iter != d_sort[i].rend(); iter++)
-			fout << 'D' << i << '\t' << iter->second << '\t' << iter->first
-					<< endl;
-	}
-	for (unsigned int i = 1; i <= l_maxlen; i++) {
-		for (iter = l_sort[i].rbegin(); iter != l_sort[i].rend(); iter++)
-			fout << 'L' << i << '\t' << iter->second << '\t' << iter->first
-					<< endl;
-	}
-	for (unsigned int i = 1; i <= s_maxlen; i++) {
-		for (iter = s_sort[i].rbegin(); iter != s_sort[i].rend(); iter++)
-			fout << 'S' << i << '\t' << iter->second << '\t' << iter->first
-					<< endl;
-	}
-
-	delete timer;
-
-	return 0;
+		return 0;
 }
 
