@@ -5,6 +5,8 @@ import os
 import time 
 
 # Function to handle the file download
+input_file = 'GUESS/src/result_folder/output.txt'  # Replace with your actual input file path
+output_file = 'output.txt'  # Replace with your desired output file path
 
 def format_text_file(input_filepath, output_filepath):
     # Read lines from the input file
@@ -30,6 +32,8 @@ def format_text_file(input_filepath, output_filepath):
 def download_file(input_file, output_file):
     # Provide the path to your file
     file_path = output_file
+    print ('**********', input_file)
+    print ('**********', output_file)
     format_text_file(input_file, output_file)
 
     
@@ -77,25 +81,28 @@ def main(name='', birth='', email='', accountName='', id='', phone=''):
     print ('write input to files')
     with open ("GUESS/src/result_folder/test.txt", "w") as f:
         f.write(email + '\\t' + password + '\\t' + fullName + '\\t' + id + '\\t' + accountName + '\\t' + phone + '\\t' + birth)
+    
+    current_directory = os.getcwd()
+# Print the current working directory
+    print("Current Working Directory:", current_directory)
+
     batch_file = "GUESS\src\command.bat"
 # eragonkisyrong96@gmail.com	buiduymanh1996	manh		wantedbyzeus	01647732700	14-3-1995
 
     # Run the batch file
-    print ('running batch file')
+    print ('running batch file to generate guesses')
     result = subprocess.run([batch_file], capture_output=True, text=True)
     print("Output:", result.stdout)
     if result.stderr == None:
         print("Errors:", result.stderr)   
     # with open ("GUESS/src/result_folder/output.txt", "r") as f_output:
-    #     output = f_output.read()
+    # output = f_output.read()
     # print (output)
     output = download_file(input_file, output_file)
     return output 
 
 
 # Example usage:
-input_file = 'GUESS/src/result_folder/output.txt'  # Replace with your actual input file path
-output_file = 'output.txt'  # Replace with your desired output file path
 demo = gr.Interface(
     fn=main,
 

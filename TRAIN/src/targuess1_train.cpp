@@ -343,6 +343,7 @@ int main(int argc, char * argv[]) {
 				string pat = getPattern(pp.email, pp.psw); // Get the structure of the psw
 
 				addDLSPattern(pp.psw, pat);
+				outputFile << "pattern pass: " << pat << std::endl;
 
 
 				p_count[pat]++; // Add this pattern

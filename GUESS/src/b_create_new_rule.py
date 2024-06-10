@@ -63,12 +63,21 @@ def write_new_order(rule_file_path, new_order_path):
             # else:
                 prob = ''
                 labels = ''
-                for i in range(len(line)):  
+                # for i in range(len(line)):  
+                i = 0
+                while i < len(line):
                     if line[i] in number:
                         prob = prob + line[i]
+                        i += 1
+                    elif line[i]+line[i+1]=='e-':
+                        prob = prob + line[i] + line[i+1]
+                        i += 2
                     else: 
                         labels = labels + line[i]
+                        i += 1
                 prob = float(prob)
+
+
                 labels = labels.replace(' ','').replace('\t','').strip()
                 if filter(labels) == False:
                     second_ls_label.append(labels)
@@ -78,7 +87,7 @@ def write_new_order(rule_file_path, new_order_path):
                 probabilities_ls.append(prob)
                 first_ls_label.append(labels)
                 first_ls_prob.append(prob)
-                print (labels, float(prob))
+                print (labels,prob)
 
             # label, prob = line.split("\t")
             # labels_probs.append((label, float(prob)))
@@ -86,6 +95,21 @@ def write_new_order(rule_file_path, new_order_path):
     # Number of elements to plot
 
 
+
+    with open(new_order_path, 'w', encoding='utf-8') as f:
+        print ('start write to new order')
+        for i in range(len(first_ls_label)):
+            f.write(first_ls_label[i] + '\t' + str(first_ls_prob[i])+'\n')
+        print ('done write to new order')
+        f.close()
+        # for i in range(len(second_ls_label)):
+        #     f.write(second_ls_label[i] + '\t' + str(second_ls_prob[i])+'\n')
+        # f.write('\n')
+        # print ('******************************')
+        # for i in range(len(fill_ls)):
+        #     f.write(fill_ls[i])
+        #     print (fill_ls[i])
+'''
 
     # Sort the data by probabilities and select the top 'num_elements' items
     sorted_labels = [label for _, label in sorted(zip(probabilities_ls, labels_ls), reverse=True)]
@@ -109,16 +133,8 @@ def write_new_order(rule_file_path, new_order_path):
     plt.xticks(rotation=90)
     plt.savefig('GUESS/src/result_folder/top_labels.png')
 
-    with open(new_order_path, 'w') as f:
-        for i in range(len(first_ls_label)):
-            f.write(first_ls_label[i] + '\t' + str(first_ls_prob[i])+'\n')
-        # for i in range(len(second_ls_label)):
-        #     f.write(second_ls_label[i] + '\t' + str(second_ls_prob[i])+'\n')
-        # f.write('\n')
-        # print ('******************************')
-        # for i in range(len(fill_ls)):
-        #     f.write(fill_ls[i])
-        #     print (fill_ls[i])
+'''
+
 
 def remove_duplicate_elements(input_file, output_file):
     # Example data
@@ -162,15 +178,45 @@ def targuess_trawling_rule(rule_file_path, new_order_path, trawling_path):
         for item in list3:
             file.write(item)
         
+def format_prob(file_path):
+        content = []
+        with open (file_path, 'r') as file:
+            lines = file.readlines()
+            for line in lines:
+                if line != '\n':
+                    data = line.strip('\n').split('\t')
+                    old_prob = data[len(data)-1]
+                    prob = float(old_prob)
+                    prob = "{:.10f}".format(prob)
+                    new_line = ''
+                    for index, item in enumerate(data): 
+                        if index != len(data)-1:
+                            new_line += item
+                        else: 
+                            new_line += prob
+                    content.append(new_line)
+                else:
+                    content.append(line)
+                    
+        with open (file_path, 'w') as new_file:
+            for item in content:
+                new_file.write(item)
 
-
+def resolve_conflict():
+    '''
+    mechanism of produce 
+    '''
 
 if __name__ == '__main__':
     rule_file_path = 'GUESS/src/result_folder/OUTPUT_TRAIN.txt'
     new_order_path = 'GUESS/src/result_folder/new_order.txt'
     trawling_path = 'GUESS/src/result_folder/trawling.txt'
+    better_new_order_path = 'GUESS/src/result_folder/better_new_order.txt'
     write_new_order(rule_file_path, new_order_path)
     remove_duplicate_elements(rule_file_path, new_order_path)
+    format_prob(new_order_path)
+
     targuess_trawling_rule(rule_file_path, new_order_path, trawling_path)
     remove_duplicate_elements(rule_file_path, trawling_path)
+    format_prob(trawling_path)
 

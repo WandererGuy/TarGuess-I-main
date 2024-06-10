@@ -86,6 +86,7 @@ personTran * pt; // The transformation of personal information
 
 // Fill in the pattern based on personal information
 bool genPersonalGuess() {
+	
 	int len = g_pat.length();
 	int pat_st = 0, cur_st = 0;
 	bool has_person_label = 0;
@@ -379,8 +380,12 @@ void genNext(guess top) { // Generate the next set of appearances
 }
 
 void genGuess(person & pp) {
+	cout<<"******************************* pre- init genGuess *******************************" <<endl;
+
 	multimap<float, string>::reverse_iterator pit;
 	// Fill each pose with the pattern with the highest probability and insert it into the priority queue
+	cout<<"******************************* init genGuess *******************************" <<endl;
+
 	for (pit = p_sort.rbegin(); pit != p_sort.rend(); ++pit) {
 		float prob = pit->first;
 		string pat = pit->second;
@@ -389,6 +394,8 @@ void genGuess(person & pp) {
 		string seg;
 		guess tmp;
 		bool suc = 1;
+		cout << "Processing pattern: " << pat << " with probability: " << prob << endl;
+
 		for (int i = 0; i <= len; ++i) {
 			char c = 'P';
 			if (i != len)
@@ -415,6 +422,7 @@ void genGuess(person & pp) {
 				} else if (seg[0] == 'S') {
 					if (s_sort[seg_len].empty()) {
 						suc = 0;
+
 						break;
 					}
 					psw += s_sort[seg_len].rbegin()->second;
@@ -430,6 +438,7 @@ void genGuess(person & pp) {
 			tmp.prob = prob;
 			tmp.pivot = 0;
 			G.push(tmp); // Insert into priority queue
+            cout << "Pushed guess with pattern: " << pat << " and password: " << psw << endl;
 		}
 	}
 
@@ -460,6 +469,8 @@ void genGuess(person & pp) {
 	if (check_duplicate)
 		exist.clear();
 	delete pt;
+
+	cout<<"******************************* done genGuess *******************************" <<endl;
 
 }
 
@@ -821,7 +832,7 @@ int main(int argc, char * argv[]) {
 				name_tmp += pp.name[i];
 		}
 		pp.name = ppname;
-
+		cout << "putting personal info into genguess" << endl;
 		genGuess(pp); // Generate a guess based on personal information
 		last_fin_time = time(NULL); // Reset time to current time
 	}
