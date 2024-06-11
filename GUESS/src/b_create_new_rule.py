@@ -191,9 +191,9 @@ def format_prob(file_path):
                     new_line = ''
                     for index, item in enumerate(data): 
                         if index != len(data)-1:
-                            new_line += item
+                            new_line += item + '\t'
                         else: 
-                            new_line += prob
+                            new_line += prob + '\n'
                     content.append(new_line)
                 else:
                     content.append(line)
@@ -202,10 +202,102 @@ def format_prob(file_path):
             for item in content:
                 new_file.write(item)
 
-def resolve_conflict():
+def resolve_conflict(file_path):
     '''
-    mechanism of produce 
+    mechanism PCFG for extract D,L,S with length 
+    is independent of format extract from targuess  
+    so if L19 missing by FPCG, and uDDDD.. extracted from targuess needs filling 
+    it cause bug, so a simple solution is to tackle this rare missing what to fill problem
+    ex: 
+    manhhandsome
+    PCFG: L12
+    Targuess: ALLLLLLLL (acount + L5)
+    so no L5 is pick up but rather L12 word pick up
+    this really need to pick up the L8 that needs to fill , in the meantime , lets 
+    fill this with random string
+    though 
+    PCFG pick up L12 is really misleading (only good for trawling)
+    PCFG should pick up L8 that needs to fill (this is real FPCG)
+    ok lemme cook , test it out , first FPCG wordlist contains general , then my method , then combine 
+    need to test 
+
+    only need to fill lesser length , this phenonmenon caused by len (letter, 
+    symbol, digit string) that PCFG pick up 
+    longer than length format Targuess pick up (which tells diffrent kind of L,D,S)
+
+    needed to fill     
+    
+
+    for example result 
+    highest letter len 27
+    highest digit len 30
+    highest symbol len 11
+    missing letter for fill ['L23', 'L25']
+    missing digit for fill ['D19', 'D22', 'D23', 'D24', 'D25', 'D26', 'D27', 'D28', 'D29']
+    missing symbol for fill ['S10']
     '''
+    available_list = [str(i) for i in range(1, 50)]
+    existing_letter_length_for_fill = []
+    existing_digit_length_for_fill = []
+    existing_symbol_length_for_fill = []
+    missing_letter_for_fill = []
+    missing_digit_for_fill = []
+    missing_symbol_for_fill = []
+
+# diagnose which is potential , so can fill by random thing or take 1 substring from longest 
+    with open (file_path, 'r') as file:
+        lines = file.readlines()
+        for line in lines:
+            data = line.split('\t')
+            if len(data) == 3:
+                if 'L' in data[0]:
+                    existing_letter_length_for_fill.append(data[0].replace('L', ''))
+                if 'D' in data[0]:
+                    existing_digit_length_for_fill.append(data[0].replace('D', ''))
+                if 'S' in data[0]:
+                    existing_symbol_length_for_fill.append(data[0].replace('S', ''))
+        for item in available_list:
+            if item in existing_letter_length_for_fill:
+                highest_letter_len = item
+            if item in existing_digit_length_for_fill:
+                highest_digit_len = item
+            if item in existing_symbol_length_for_fill:
+                highest_symbol_len = item
+        available_list = [str(i) for i in range(1, int(highest_letter_len))]
+        for item in available_list:                          
+            if item not in existing_letter_length_for_fill:
+                missing_letter_for_fill.append('L'+item)
+        available_list = [str(i) for i in range(1, int(highest_digit_len))]
+        for item in available_list:                          
+            if item not in existing_digit_length_for_fill:
+                missing_digit_for_fill.append('D'+item)
+        available_list = [str(i) for i in range(1, int(highest_symbol_len))]
+        for item in available_list:                          
+            if item not in existing_symbol_length_for_fill:
+                missing_symbol_for_fill.append('S'+item)
+        print ('highest letter len', highest_letter_len)
+        print ('highest digit len', highest_digit_len)
+        print ('highest symbol len', highest_symbol_len)
+        print ('missing letter for fill', missing_letter_for_fill)
+        print ('missing digit for fill', missing_digit_for_fill)
+        print ('missing symbol for fill', missing_symbol_for_fill)
+
+    new_pcfg_value_ls = []
+    for item in missing_letter_for_fill:
+        times = int(item.replace('L', ''))
+        new_pcfg_value_ls.append(item + '\t' + 'x'* times + '\t1') # 100% for its category
+    for item in missing_digit_for_fill:
+        times = int(item.replace('D', ''))
+        new_pcfg_value_ls.append(item + '\t' + '0'* times + '\t1') # 100% for its category
+    for item in missing_symbol_for_fill:
+        times = int(item.replace('S', ''))
+        new_pcfg_value_ls.append(item + '\t' + '@'* times + '\t1') # 100% for its category
+
+    print ('Putting non sense to fill missing')
+    with open(file_path, 'a') as new_file:
+        for value in new_pcfg_value_ls:
+            new_file.write(value + '\n')
+
 
 if __name__ == '__main__':
     rule_file_path = 'GUESS/src/result_folder/OUTPUT_TRAIN.txt'
@@ -214,9 +306,11 @@ if __name__ == '__main__':
     better_new_order_path = 'GUESS/src/result_folder/better_new_order.txt'
     write_new_order(rule_file_path, new_order_path)
     remove_duplicate_elements(rule_file_path, new_order_path)
-    format_prob(new_order_path)
+
+    # format_prob(new_order_path)
+    resolve_conflict(new_order_path)
 
     targuess_trawling_rule(rule_file_path, new_order_path, trawling_path)
     remove_duplicate_elements(rule_file_path, trawling_path)
-    format_prob(trawling_path)
+    # format_prob(trawling_path)
 

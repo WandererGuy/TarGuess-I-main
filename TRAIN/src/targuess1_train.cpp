@@ -52,7 +52,7 @@ ofstream fout;//output
 int interval = 1000;
 
 // Global ofstream object
-std::ofstream outputFile;
+std::ofstream outputFile("training_output.txt");
 
 //////////////////////////////////
 
@@ -64,9 +64,7 @@ string getPattern(string email, string psw) {
 		pat_str += 'P';
 	// If the user's personal information can be found, match the corresponding location on the password
 	if (PI.find(email) != PI.end()) {
-
 		person pp = PI[email];
-
 		/// phone
 		pp.processPhone(pat_str, psw);
 
@@ -84,8 +82,11 @@ string getPattern(string email, string psw) {
 
 		// gid
 		pp.processGid(pat_str, psw);
-	}
 
+	}
+	
+	// input : PPPPPtttttuu 
+	// output : LLLDDtttttuu
 	for (int i = 0; i < len; i++) {
 		char c = psw[i];
 		if (pat_str[i] == 'P') {
@@ -97,6 +98,12 @@ string getPattern(string email, string psw) {
 				pat_str[i] = 'S';
 		}
 	}
+	outputFile << "real pattern: " << pat_str << std::endl;
+
+	
+
+ 	// input : LLLDDtttttuu 
+	// output : LLLDDtu
 
 	string ptmp = pat_str;
 	char last = 'P';
@@ -110,7 +117,7 @@ string getPattern(string email, string psw) {
 
 		last = c;
 	}
-	outputFile << "pattern: "<<pat_str<< std::endl;
+	// outputFile << "pattern: "<<pat_str<< std::endl;
 
 	return pat_str;
 }
@@ -270,7 +277,6 @@ int main(int argc, char * argv[]) {
 		// The PI assignment that does not exist is ""
 		int count_person = 0 ;
 				// Create an ofstream object for writing to a file
-		std::ofstream outputFile("training_output.txt");
 
 		// Check if the file is open and ready for writing
 		if (outputFile.is_open()) {
@@ -341,9 +347,10 @@ int main(int argc, char * argv[]) {
 				PI[pp.email] = pp;
 
 				string pat = getPattern(pp.email, pp.psw); // Get the structure of the psw
+				outputFile << "old pattern pass: " << pat << std::endl;
 
 				addDLSPattern(pp.psw, pat);
-				outputFile << "pattern pass: " << pat << std::endl;
+				outputFile << " pattern pass: " << pat << std::endl;
 
 
 				p_count[pat]++; // Add this pattern
