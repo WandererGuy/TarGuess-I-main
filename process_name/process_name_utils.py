@@ -203,3 +203,15 @@ def extract_meaningful_chunks_WORD_NAME_CHAR_NEW(input_str, word_list, name_list
             total_list.append(item)
 # Sorting the list
     return total_list
+
+
+def check_meaningful(text):
+    new_word_list = [item.replace('\n', '') for item in word_list]
+    new_name_list = [item.replace('\n', '') for item in name_list]
+    new_english_list = [item.strip().replace('\n', '') for item in english_list]
+    total_list = []
+    total_list.extend(new_word_list + new_name_list + new_english_list)
+    if text in total_list:
+        return True 
+    else:
+        return False 
