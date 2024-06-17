@@ -1,10 +1,36 @@
+'''example of train dataset 
+,id,username,password,email,firstname,lastname,birthday,gender,address,tel                                       
+0,,rinocococ,e10adc3949ba59abbe56e057f20f883e,vtailieu@gmail.com,Minh Trâm,Từ,19-1-1985,1.0,"56 vancao, phuong tan loi, tp.bmt , tinh daklak",0973276483
+1,,lamfriends2000,c640856549e3cf8dfd35274ad9e62736,lamfriends2000@yahoo.com,Lam,Thai Xuan,,1.0,,
+2,,hanguyen,a667f8ec02cb7d3f205a36658367169e,congha76@yahoo.com,Ha,Nguyen,,0.0,,
+3,,ngocanhcdtk5,e2f5bbdb11e0089051185fe540227f85,ngocanhcdtk5@gmail.com,Anh,Nguyen Ngoc,,0.0,,
+4,,manh_sanh_co_don,e2f5bbdb11e0089051185fe540227f85,ngocanha3@gmail.com,Anh,Nguyen Ngoc,,0.0,,
+5,,manh_sanh_co_don_cdt,e2f5bbdb11e0089051185fe540227f85,ngocanh_hy87@yahoo.com,Anh,Nguyen Ngoc,,0.0,,
+6,,nonameteam,d48b279000cc65c062cb1e1d4a979ba3,nnt@gmail.com,Noname,Team,,0.0,,
+7,,myphuong,e71c617b3b17ecc166a6a5a8eccf0302,cdspthk1142@qtttc.edu.vn,Mỹ Phương,Nguyễn Thị,,0.0,,
+8,,phuong_my,e71c617b3b17ecc166a6a5a8eccf0302,giotlesau_872000@yahoo.com,Mỹ Phương,Nguyễn Thị,,0.0,,
+9,,dangquangtai,11c0e20f98e63cc8049a7c6168f1f483,haiauvocanh_goikevodanh2005@yahoo.com,Tai,Dang Quang,,0.0,,
+10,,daiquangtang,11c0e20f98e63cc8049a7c6168f1f483,haiauvocanh_goikevodanh2005@gmail.com,Tang,Dai Quang,,0.0,,
+11,,nhatchinh,de03ebd7140cd135176bbc0ddae1f30e,nhatchinhbc@hotmail.com,Chinh,Luong Nguyen Nhat,,0.0,,
+
+Usage:
+python TRAIN\src\tailieuvn_data\create_train_dataset.py
+'''
+
 import traceback
 import csv
 import time 
 import unidecode
-
+import pandas as pd     
+import yaml
 hash_dict = {}
 error_count = 0 
+
+
+def load_config(config_path='config/train.yaml'):
+    with open(config_path, 'r') as file:
+        return yaml.safe_load(file)
+
 
 def create_hash_dict():
     global hash_dict
@@ -22,10 +48,8 @@ def create_hash_dict():
 
 def turn_string(text):
     return str(text)
-import pandas as pd     
-# got 1 csv from the PREPROCESS 
-def update_raw_csv():
-    csv_file = 'PREPROCESS/0.csv'
+def update_raw_csv(config):
+    csv_file = config['raw_csv_path']
     df = pd.read_csv(csv_file)
     new_df = df[['username', 'password', 'email', 'firstname', 'lastname', 'birthday', 'gender', 'address', 'tel']]
     new_df['plain_password'] = ''
@@ -37,7 +61,7 @@ def update_raw_csv():
     new_df[['email_prefix', 'email_domain']] = new_df['email'].str.split('@', expand=True)
     new_df['email_prefix'] = new_df['email'] # well guess still need full email
     update_df = new_df[['username', 'password', 'plain_password', 'email_prefix','email_domain',  'fullname', 'birthday', 'gender', 'address', 'tel']]
-    update_df.to_csv('TRAIN/src/tailieuvn_data/update_0.csv', index=False)
+    update_df.to_csv(config['update_csv_path'], index=False)
 
 def replace_password(hash_password):
     if hash_password in hash_dict:
@@ -45,8 +69,8 @@ def replace_password(hash_password):
     else:
         return None 
     
-def fill_plain_pass():
-    update_csv_file = 'TRAIN/src/tailieuvn_data/update_0.csv'
+def fill_plain_pass(config):
+    update_csv_file = config['update_csv_path']
     df = pd.read_csv(update_csv_file)
     df = df.map(turn_string)
     print("Length of the DataFrame ORIGINAL:", len(df))
@@ -101,7 +125,7 @@ def remove_question_marks(input_string):
     else:
         return input_string.replace('?', '')
 
-def finalize(df):
+def finalize(config, df):
     '''
     'email_prefix',
     'plain_password', 
@@ -145,15 +169,63 @@ def finalize(df):
     new_df['Birth'] = new_df['Birth'].apply(remove_question_marks)
     new_df['Account'] = new_df['Account'].apply(remove_question_marks)
     new_df['GID'] = new_df['GID'].apply(remove_question_marks)
-    new_df.to_csv('TRAIN/src/tailieuvn_data/final.csv', index=False)
+    new_df.to_csv(config['final_csv_path'], index=False)
+
+
+def look_up(name, name_dict):
+    try:
+        return name_dict[name] 
+    except Exception as e:
+        print (e)
+        return None
+
+def post_process_csv(file_path):
+    '''read name txt 
+    create dict for look up 
+    read csv
+    substitute name with fix name 
+    if name == None -> delete row 
+    write on new csv '''
+    name_file = 'process_name/output.txt'
+    name_dict = {}
+    with open (name_file, 'r') as file :
+        lines = file.readlines()
+        for line in lines:
+            
+            line = line.strip('\n')
+            if '---> ' in line:
+                fix_name = line.split('---> ')[1]
+                if ori_name not in name_dict:
+                    name_dict[ori_name] = fix_name
+                else:
+                    print ('WTF it duplicate lmao')
+            else:
+                ori_name = line
+
+
+    df = pd.read_csv(file_path)
+    df['Name'] = df['Name'].apply(lambda x: look_up(x, name_dict))
+    
+    # for name == None or '' -> bad for learning folr model -> remove 
+    remove_row = []
+    for index, item in df['Name'].items():
+        if item == None or item == '' or item == 'nan' or item == 'None':
+            remove_row.append(index)
+    df = df.drop(remove_row)
+    print ('******* remove *******')
+    print (remove_row)
+        # df.at[index,'PossibleNameClue'] = xoa_dau(new_item).strip() 
+    df.to_csv(config['new_final_csv_path'], index=False)
 
 
 if __name__ == '__main__':
+        config = load_config()
 
-        update_raw_csv()
-        time.sleep(5)
-        create_hash_dict()
-        df = fill_plain_pass()
-        finalize(df)
-        export_txt('TRAIN/src/tailieuvn_data/final.csv')
-        print ('number of error birthday',error_count)
+        # update_raw_csv(config)
+        # time.sleep(5)
+        # create_hash_dict()
+        # df = fill_plain_pass(config)
+        # finalize(config, df)
+        post_process_csv('TRAIN/src/tailieuvn_data/final.csv')
+        # export_txt('TRAIN/src/tailieuvn_data/final.csv')
+        # print ('number of error birthday',error_count)

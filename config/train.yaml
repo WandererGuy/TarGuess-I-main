@@ -1,0 +1,5 @@
+
+raw_csv_path: 'PREPROCESS/0.csv'
+update_csv_path: 'TRAIN/src/tailieuvn_data/update_0.csv'
+final_csv_path: "TRAIN/src/tailieuvn_data/final.csv"
+new_final_csv_path: 'TRAIN/src/tailieuvn_data/new_final.csv'

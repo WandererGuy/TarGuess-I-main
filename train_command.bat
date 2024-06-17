@@ -1,3 +1,12 @@
+@REM ---- train from raw csv of tailieu leak 
+@REM # fill plain password (cracked md5) in new csv, 
+@REM # refine csv (unicode), 
+@REM # create txt file for training from csv , 
+@REM # train, 
+@REM # move file output to GUESS, 
+@REM # re-order pattern in file>
+
+
 @echo off
 cd "TRAIN\src"
 echo Compiling the program...
