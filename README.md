@@ -38,11 +38,10 @@ python TRAIN\src\tailieuvn_data\create_train_dataset.py
 
 
 
-Explain
-before training:
-have a raw csv file 
-cd process_name 
-python process_name.py -> to create a process_name/output.txt
-cd ..
-with this txt file , below script create a dict to fix name and do stuffs
-python TRAIN\src\tailieuvn_data\create_train_dataset.py
+### before training:
+**have a raw csv file**
+**cd process_name**
+**python process_name.py -> to create a process_name/output.txt**
+**cd ..**
+**with this txt file , below script create a dict to fix name and do stuffs**
+**python TRAIN\src\tailieuvn_data\create_train_dataset.py**

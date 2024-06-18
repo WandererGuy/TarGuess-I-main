@@ -188,7 +188,8 @@ def look_up(name, name_dict):
         miss_name.append(e)
         return None
 
-
+def lower_word(word):
+    return word.lower()
 
 
 def post_process_csv(file_path):
@@ -216,6 +217,9 @@ def post_process_csv(file_path):
 
     df = pd.read_csv(file_path)
     df['Name'] = df['Name'].apply(lambda x: look_up(x, name_dict))
+    # lower password for simpler 
+    
+    df['Password'] = df['Password'].apply(lower_word)
     # for name == None or '' -> bad for learning folr model -> remove 
     remove_row = []
     for index, item in df['Name'].items():
