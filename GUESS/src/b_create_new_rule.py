@@ -271,6 +271,7 @@ def resolve_conflict(file_path):
         for item in available_list:                          
             if item not in existing_digit_length_for_fill:
                 missing_digit_for_fill.append('D'+item)
+                
         available_list = [str(i) for i in range(1, int(highest_symbol_len))]
         for item in available_list:                          
             if item not in existing_symbol_length_for_fill:

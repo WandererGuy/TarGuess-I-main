@@ -15,6 +15,14 @@
 
 Usage:
 python TRAIN\src\tailieuvn_data\create_train_dataset.py
+
+
+before that , 
+have a raw csv file 
+cd process_name 
+python process_name.py -> to create a pprocess_name/output.txt
+cd ..
+python TRAIN\src\tailieuvn_data\create_train_dataset.py
 '''
 
 import traceback
@@ -169,15 +177,19 @@ def finalize(config, df):
     new_df['Birth'] = new_df['Birth'].apply(remove_question_marks)
     new_df['Account'] = new_df['Account'].apply(remove_question_marks)
     new_df['GID'] = new_df['GID'].apply(remove_question_marks)
-    new_df.to_csv(config['final_csv_path'], index=False)
+    new_df.to_csv(config['pre_final_csv_path'], index=False)
 
-
+miss_name = []
 def look_up(name, name_dict):
+    global miss_name
     try:
-        return name_dict[name] 
-    except Exception as e:
-        print (e)
+        return name_dict[name].lower() 
+    except Exception as e: # not in dict name 
+        miss_name.append(e)
         return None
+
+
+
 
 def post_process_csv(file_path):
     '''read name txt 
@@ -202,30 +214,27 @@ def post_process_csv(file_path):
             else:
                 ori_name = line
 
-
     df = pd.read_csv(file_path)
     df['Name'] = df['Name'].apply(lambda x: look_up(x, name_dict))
-    
     # for name == None or '' -> bad for learning folr model -> remove 
     remove_row = []
     for index, item in df['Name'].items():
         if item == None or item == '' or item == 'nan' or item == 'None':
             remove_row.append(index)
     df = df.drop(remove_row)
-    print ('******* remove *******')
-    # print (remove_row)
+    print ('******* done remove *******')
         # df.at[index,'PossibleNameClue'] = xoa_dau(new_item).strip() 
     df.to_csv(config['new_final_csv_path'], index=False)
 
 
 if __name__ == '__main__':
         config = load_config()
-
-        # update_raw_csv(config)
-        # time.sleep(5)
-        # create_hash_dict()
-        # df = fill_plain_pass(config)
-        # finalize(config, df)
-        post_process_csv('TRAIN/src/tailieuvn_data/final.csv')
-        # export_txt('TRAIN/src/tailieuvn_data/final.csv')
-        # print ('number of error birthday',error_count)
+        update_raw_csv(config)
+        time.sleep(5)
+        create_hash_dict()
+        df = fill_plain_pass(config)
+        finalize(config, df)
+        post_process_csv('TRAIN/src/tailieuvn_data/pre_final.csv')
+        print ('******* done write final csv to final.txt *******')
+        export_txt('TRAIN/src/tailieuvn_data/final.csv')
+        print ('number of error birthday',error_count)

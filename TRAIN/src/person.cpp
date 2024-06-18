@@ -58,15 +58,25 @@ void person::processName(string& pat_str, string psw) {
 		}
 	}
 
-	string tmp[5];
+
+	// the more discover format the better, algo priority format swap longest 
+	// so more format is better
+
+	string tmp[6];
+
 	for (int i = 0; i < name_len; i++) {
+		if (i>0) {
+
+			tmp[5] += name_str[i][0];
+		}
+
 		tmp[0] += name_str[i][0];
 		tmp[1] += name_str[i];
 		if (i != 0)
 			tmp[2] += name_str[i];
 	}
-
 	tmp[3] = name_str[0];
+
 	tmp[3][0] -= 32;
 	tmp[4] = tmp[0].substr(1, tmp[0].length() - 1); //sc
 
@@ -75,31 +85,62 @@ void person::processName(string& pat_str, string psw) {
 	findStr(pat_str, psw, tmp[0], 'b'); // zsc
 	findStr(pat_str, psw, tmp[2], 'c'); // sanchuan
 	findStr(pat_str, psw, name_str[0], 'd'); // zhang
-	findStr(pat_str, psw, tmp[3], 'e'); // Zhang
+	// findStr(pat_str, psw, tmp[3], 'e'); // Zhang
 
 	findStr(pat_str, psw, tmp[4] + name_str[0], 'f'); // sczhang
 	findStr(pat_str, psw, name_str[0] + tmp[4], 'g'); // zhangsc
-}
+
+
+	findStr(pat_str, psw, name_str[1], 'V'); // san
+	findStr(pat_str, psw, name_str[2], 'W'); // chuan
+
+
+
+
+	findStr(pat_str, psw, tmp[5] + name_str[0][0], 'X'); // scz
+
+	}
+	// fundamental char >= 2 char , can create a fundamental format 
+
+	// string tmp[10];
+	// for (int i = 0; i < name_len; i++) {
+	// 	tmp[0] += name_str[i][0];
+	// 	tmp[1] = name_str[i]
+	// 	if (i != 0)
+	// 		tmp[2] += name_str[i];
+	// }
+
 
 void person::processBirth(string& pat_str, string psw) {
 	if (birth == "" || birth.length() != 8)
 		return;
-	findStr(pat_str, psw, birth, 'B'); // 19940231
-	if (birth[4] == '0')
-		findStr(pat_str, psw, birth.substr(0, 4) + birth.substr(5, 3), 'h'); // 1994231
-	if (birth[6] == '0')
-		findStr(pat_str, psw, birth.substr(0, 6) + birth[7], 'i'); // 1994021
-	if (birth[4] == '0' && birth[6] == '0')
-		findStr(pat_str, psw, birth.substr(0, 4) + birth[5] + birth[7], 'j'); // 199421
-	findStr(pat_str, psw, birth.substr(0, 6), 'k'); // 199402
-	findStr(pat_str, psw, birth.substr(2, 6), 'l'); // 940231
-	findStr(pat_str, psw, birth.substr(0, 4), 'm'); // 1994
-	findStr(pat_str, psw, birth.substr(4, 4), 'n'); // 0231
-	findStr(pat_str, psw, birth.substr(2, 4), 'o'); // 9402
+	// findStr(pat_str, psw, birth, 'B'); // 19940231
+	// if (birth[4] == '0')
+	// 	findStr(pat_str, psw, birth.substr(0, 4) + birth.substr(5, 3), 'h'); // 1994231
+	// if (birth[6] == '0')
+	// 	findStr(pat_str, psw, birth.substr(0, 6) + birth[7], 'i'); // 1994021
+	// if (birth[4] == '0' && birth[6] == '0')
+	// 	findStr(pat_str, psw, birth.substr(0, 4) + birth[5] + birth[7], 'j'); // 199421
+	// findStr(pat_str, psw, birth.substr(0, 6), 'k'); // 199402
+	// findStr(pat_str, psw, birth.substr(2, 6), 'l'); // 940231
+	// findStr(pat_str, psw, birth.substr(0, 4), 'm'); // 1994
+	// findStr(pat_str, psw, birth.substr(4, 4), 'n'); // 0231
+	// findStr(pat_str, psw, birth.substr(2, 4), 'o'); // 9402
 
-	findStr(pat_str, psw, birth.substr(4, 4) + birth.substr(0, 4), 'p'); // 02311994
-	findStr(pat_str, psw, birth.substr(4, 2) + birth.substr(0, 4), 'q'); // 021994
-	findStr(pat_str, psw, birth.substr(4, 4) + birth.substr(2, 2), 'r'); // 023194
+	// findStr(pat_str, psw, birth.substr(4, 4) + birth.substr(0, 4), 'p'); // 02311994
+	// findStr(pat_str, psw, birth.substr(4, 2) + birth.substr(0, 4), 'q'); // 021994
+	// findStr(pat_str, psw, birth.substr(4, 4) + birth.substr(2, 2), 'r'); // 023194
+	
+	// collecting fundamentals : 7 of them 
+	// date , month , year, date transform, month trans , year trans
+	findStr(pat_str, psw, birth.substr(4,2) , 'O'); // month
+	findStr(pat_str, psw, birth.substr(6,2) , 'Q'); // date
+	findStr(pat_str, psw, birth.substr(0,4) , 'R'); // year
+	findStr(pat_str, psw, birth.substr(2,2) , 'S'); // last 2 digit year
+	if (birth[4] == '0')
+		findStr(pat_str, psw, birth.substr(5, 1) , 'T'); // month with 0 as first digit  
+	if (birth[6] == '0')
+		findStr(pat_str, psw, birth.substr(7,1), 'U'); // date with 0 as first digit
 }
 
 void person::processEmail(string& pat_str, string psw) {
