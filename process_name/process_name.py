@@ -200,7 +200,17 @@ file.close()
 
 # Open the output file in write mode
 # Loop through the names
+def split_list(lst):
+    # Calculate the size of each part
+    n = len(lst)
+    part_size = n // 3
 
+    # Calculate the start and end indices for each part
+    part1 = lst[:part_size]
+    part2 = lst[part_size:2 * part_size]
+    part3 = lst[2 * part_size:]
+
+    return [part1, part2, part3]
 
 def process_all_name(name_ls):
     for i in tqdm(range(len(name_ls))):
@@ -219,14 +229,15 @@ def process_all_name(name_ls):
             error_file.close()
 
 
-import multiprocessing 
+process_all_name(name_ls)
+# import multiprocessing 
 
-# Create a pool of processes
-pool = multiprocessing.Pool(3)
+# # Create a pool of processes
+# pool = multiprocessing.Pool(3)
 
-# Use the pool to process the names
-pool.map(process_all_name, name_ls)
+# # Use the pool to process the names
+# pool.map(process_all_name, split_list(name_ls))
 
-# Close the pool
-pool.close()
-pool.join()
+# # Close the pool
+# pool.close()
+# pool.join()

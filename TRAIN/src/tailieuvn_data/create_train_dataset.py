@@ -213,7 +213,7 @@ def post_process_csv(file_path):
             remove_row.append(index)
     df = df.drop(remove_row)
     print ('******* remove *******')
-    print (remove_row)
+    # print (remove_row)
         # df.at[index,'PossibleNameClue'] = xoa_dau(new_item).strip() 
     df.to_csv(config['new_final_csv_path'], index=False)
 
