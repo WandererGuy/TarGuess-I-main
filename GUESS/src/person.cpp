@@ -33,7 +33,7 @@ void person::findStr(string& pat_str, string psw, string str, char c) {
 }
 
 
-
+// DO NOT NAME 'L' 'D' 'P' 'S'
 
 void person::processPhone(string& pat_str, string psw) {
 	if (phone == "")
@@ -123,7 +123,7 @@ void person::processBirth(string& pat_str, string psw) {
 	// 	findStr(pat_str, psw, birth.substr(0, 4) + birth[5] + birth[7], 'j'); // 199421
 	// findStr(pat_str, psw, birth.substr(0, 6), 'k'); // 199402
 	// findStr(pat_str, psw, birth.substr(2, 6), 'l'); // 940231
-	// findStr(pat_str, psw, birth.substr(0, 4), 'm'); // 1994
+	// findStr(pat_str, psw,t birth.substr(0, 4), 'm'); // 1994
 	// findStr(pat_str, psw, birth.substr(4, 4), 'n'); // 0231
 	// findStr(pat_str, psw, birth.substr(2, 4), 'o'); // 9402
 
@@ -136,11 +136,23 @@ void person::processBirth(string& pat_str, string psw) {
 	findStr(pat_str, psw, birth.substr(4,2) , 'O'); // month
 	findStr(pat_str, psw, birth.substr(6,2) , 'Q'); // date
 	findStr(pat_str, psw, birth.substr(0,4) , 'R'); // year
-	findStr(pat_str, psw, birth.substr(2,2) , 'S'); // last 2 digit year
-	if (birth[4] == '0')
-		findStr(pat_str, psw, birth.substr(5, 1) , 'T'); // month with 0 as first digit  
-	if (birth[6] == '0')
-		findStr(pat_str, psw, birth.substr(7,1), 'U'); // date with 0 as first digit
+	findStr(pat_str, psw, birth.substr(2,2) , 'F'); // last 2 digit year
+	// just need to > 1 char to be count as format 
+	// for now, most pass is date-month-year order
+	if (birth[4] == '0'&& birth[6] != '0')
+	// month with 0 as first digit  + full year / partial year / full date
+		findStr(pat_str, psw, birth.substr(5, 1) + birth.substr(0,4), 'H'); 
+		findStr(pat_str, psw, birth.substr(5, 1) + birth.substr(2,2), 'I'); 
+		findStr(pat_str, psw, birth.substr(5, 1) + birth.substr(6,2), 'J'); 
+	if (birth[6] == '0'&& birth[4] != '0')
+	 // date with 0 as first digit+ full year / partial year / full month
+		findStr(pat_str, psw, birth.substr(7,1) + birth.substr(0,4), 'K');
+		findStr(pat_str, psw, birth.substr(7,1) + birth.substr(2,2), 'Y');
+		findStr(pat_str, psw, birth.substr(7,1) + birth.substr(4,2), 'Z');
+	if (birth[6] == '0' && birth[4] == '0')
+		findStr(pat_str, psw, birth.substr(7,1) + birth.substr(5, 1), 'M');
+
+
 }
 
 void person::processEmail(string& pat_str, string psw) {
