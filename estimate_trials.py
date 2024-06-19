@@ -25,4 +25,4 @@ def estimate(tmp):
 def cal_trials(text):
     tmp = collect_mask(text)
     possi = estimate(tmp)
-    return possi``
+    return possi
