@@ -1,15 +1,18 @@
 from format_finder import create_format_dict
 
-name_str = ['manh', 'duong', 'van']
-birth = '20010426'
+name_str = ['ynhi', 'nguyen', 'luu']
+birth = '20001231'
+email = 'nhi30k@gmail.com'
 phone = '0383962428'
-account = 'manhdepzai123'
+account = 'ynhiluu3112'
 gid = '001201000681'
 
 
 def replace_format():
     global select_num
-    format_dict = create_format_dict(name_str, birth, phone, account, gid)
+    format_dict = create_format_dict(name_str, birth, email, phone, account, gid)
+    raw_lst = []
+    new_lst = []
     with open ('test.txt', 'r') as file:
         lines = file.readlines()
         for index, line in enumerate(lines):
@@ -23,9 +26,10 @@ def replace_format():
                     new += format_dict[raw[i]]
                 else:
                     new += raw[i]
-            print (raw, '\t', new)
-            if line == '':
-                break
+            raw_lst.append(raw)
+            new_lst.append(new)
+            # print (raw, '\t', new)
+    return raw_lst, new_lst
 
 
 import matplotlib.pyplot as plt
@@ -74,28 +78,31 @@ def ploting(probabilities_ls, labels_ls):
     plt.xticks(rotation=90)
     plt.savefig('top_labels.png')
 
-probabilities_ls = []
-labels_ls = []
-with open ('test.txt', 'r') as file:
-    lines = file.readlines()
-    for line in lines:
-        line = line.strip('\n')
-        label, prob = line.split('\t')
-
-
-        prob = round(round(float(prob), 8)*10000000,8) 
-        probabilities_ls.append(prob)
-        labels_ls.append(label)
-
 select_num = 30
 num_elements = select_num
+# analyze format samples (from new_order) , translate format & plot 
+if __name__ == '__main__':
+
+    probabilities_ls = []
+    labels_ls = []
+    with open ('test.txt', 'r') as file:
+        lines = file.readlines()
+        for line in lines:
+            line = line.strip('\n')
+            label, prob = line.split('\t')
 
 
-replace_format()
+            prob = round(round(float(prob), 8)*10000000,8) 
+            probabilities_ls.append(prob)
+            labels_ls.append(label)
 
 
-from estimate_trials import cal_trials
-for item in labels_ls[:select_num]:
-    print (item, '\t',cal_trials(item))
+    from estimate_trials import cal_trials
+    for item in labels_ls[:select_num]:
+        print (item, '\t',cal_trials(item))
 
-ploting(probabilities_ls[:select_num], labels_ls[:select_num])
+    ploting(probabilities_ls[:select_num], labels_ls[:select_num])
+
+    replace_format()
+
+    

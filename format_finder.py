@@ -1,10 +1,9 @@
 digit_lst = '0123456789'
 letter_lst = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-email = 'manhtech264@gmail.com'
 
 
 
-def create_format_dict(name_str: list, birth: str, phone: str, account: str, gid: str):
+def create_format_dict(name_str: list, birth: str, email:str, phone: str, account: str, gid: str):
     ##### NAME #####
     tmp_5 = tmp_4 = tmp_2 = tmp_1 = tmp_0 = ''
     for i in range (len(name_str)):
