@@ -6,7 +6,7 @@ import time
 
 # Function to handle the file download
 # input_file = 'mask.hcmask'  # Replace with your actual input file path
-output_file = 'mask.hcmask'  # Replace with your desired output file path
+output_file = 'generated_target_masklist/mask.hcmask'  # Replace with your desired output file path
 
 # def format_text_file(input_filepath, output_filepath):
 #     # Read lines from the input file
@@ -86,12 +86,12 @@ def main(name='', birth='', email='', accountName='', id='', phone=''):
 # Print the current working directory
     print("Current Working Directory:", current_directory)
 
-    batch_file = "automate_cracking.bat"
+    python_file = "automate_cracking.py"
 # eragonkisyrong96@gmail.com	buiduymanh1996	manh		wantedbyzeus	01647732700	14-3-1995
 
     # Run the batch file
     print ('running batch file to generate guesses')
-    result = subprocess.run([batch_file], capture_output=True, text=True)
+    result = subprocess.run(['python', python_file], capture_output=True, text=True)
     print("Output:", result.stdout)
     if result.stderr == None:
         print("Errors:", result.stderr)   

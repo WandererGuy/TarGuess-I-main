@@ -4,7 +4,7 @@
 @REM # create txt file for training from csv , 
 @REM # train, 
 @REM # move file output to GUESS, 
-@REM # re-order pattern in file>
+@REM # re-order pattern in file
 
 
 @echo off

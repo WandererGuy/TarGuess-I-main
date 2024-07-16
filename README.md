@@ -8,19 +8,28 @@ conda install conda-forge::matplotlib
 
 conda install conda-forge::unidecode
 
+pip install fastapi, uvicorn, pydantic
 ## Usage 
 ### Training 
 **training and move model trained to ./GUESS**
-'''
+```
 train_command.bat 
-'''
+```
 ### Run app 
-'''
+```
 activate_app.bat
-'''
+```
+```
+python api.py
+```
 
+
+
+python server_api.py
 
 ## Utilities 
+### format_finder.py 
+is for format translation, so change person.cpp rule , require change manually format_finder.py as well
 
 
 ### create pcfg my way , better (for fill in mask, remove clutter personal info)

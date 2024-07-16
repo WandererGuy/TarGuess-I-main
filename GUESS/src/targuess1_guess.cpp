@@ -35,7 +35,7 @@ bool is_output_to_file = true;
 // The maximum number of passwords that can be printed out is set to negative, with no limit
 int maximum_guess_num = 100000000;
 // The minimum probability threshold for allowing output passwords, set to negative to have no limit
-double minimum_prob = 0.0000000000001;
+double minimum_prob = 0.000000000000000001;
 // Maximum password length, set to negative to have no limit
 int password_max_len = 999; 
 // The shortest length of the password, set to negative, there is no limit
@@ -53,7 +53,7 @@ int predict_timeout = 40000;
 // Whether to remove duplicates
 bool check_duplicate = false;
 // Do you want to output the guess to the console
-bool output_to_console = true;
+bool output_to_console = false;
 //////////////////////////////////
 
 CTimer *timer = new CTimer;
@@ -394,7 +394,7 @@ void genGuess(person & pp) {
 		string seg;
 		guess tmp;
 		bool suc = 1;
-		cout << "Processing pattern: " << pat << " with probability: " << prob << endl;
+		// cout << "Processing pattern: " << pat << " with probability: " << prob << endl;
 
 		for (int i = 0; i <= len; ++i) {
 			char c = 'P';
@@ -438,7 +438,7 @@ void genGuess(person & pp) {
 			tmp.prob = prob;
 			tmp.pivot = 0;
 			G.push(tmp); // Insert into priority queue
-            cout << "Pushed guess with pattern: " << pat << " and password: " << psw << endl;
+            // cout << "Pushed guess with pattern: " << pat << " and password: " << psw << endl;
 		}
 	}
 
@@ -449,7 +449,7 @@ void genGuess(person & pp) {
 		G.pop();
 		if (maximum_guess_num >= 0 && cur_guess_num >= maximum_guess_num
 				|| top.prob < minimum_prob) {
-			//cout << cur_guess_num << ' ' << maximum_guess_num << endl;
+			// cout << cur_guess_num << ' ' << maximum_guess_num << endl;
 			break;
 		}
 

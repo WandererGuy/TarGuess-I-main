@@ -1,12 +1,16 @@
 from format_finder import create_format_dict
 
-name_str = ['ynhi', 'nguyen', 'luu']
-birth = '20001231'
-email = 'nhi30k@gmail.com'
-phone = '0383962428'
-account = 'ynhiluu3112'
-gid = '001201000681'
+# name_str = ['ynhi', 'nguyen', 'luu']
+# birth = '20001231'
+# email = 'nhi30k@gmail.com'
+# phone = '0383962428'
+# account = 'ynhiluu3112'
+# gid = '001201000681'
 
+import configparser
+config = configparser.ConfigParser()
+config.read('config.ini')
+max_mask_generate = config['DEFAULT']['max_mask_generate'] 
 
 def read_input():
     info_dict = {}
@@ -50,7 +54,7 @@ def create_mask(trans_format):
     return mask 
 
 def generate_mask_file(file_path):
-    mask_file = open('mask.hcmask', 'w')
+    mask_file = open('generated_target_masklist/mask.hcmask', 'w')
     with open (file_path, 'r') as file:
         lines = file.readlines()
         for line in lines:
@@ -66,10 +70,9 @@ if __name__ == '__main__':
     f = 'format_translation.txt'
     info_dict = read_input()
     with open(f, 'w') as file:
-        raw_lst, new_lst = replace_format(100, info_dict)
+        raw_lst, new_lst = replace_format(max_mask_generate, info_dict)
         for raw, new in zip(raw_lst, new_lst):
             file.write(f"{raw}\t{new}\n")
-
     generate_mask_file(f)
 
 
