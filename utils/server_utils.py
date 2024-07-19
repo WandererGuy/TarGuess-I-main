@@ -11,7 +11,7 @@ from pydantic import BaseModel, validator, ValidationError
 import re
 import unidecode
 
-output_file_mask = 'generated_target_masklist/mask.hcmask'  # Replace with your desired output file path
+output_file_mask = 'static/generated_target_masklist/mask.hcmask'  # Replace with your desired output file path
 
 def download_file_masklist(output_file_mask):
     # Provide the path to your file
@@ -86,7 +86,7 @@ def run_masklist(name='', birth='', email='', accountName='', id='', phone=''):
 
 # Function to handle the file download
 input_file_wordlist = 'GUESS/src/result_folder/output.txt'  # Replace with your actual input file path
-output_file_wordlist = 'generated_target_wordlist/output.txt'  # Replace with your desired output file path
+output_file_wordlist = 'static/generated_target_wordlist/output.txt'  # Replace with your desired output file path
 
 def format_text_file(input_file_wordlistpath, output_file_wordlistpath):
     # Read lines from the input file

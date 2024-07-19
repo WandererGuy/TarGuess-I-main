@@ -54,7 +54,7 @@ def create_mask(trans_format):
     return mask 
 
 def generate_mask_file(file_path):
-    mask_file = open('generated_target_masklist/mask.hcmask', 'w')
+    mask_file = open('static/generated_target_masklist/mask.hcmask', 'w')
     with open (file_path, 'r') as file:
         lines = file.readlines()
         for line in lines:

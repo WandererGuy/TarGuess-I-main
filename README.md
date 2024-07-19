@@ -8,7 +8,7 @@ conda install conda-forge::matplotlib
 
 conda install conda-forge::unidecode
 
-pip install fastapi, uvicorn, pydantic
+pip install fastapi uvicorn pydantic
 ## Usage 
 ### Training 
 **training and move model trained to ./GUESS**

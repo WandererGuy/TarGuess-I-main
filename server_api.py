@@ -1,18 +1,12 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Form
 import os 
 import uvicorn
 import logging
-from pydantic import BaseModel
 import configparser
 import subprocess
-from dateutil import parser
-import os 
-from pydantic import BaseModel, validator, ValidationError
 import re
-import unidecode
-
+from fastapi.staticfiles import StaticFiles
 from utils.server_utils import *
-
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename='fastapi.log', filemode='w')
 logger = logging.getLogger(__name__)
@@ -22,99 +16,90 @@ config.read('config.ini')
 host_ip = config['DEFAULT']['host'] 
 port_num = config['DEFAULT']['port'] 
 
-
 app = FastAPI()
 
-class InputData_wordlist(BaseModel):
-    full_name: str
-    birth: str  # This will now be validated for the format
-    email: str
-    account_name: str
-    id_num: str
-    phone: str
-    maximum_guess_num: int
-    minimum_prob : int 
-    password_min_len : int
-    password_max_len : int
-
-    @validator('birth')
-    def check_birth_format(cls, v):
-        if not re.match(r'^\d{2}-\d{2}-\d{4}$', v):
-            raise ValueError('Birth date must be in DD-MM-YYYY format')
-        return v
-    
-class InputData_masklist(BaseModel):
-    full_name: str
-    birth: str  # This will now be validated for the format
-    email: str
-    account_name: str
-    id_num: str
-    phone: str
-    max_mask_generate: int
-
-    @validator('birth')
-    def check_birth_format(cls, v):
-        if not re.match(r'^\d{2}-\d{2}-\d{4}$', v):
-            raise ValueError('Birth date must be in DD-MM-YYYY format')
-        return v
+app.mount("/static", StaticFiles(directory="static"), name="static")
 # Endpoint to receive an image and start the processing pipeline
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
 
 @app.post("/GenerateTargetWordlist/")
-async def GenerateTargetWordlist(data: InputData_wordlist):
+async def GenerateTargetWordlist(
+    full_name: str = Form(None),
+    birth: str = Form(None),
+    email: str = Form(None),
+    account_name: str = Form(None),
+    id_num: str = Form(None),
+    phone: str = Form(None),
+    maximum_guess_num: int = Form(...),
+    minimum_prob: int = Form(...),
+    password_min_len: int = Form(...),
+    password_max_len: int = Form(...)
+):
     try:
-        name = data.full_name
-        birth = data.birth
-        email = data.email
-        accountName = data.account_name
-        id_num = data.id_num
-        phone = data.phone
+        full_name = full_name or ""
+        birth = birth or ""
+        email = email or ""
+        account_name = account_name or ""
+        id_num = id_num or ""
+        phone = phone or ""
+
+        if birth and not re.match(r'^\d{2}-\d{2}-\d{4}$', birth):
+            raise HTTPException(status_code=400, detail='Birth date must be in DD-MM-YYYY format')
         
         updates = {
-            'maximum_guess_num': data.maximum_guess_num,
-            'minimum_prob': data.minimum_prob,
-            'password_max_len': data.password_max_len,
-            'password_min_len': data.password_min_len
+            'maximum_guess_num': maximum_guess_num,
+            'minimum_prob': minimum_prob,
+            'password_max_len': password_max_len,
+            'password_min_len': password_min_len
         }
         # change config ini file 
         update_wordlist_config(updates)
 
-        output = run_wordlist(name, birth, email, accountName, id_num, phone)
-        file_path = output
-        print(file_path) 
-        return {"message": "File saved successfully", "file_path": os.path.abspath(file_path)}
+        output = run_wordlist(full_name, birth, email, account_name, id_num, phone)
+        file_path = os.path.basename(output)
+        path = f"http://{host_ip}:{port_num}/static/generated_target_wordlist/" + file_path
+        return {"message": "File saved successfully", "url":path}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @app.post("/GenerateTargetMaskList/")
-async def GenerateTargetMaskList(data: InputData_masklist):
+async def GenerateTargetMaskList(
+    full_name: str = Form(None),
+    birth: str = Form(None),
+    email: str = Form(None),
+    account_name: str = Form(None),
+    id_num: str = Form(None),
+    phone: str = Form(None),
+    max_mask_generate: int = Form(...)
+):
     try:
-        name = data.full_name
-        birth = data.birth
-        email = data.email
-        accountName = data.account_name
-        id_num = data.id_num
-        phone = data.phone
+        full_name = full_name or ""
+        birth = birth or ""
+        email = email or ""
+        account_name = account_name or ""
+        id_num = id_num or ""
+        phone = phone or ""
+
+        if birth and not re.match(r'^\d{2}-\d{2}-\d{4}$', birth):
+            raise HTTPException(status_code=400, detail='Birth date must be in DD-MM-YYYY format')
 
         updates = {
-            'max_mask_generate': data.max_mask_generate
+            'max_mask_generate': max_mask_generate
         }
         # change config ini file 
         update_masklist_config(updates)
 
-        output = run_masklist(name, birth, email, accountName, id_num, phone)
-        file_path = output
-        print(file_path) 
-        return {"message": "File saved successfully", "file_path": os.path.abspath(file_path)}
+        output = run_masklist(full_name, birth, email, account_name, id_num, phone)
+        file_path = os.path.basename(output)
+        path = f"http://{host_ip}:{port_num}/static/generated_target_masklist/" + file_path
+        return {"message": "File saved successfully", "url":path}    
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
 def main():
-    print ('INITIALIZING FASTAPI SERVER')
+    print('INITIALIZING FASTAPI SERVER')
     uvicorn.run("server_api:app", host=host_ip, port=int(port_num), reload=True)
 
 if __name__ == "__main__":
