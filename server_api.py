@@ -81,6 +81,7 @@ async def GenerateTargetMaskList(
         account_name = account_name or ""
         id_num = id_num or ""
         phone = phone or ""
+        
 
         if birth and not re.match(r'^\d{2}-\d{2}-\d{4}$', birth):
             raise HTTPException(status_code=400, detail='Birth date must be in DD-MM-YYYY format')

@@ -6,10 +6,10 @@ from format_finder import create_format_dict
 # phone = '0383962428'
 # account = 'ynhiluu3112'
 # gid = '001201000681'
-
+import argparse
 import configparser
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('GUESS_MASK/config.ini')
 max_mask_generate = config['DEFAULT']['max_mask_generate'] 
 
 def read_input():
@@ -53,8 +53,8 @@ def create_mask(trans_format):
     mask = trans_format.replace('D', '?d').replace('L', '?l').replace('S', '?s')
     return mask 
 
-def generate_mask_file(file_path):
-    mask_file = open('static/generated_target_masklist/mask.hcmask', 'w')
+def generate_mask_file(mask_file_path, file_path):
+    mask_file = open(mask_file_path, 'w')
     with open (file_path, 'r') as file:
         lines = file.readlines()
         for line in lines:
@@ -66,14 +66,24 @@ def generate_mask_file(file_path):
             else:
                 mask_file.write(trans_format + '\n')
 
-if __name__ == '__main__':
+def main():
+    parser = argparse.ArgumentParser(description="parse input data")
+    parser.add_argument('--mask_file_path', type=str)
+    args = parser.parse_args()
+    mask_file_path = args.mask_file_path
+
+    print (mask_file_path)
     f = 'format_translation.txt'
     info_dict = read_input()
     with open(f, 'w') as file:
         raw_lst, new_lst = replace_format(max_mask_generate, info_dict)
         for raw, new in zip(raw_lst, new_lst):
             file.write(f"{raw}\t{new}\n")
-    generate_mask_file(f)
+    generate_mask_file(mask_file_path, f)
+
+if __name__ == '__main__':
+    main()
+
 
 
 

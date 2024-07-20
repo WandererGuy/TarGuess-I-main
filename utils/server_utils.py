@@ -10,22 +10,23 @@ import os
 from pydantic import BaseModel, validator, ValidationError
 import re
 import unidecode
+import uuid
 
 output_file_mask = 'static/generated_target_masklist/mask.hcmask'  # Replace with your desired output file path
 
-def download_file_masklist(output_file_mask):
-    # Provide the path to your file
-    file_path = output_file_mask
-    # print ('**********', input_file)
-    print ('**********', output_file_mask)
-    # format_text_file(input_file, output_file_mask)
-
-    
-    # Make sure the file exists to avoid errors
-    if os.path.exists(file_path):
-        return file_path
+def generate_unique_filename(UPLOAD_FOLDER, extension="txt"):
+    if extension != None:
+        filename = f"{uuid.uuid4()}.{extension}"
+        file_path = os.path.join(UPLOAD_FOLDER, filename)
+        if not os.path.exists(file_path):
+            return filename
     else:
-        return 'Fail generate'
+        filename = f"{uuid.uuid4()}"
+        file_path = os.path.join(UPLOAD_FOLDER, filename)
+        if not os.path.exists(file_path):
+            return filename 
+        
+
 
 def process_birthday(birthday):
     try:
@@ -70,23 +71,41 @@ def run_masklist(name='', birth='', email='', accountName='', id='', phone=''):
 # Print the current working directory
     print("Current Working Directory:", current_directory)
 
+
+    file_mask = generate_unique_filename('static/generated_target_masklist', extension='hcmask')
+    file_mask_path = os.path.join('static/generated_target_masklist', file_mask)
     python_file = "GUESS_MASK/automate_cracking.py"
 # eragonkisyrong96@gmail.com	buiduymanh1996	manh		wantedbyzeus	01647732700	14-3-1995
-
+    
     # Run the batch file
-    print ('running batch file to generate guesses')
-    result = subprocess.run(['python', python_file], capture_output=True, text=True)
-    print("Output:", result.stdout)
-    if result.stderr == None:
-        print("Errors:", result.stderr)   
-    output = download_file_masklist(output_file_mask)
-    return output 
+    print ('running python file to generate guesses')
+
+    process = subprocess.Popen(['python', python_file, '--mask_file_path', file_mask_path], 
+                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+    # Giao tiếp với tiến trình con
+    stdout, stderr = process.communicate()
+
+    # In kết quả đầu ra
+    print("Output:", stdout)
+
+    # Kiểm tra và in thông báo lỗi nếu có
+    if stderr:
+        print("Errors:", stderr)
+
+    return file_mask_path
+
+    # result = subprocess.run(['python', python_file, '--mask_file_path', file_mask_path], capture_output=True, text=True)
+    # print("Output:", result.stdout)
+    # if result.stderr == None:
+    #     print("Errors:", result.stderr)   
+    # return file_mask_path
 
 
 
 # Function to handle the file download
 input_file_wordlist = 'GUESS/src/result_folder/output.txt'  # Replace with your actual input file path
-output_file_wordlist = 'static/generated_target_wordlist/output.txt'  # Replace with your desired output file path
+output_file_wordlist_folder = 'static/generated_target_wordlist'  # Replace with your desired output file path
 
 def format_text_file(input_file_wordlistpath, output_file_wordlistpath):
     # Read lines from the input file
@@ -108,20 +127,6 @@ def format_text_file(input_file_wordlistpath, output_file_wordlistpath):
                 password, probability = line.split('\t')
                 file.write(f"{password:<{max_length}} {probability}\n")
 
-
-def download_file_wordlist(input_file_wordlist, output_file_wordlist):
-    # Provide the path to your file
-    file_path = output_file_wordlist
-    print ('**********', input_file_wordlist)
-    print ('**********', output_file_wordlist)
-    format_text_file(input_file_wordlist, output_file_wordlist)
-
-    
-    # Make sure the file exists to avoid errors
-    if os.path.exists(file_path):
-        return file_path
-    else:
-        return 'Fail generate'
 
 
 
@@ -166,9 +171,10 @@ def run_wordlist(name='', birth='', email='', accountName='', id='', phone=''):
     # with open ("GUESS/src/result_folder/output.txt", "r") as f_output:
     # output = f_output.read()
     # print (output)
-    output = download_file_wordlist(input_file_wordlist, output_file_wordlist)
-    return output 
-
+    output_file_wordlist = generate_unique_filename(output_file_wordlist_folder)
+    output_file_wordlist_path = output_file_wordlist_folder + '/' + output_file_wordlist
+    format_text_file(input_file_wordlist, output_file_wordlist_path)
+    return output_file_wordlist
 
 def update_wordlist_config(updates):
     file_path = 'GUESS\src\config.ini'
