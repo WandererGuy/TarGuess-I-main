@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Form
+from fastapi import FastAPI, HTTPException, Form, APIRouter
 import os 
 import uvicorn
 import logging
@@ -8,23 +8,9 @@ import re
 from fastapi.staticfiles import StaticFiles
 from utils.server_utils import *
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename='fastapi.log', filemode='w')
-logger = logging.getLogger(__name__)
 
-config = configparser.ConfigParser()
-config.read('config.ini')
-host_ip = config['DEFAULT']['host'] 
-port_num = config['DEFAULT']['port'] 
-
-app = FastAPI()
-
-app.mount("/static", StaticFiles(directory="static"), name="static")
-# Endpoint to receive an image and start the processing pipeline
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-@app.post("/GenerateTargetWordlist/")
+router = APIRouter()
+@router.post("/GenerateTargetWordlist/")
 async def GenerateTargetWordlist(
     full_name: str = Form(None),
     birth: str = Form(None),
@@ -64,7 +50,7 @@ async def GenerateTargetWordlist(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/GenerateTargetMaskList/")
+@router.post("/GenerateTargetMaskList/")
 async def GenerateTargetMaskList(
     full_name: str = Form(None),
     birth: str = Form(None),
@@ -98,10 +84,3 @@ async def GenerateTargetMaskList(
         return {"message": "File saved successfully", "url":path}    
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-def main():
-    print('INITIALIZING FASTAPI SERVER')
-    uvicorn.run("server_api:app", host=host_ip, port=int(port_num), reload=True)
-
-if __name__ == "__main__":
-    main()
