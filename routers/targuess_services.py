@@ -6,9 +6,12 @@ import configparser
 import subprocess
 import re
 from fastapi.staticfiles import StaticFiles
-from utils.server_utils import *
+from utils.server_utils import * 
+config = configparser.ConfigParser()
+config.read('config.ini')
 
-
+host_ip = config['DEFAULT']['host'] 
+port_num = config['DEFAULT']['port'] 
 router = APIRouter()
 @router.post("/GenerateTargetWordlist/")
 async def GenerateTargetWordlist(
