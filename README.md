@@ -9,6 +9,26 @@ conda install conda-forge::matplotlib
 conda install conda-forge::unidecode
 
 pip install fastapi uvicorn pydantic
+
+
+
+### set up C++ for VScode
+install extension Code Runner + C++ in Vscode 
+download msys2 and run ... add .. to become environment path (like https://code.visualstudio.com/docs/languages/cpp)
+place libstdc++-6.dll file somewhere in /ucrt folder into C++ run code folder(GUESS/src/)
+fix path in config/config_setup_cpp.txt (so that can use g++ in C++ session)
+
+
+For reference:
+https://code.visualstudio.com/docs/languages/cpp
+Download msys2 MSYS2 on its website for newest
+https://www.freecodecamp.org/news/how-to-install-c-and-cpp-compiler-on-windows/
+C++ programming with Visual Studio Code
+
+exe error 
+place libstdc++-6.dll file somewhere in /ucrt folder into C++ run code folder(GUESS/src/)
+https://stackoverflow.com/questions/74734500/cant-find-entry-point-zst28-throw-bad-array-new-lengthv-in-dll-filepath
+
 ## Usage 
 ### Training 
 **training and move model trained to ./GUESS**

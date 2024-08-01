@@ -8,7 +8,7 @@ import re
 from fastapi.staticfiles import StaticFiles
 from utils.server_utils import * 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('config/config.ini')
 
 host_ip = config['DEFAULT']['host'] 
 port_num = config['DEFAULT']['port'] 
