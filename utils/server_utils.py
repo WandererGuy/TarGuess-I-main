@@ -157,17 +157,30 @@ def run_wordlist(name='', birth='', email='', accountName='', id='', phone=''):
     if birth == "Invalid date. Please enter a valid date (e.g., DD-MM-YYYY).":
         return birth
     print ('write input to files')
+    check_ls = [email, password, fullName, id, accountName, phone, birth]
+    for i in range (len(check_ls)):
+        
+        if check_ls[i]  == "" or check_ls[i]  == '' or check_ls[i] == '""' or check_ls[i] == "''" or check_ls[i] == None:
+            check_ls[i] = ""
+        print (check_ls[i])    
     with open ("GUESS/src/result_folder/test.txt", "w") as f:
-        f.write(email + '\\t' + password + '\\t' + fullName + '\\t' + id + '\\t' + accountName + '\\t' + phone + '\\t' + birth)
+        string = check_ls[0] + '\\t' + check_ls[1] + '\\t' + check_ls[2] + '\\t' + check_ls[3] + '\\t' + check_ls[4] + '\\t' + check_ls[5] + '\\t' + check_ls[6]
+        f.write(string)
     batch_file = "GUESS\src\command.bat"
 # eragonkisyrong96@gmail.com	buiduymanh1996	manh		wantedbyzeus	01647732700	14-3-1995
 
     # Run the batch file
     print ('running batch file to generate guesses')
-    result = subprocess.run([batch_file], capture_output=True, text=True)
-    print("Output:", result.stdout)
-    if result.stderr == None:
-        print("Errors:", result.stderr)   
+    # result = subprocess.run([batch_file], capture_output=True, text=True)
+
+
+    result = subprocess.Popen([batch_file], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    stdout, stderr = result.communicate()
+
+    print("Output:", stdout)
+    if stderr:
+
+        print("Errors:", stderr)
     # with open ("GUESS/src/result_folder/output.txt", "r") as f_output:
     # output = f_output.read()
     # print (output)

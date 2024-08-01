@@ -45,7 +45,7 @@ async def GenerateTargetWordlist(
         }
         # change config ini file 
         update_wordlist_config(updates)
-
+        
         output = run_wordlist(full_name, birth, email, account_name, id_num, phone)
         file_path = os.path.basename(output)
         path = f"http://{host_ip}:{port_num}/static/generated_target_wordlist/" + file_path
