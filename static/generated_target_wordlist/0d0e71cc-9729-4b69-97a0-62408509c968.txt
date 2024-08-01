@@ -1,0 +1,710 @@
+Password                      Probability
+-----------------------------------------
+quangtran                     0.0306035
+
+u0000000000000000000          0.00579578
+
+qua                           0.000825459
+
+quangtran123                  0.000174798
+
+quangtran1                    3.86021e-05
+
+quangtran2                    3.58392e-05
+
+quangtranthanh                3.42199e-05
+
+quangtrandung                 3.0058e-05
+
+quangtran3                    2.97607e-05
+
+quangtran7                    2.83002e-05
+
+quangtrananhyeuem             2.78838e-05
+
+quangtran0                    2.73926e-05
+
+quangtran12                   2.72028e-05
+
+quangtranlinh                 2.56284e-05
+
+quangtran9                    2.54584e-05
+
+quangtranhung                 2.49956e-05
+
+quangtran1234                 2.48694e-05
+
+quangtranabc                  2.47446e-05
+
+quangtranminh                 2.34136e-05
+
+quangtranece                  2.3002e-05
+
+thanhquangtran                2.00054e-05
+
+quangtran89                   1.96986e-05
+
+quangtranlove                 1.96168e-05
+
+quangtranhoa                  1.95169e-05
+
+quangtran6                    1.92616e-05
+
+quangtran5                    1.86695e-05
+
+quangtrantuan                 1.86676e-05
+
+quangtrannam                  1.84713e-05
+
+quangtranabcd                 1.80348e-05
+
+quangtranthao                 1.80348e-05
+
+quangtran@                    1.78752e-05
+
+quangtranu0000000000000000000 1.7563e-05
+
+quangtran88                   1.75411e-05
+
+quangtranthuy                 1.7402e-05
+
+quangtran2009                 1.73414e-05
+
+quangtrantrung                1.69935e-05
+
+quangtran8                    1.68933e-05
+
+quangtran13                   1.63217e-05
+
+quangtrananh                  1.60317e-05
+
+quangtran86                   1.59465e-05
+
+quangtranadf                  1.56832e-05
+
+quangtraneef                  1.56832e-05
+
+quangtranffd                  1.56832e-05
+
+quangtranngoc                 1.55036e-05
+
+quangtranhai                  1.49862e-05
+
+quangtranddeb                 1.48708e-05
+
+quangtranlong                 1.48708e-05
+
+quangtranfce                  1.46377e-05
+
+quangtranssw                  1.46377e-05
+
+quangtranvan                  1.46377e-05
+
+quangtran4                    1.44856e-05
+
+quangtranhuong                1.44329e-05
+
+quangtrancbac                 1.4238e-05
+
+quangtranc                    1.40999e-05
+
+quangtran11                   1.39766e-05
+
+quangtranbea                  1.39406e-05
+
+quangtrancca                  1.39406e-05
+
+quangtrancda                  1.35921e-05
+
+quangtranvnn                  1.35921e-05
+
+quangtranaf                   1.3565e-05
+
+quangtranaa                   1.34843e-05
+
+quangtran33                   1.34138e-05
+
+quangtran09                   1.32262e-05
+
+quangtran1988                 1.31741e-05
+
+quangtran10                   1.30386e-05
+
+quangtraned                   1.29998e-05
+
+quangtrandbda                 1.29724e-05
+
+quangtranedae                 1.29724e-05
+
+quangtran82                   1.2851e-05
+
+quangtran87                   1.26634e-05
+
+quangtrancdf                  1.25466e-05
+
+quangtraneec                  1.25466e-05
+
+quangtranfda                  1.25466e-05
+
+quangtran78                   1.24758e-05
+
+quangtran85                   1.24758e-05
+
+quangtranbbde                 1.23396e-05
+
+quangtranccde                 1.23396e-05
+
+quangtranhang                 1.23396e-05
+
+quangtranthang                1.23378e-05
+
+quangtranacb                  1.2198e-05
+
+quangtranson                  1.2198e-05
+
+quathanh                      1.21086e-05
+
+quangtrandafa                 1.20232e-05
+
+quangtranhieu                 1.20232e-05
+
+quangtran12345678             1.18577e-05
+
+quangtran000000               1.18517e-05
+
+quangtranafe                  1.18495e-05
+
+quangtranfec                  1.18495e-05
+
+quangtranhoang                1.16394e-05
+
+quangtran90                   1.15377e-05
+
+quangtranthu                  1.1501e-05
+
+quangtran73                   1.14439e-05
+
+quangtrantrang                1.14066e-05
+
+quangtrantung                 1.13904e-05
+
+dungquangtran                 1.13377e-05
+
+quangtran80                   1.12564e-05
+
+quangtran1990                 1.10232e-05
+
+abcquangtran                  1.0911e-05
+
+quangtrand                    1.08781e-05
+
+quangtrane                    1.08665e-05
+
+quangtranhanh                 1.07576e-05
+
+quangtrandddaa                1.07082e-05
+
+quangtran1989                 1.06199e-05
+
+quangtranquang                1.04755e-05
+
+quangtranabb                  1.04555e-05
+
+quangtrancom                  1.04555e-05
+
+quangtrancb                   1.0416e-05
+
+quangtran25251325             1.02418e-05
+
+quangtran83                   1.02245e-05
+
+ecequangtran                  1.01426e-05
+
+quangtranedca                 1.01248e-05
+
+quangtranhien                 1.01248e-05
+
+quangtranbba                  1.0107e-05
+
+quangtranefb                  1.0107e-05
+
+trungquangtran                9.93466e-06
+
+quangtran1987                 9.81334e-06
+
+quangtraneefc                 9.8084e-06
+
+quangtrantien                 9.8084e-06
+
+linhquangtran                 9.66685e-06
+
+quangtran58                   9.66168e-06
+
+quangtranb                    9.654e-06
+
+quangtrana                    9.51537e-06
+
+quangtranbinh                 9.49201e-06
+
+quangtran02                   9.47405e-06
+
+123quangtran                  9.44855e-06
+
+hungquangtran                 9.42817e-06
+
+quangtranbef                  9.40992e-06
+
+quangtranmaimai               9.36618e-06
+
+quangtranf                    9.12281e-06
+
+quangtran42                   9.09884e-06
+
+quangtrannhung                9.07874e-06
+
+quangtranmeo                  9.06141e-06
+
+quangtran08                   8.91127e-06
+
+quangtran98                   8.91127e-06
+
+quangtran2010                 8.87232e-06
+
+minhquangtran                 8.83144e-06
+
+quangtranqua                  8.78148e-06
+
+quangtranquangtran            8.78148e-06
+
+quaquangtran                  8.78148e-06
+
+quangtranhuy                  8.71289e-06
+
+quangtranqaz                  8.71289e-06
+
+quangtranbbafb                8.61314e-06
+
+quangtranhuyen                8.61314e-06
+
+hoaquangtran                  8.60585e-06
+
+quangtran2008                 8.60349e-06
+
+quangtranba                   8.55888e-06
+
+quangtran03                   8.53607e-06
+
+quangtran77                   8.53607e-06
+
+quangtran84                   8.53607e-06
+
+quangtran44                   8.44222e-06
+
+huongquangtran                8.43767e-06
+
+quangtranab                   8.15517e-06
+
+quangtranduong                8.1476e-06
+
+namquangtran                  8.14482e-06
+
+quangtran094                  8.09253e-06
+
+quangtran71                   8.06701e-06
+
+quangtran63                   7.97323e-06
+
+quangtran369                  7.93065e-06
+
+quangtran06                   7.87944e-06
+
+cquangtran                    7.83326e-06
+
+quangtran1983                 7.79686e-06
+
+quangtran00                   7.69181e-06
+
+quangtran14                   7.69181e-06
+
+quangtran51                   7.69181e-06
+
+quangtran023                  7.60697e-06
+
+quangtran555                  7.60697e-06
+
+quangtran57                   7.59802e-06
+
+quangtrankien                 7.59361e-06
+
+quangtran.                    7.56981e-06
+
+quangtran2007                 7.52802e-06
+
+quangtran91                   7.50424e-06
+
+quangtrancuong                7.44923e-06
+
+quangtranhaiyen               7.42693e-06
+
+quangtran23                   7.41039e-06
+
+lovequangtran                 7.3993e-06
+
+quangtran1984                 7.39357e-06
+
+quangtran1986                 7.39357e-06
+
+quangtran20                   7.3166e-06
+
+quangtran069                  7.28329e-06
+
+quangtran214                  7.28329e-06
+
+quangtran704                  7.28329e-06
+
+quangtran855                  7.28329e-06
+
+quangtranever                 7.2772e-06
+
+quangtrannhan                 7.2772e-06
+
+quangtranvinh                 7.2772e-06
+
+quangtran61                   7.22282e-06
+
+thangquangtran                7.21284e-06
+
+quangtranbe                   7.18624e-06
+
+quangtran1985                 7.12474e-06
+
+quangtran151                  7.12142e-06
+
+quangtran552                  7.12142e-06
+
+qua123                        7.08641e-06
+
+anhquangtran                  7.06909e-06
+
+tuanquangtran                 7.0413e-06
+
+quangtran92                   7.03518e-06
+
+quangtranbf                   7.02476e-06
+
+quangtran12345                7.02143e-06
+
+quangtranduy                  6.97031e-06
+
+quangtranlan                  6.97031e-06
+
+quangtranphu                  6.97031e-06
+
+quangtranyen                  6.97031e-06
+
+quangtran184                  6.95955e-06
+
+quangtran15                   6.9414e-06
+
+quangtran50                   6.9414e-06
+
+quangtran81                   6.9414e-06
+
+adfquangtran                  6.91542e-06
+
+eefquangtran                  6.91542e-06
+
+ffdquangtran                  6.91542e-06
+
+quangtranbc                   6.86328e-06
+
+quangtran1982                 6.8559e-06
+
+quangtran21                   6.84761e-06
+
+quangtran_                    6.82031e-06
+
+hoangquangtran                6.80456e-06
+
+abcdquangtran                 6.80261e-06
+
+thaoquangtran                 6.80261e-06
+
+quangtran298                  6.79774e-06
+
+quangtranca                   6.78254e-06
+
+quangtranda                   6.78254e-06
+
+quangtranec                   6.78254e-06
+
+quangtran22                   6.75382e-06
+
+trangquangtran                6.66848e-06
+
+u00000000000000000001         6.65553e-06
+
+quangtranthai                 6.6444e-06
+
+quangtranbao                  6.6218e-06
+
+quangtranfa                   6.62102e-06
+
+quangtranff                   6.62102e-06
+
+haiquangtran                  6.60807e-06
+
+afquangtran                   6.59922e-06
+
+quangtran1991                 6.587e-06
+
+thuyquangtran                 6.56393e-06
+
+aaquangtran                   6.55994e-06
+
+quangtrangiang                6.51803e-06
+
+quangtran059                  6.47402e-06
+
+quangtran118                  6.47402e-06
+
+quangtran462                  6.47402e-06
+
+fcequangtran                  6.45439e-06
+
+sswquangtran                  6.45439e-06
+
+vanquangtran                  6.45439e-06
+
+quangtranloan                 6.328e-06
+
+edquangtran                   6.32425e-06
+
+quangtran748                  6.31217e-06
+
+quangtrannghia                6.28526e-06
+
+quangtrannga                  6.27328e-06
+
+dddaaquangtran                6.2602e-06
+
+quangtran/                    6.25823e-06
+
+quangtrancd                   6.21731e-06
+
+quangtran07                   6.19098e-06
+
+u00000000000000000002         6.17918e-06
+
+quangtran@@                   6.17955e-06
+
+quangtran007                  6.15032e-06
+
+quangtran077                  6.15032e-06
+
+quangtran847                  6.15032e-06
+
+quangtran868                  6.15032e-06
+
+beaquangtran                  6.14704e-06
+
+ccaquangtran                  6.14704e-06
+
+quangquangtran                6.12412e-06
+
+quangtran18                   6.09718e-06
+
+quangtranthinh                6.05249e-06
+
+quangtran5132                 6.04931e-06
+
+quangtran8166                 6.04931e-06
+
+dquangtran                    6.04337e-06
+
+equangtran                    6.03696e-06
+
+quatrung                      6.01309e-06
+
+quangtranngay                 6.01161e-06
+
+quangtrannhat                 6.01161e-06
+
+quangtrantinh                 6.01161e-06
+
+quangtranxuan                 6.01161e-06
+
+quangtran32                   6.00338e-06
+
+quangtran76                   6.00338e-06
+
+cdaquangtran                  5.99336e-06
+
+vnnquangtran                  5.99336e-06
+
+quangtran051                  5.98847e-06
+
+quangtran392                  5.98847e-06
+
+quangtranduc                  5.92477e-06
+
+quangtran2005                 5.91488e-06
+
+quangtran01                   5.90957e-06
+
+ngocquangtran                 5.84784e-06
+
+quangtran47                   5.81577e-06
+
+quangtran1683                 5.78045e-06
+
+quangtran3894                 5.78045e-06
+
+quangtran95                   5.72197e-06
+
+quangtranmanh                 5.6952e-06
+
+quangtran317                  5.66477e-06
+
+quangtran783                  5.66477e-06
+
+quangtran845                  5.66477e-06
+
+quangtran4590                 5.64602e-06
+
+ddebquangtran                 5.60916e-06
+
+longquangtran                 5.60916e-06
+
+quangtran97                   5.53436e-06
+
+cdfquangtran                  5.53233e-06
+
+eecquangtran                  5.53233e-06
+
+fdaquangtran                  5.53233e-06
+
+quangtran456                  5.50292e-06
+
+quangtran663                  5.50292e-06
+
+quangtran829                  5.50292e-06
+
+quangtranhong                 5.37881e-06
+
+acbquangtran                  5.37866e-06
+
+quangtrankhoa                 5.37881e-06
+
+sonquangtran                  5.37866e-06
+
+quangtrantoan                 5.37881e-06
+
+quangtran3913                 5.37716e-06
+
+cbacquangtran                 5.37047e-06
+
+bquangtran                    5.36333e-06
+
+quangtranphong                5.35412e-06
+
+quangtran43                   5.34676e-06
+
+1quangtran                    5.32442e-06
+
+nhungquangtran                5.30757e-06
+
+aquangtran                    5.28632e-06
+
+quangtran1557                 5.24273e-06
+
+quangtran2004                 5.24273e-06
+
+quangtraniloveu               5.24011e-06
+
+quangtrandat                  5.22773e-06
+
+quangtrannha                  5.22773e-06
+
+afequangtran                  5.22498e-06
+
+fecquangtran                  5.22498e-06
+
+quangtran177                  5.17922e-06
+
+quangtran250                  5.17922e-06
+
+quangtran763                  5.17922e-06
+
+quangtranth                   5.16764e-06
+
+quangtran26                   5.15915e-06
+
+quangtran31                   5.15915e-06
+
+quangtran35                   5.15915e-06
+
+u00000000000000000003         5.13115e-06
+
+quangtran2006                 5.1083e-06
+
+quangtran2177                 5.1083e-06
+
+quangtran2442                 5.1083e-06
+
+quahuong                      5.10701e-06
+
+quangtrandf                   5.0869e-06
+
+thuquangtran                  5.07131e-06
+
+cbquangtran                   5.06726e-06
+
+fquangtran                    5.06823e-06
+
+quangtran29                   5.06535e-06
+
+quangtranngan                 5.0624e-06
+
+bbafbquangtran                5.03537e-06
+
+huyenquangtran                5.03537e-06
+
+quangtran466                  5.01737e-06
+
+quangtran3699                 4.97388e-06
+
+quangtran7446                 4.97388e-06
+
+quangtran24                   4.97154e-06
+
+2quangtran                    4.94334e-06
+
+dbdaquangtran                 4.89311e-06
+
+edaequangtran                 4.89311e-06
+
+u00000000000000000007         4.87934e-06
+
+quangtranloc                  4.87922e-06
+
+quangtranmai                  4.87922e-06
+
+quangtrannth                  4.87922e-06
+
+quangtrantam                  4.87922e-06
+
+quangtranyeu                  4.87922e-06
+
+quangtran34                   4.87774e-06
+
+quangtran53                   4.87774e-06
+
+quangtran1978                 4.83945e-06
+
+quangtran38                   4.78394e-06
+
+duongquangtran                4.76321e-06
+
+quangtranviet                 4.746e-06
+
