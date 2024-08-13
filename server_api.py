@@ -32,7 +32,7 @@ async def root():
 
 def main():
     print('INITIALIZING FASTAPI SERVER')
-    uvicorn.run("main:app", host=host_ip, port=int(port_num), reload=True)
+    uvicorn.run("server_api:app", host=host_ip, port=int(port_num), reload=True)
 
 if __name__ == "__main__":
     main()
