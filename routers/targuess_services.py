@@ -53,8 +53,8 @@ async def GenerateTargetWordlist(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/GenerateTargetMaskList/")
-async def GenerateTargetMaskList(
+@router.post("/generate-target-mask-list/")
+async def generate_target_mask_list(
     full_name: str = Form(None),
     birth: str = Form(None),
     email: str = Form(None),

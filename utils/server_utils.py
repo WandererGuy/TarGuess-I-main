@@ -48,8 +48,10 @@ def run_masklist(name='', birth='', email='', accountName='', id='', phone=''):
     if name != '':
         name = name.lower()
         name = unidecode.unidecode(name)
-
+        name = name.strip()
         my_list = name.split(' ')
+        if len(my_list) < 3:
+            raise HTTPException(status_code=400, detail='Full Name must have 3 or more compnents')
         my_list = [my_list[-1]] + my_list[:-1]
         # Joins elements with '|' and avoids extra '|' at the end
         for index, item in enumerate(my_list):

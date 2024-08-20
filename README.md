@@ -1,12 +1,9 @@
 # Abstraction triumphs all 
 # project PASSWORD GUESSING FOR FORENSIC 
 ## Installation 
-conda create targuess_env python==3.10  (or 3.10.14)
-conda install conda-forge::gradio
+conda create -p ..... targuess_env python==3.10  (or 3.10.14)
+conda install conda-forge::gradio matplotlib unidecode
 
-conda install conda-forge::matplotlib
-
-conda install conda-forge::unidecode
 
 pip install fastapi uvicorn pydantic
 
