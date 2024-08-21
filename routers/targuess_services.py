@@ -63,18 +63,18 @@ async def generate_target_mask_list(
     phone: str = Form(None),
     max_mask_generate: int = Form(...)
 ):
+    
+    full_name = full_name or ""
+    birth = birth or ""
+    email = email or ""
+    account_name = account_name or ""
+    id_num = id_num or ""
+    phone = phone or ""
+    
+
+    if birth and not re.match(r'^\d{2}-\d{2}-\d{4}$', birth):
+        raise HTTPException(status_code=400, detail="Birth date must be in DD-MM-YYYY format")
     try:
-        full_name = full_name or ""
-        birth = birth or ""
-        email = email or ""
-        account_name = account_name or ""
-        id_num = id_num or ""
-        phone = phone or ""
-        
-
-        if birth and not re.match(r'^\d{2}-\d{2}-\d{4}$', birth):
-            raise HTTPException(status_code=400, detail='Birth date must be in DD-MM-YYYY format')
-
         updates = {
             'max_mask_generate': max_mask_generate
         }
