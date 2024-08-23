@@ -27,7 +27,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 # Endpoint to receive an image and start the processing pipeline
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"detail":{"message": "Hello World"}}
 
 
 def main():

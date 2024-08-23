@@ -13,8 +13,8 @@ config.read('config/config.ini')
 host_ip = config['DEFAULT']['host'] 
 port_num = config['DEFAULT']['port'] 
 router = APIRouter()
-@router.post("/GenerateTargetWordlist/")
-async def GenerateTargetWordlist(
+@router.post("/generate-target-wordlist/")
+async def generate_target_wordlist(
     full_name: str = Form(None),
     birth: str = Form(None),
     email: str = Form(None),
@@ -35,8 +35,7 @@ async def GenerateTargetWordlist(
         phone = phone or ""
 
         if birth and not re.match(r'^\d{2}-\d{2}-\d{4}$', birth):
-            raise HTTPException(status_code=400, detail='Birth date must be in DD-MM-YYYY format')
-        
+            raise HTTPException(status_code=400, detail={"message": "Birth date must be in DD-MM-YYYY format", "data": {"url":None}})        
         updates = {
             'maximum_guess_num': maximum_guess_num,
             'minimum_prob': minimum_prob,
@@ -49,9 +48,9 @@ async def GenerateTargetWordlist(
         output = run_wordlist(full_name, birth, email, account_name, id_num, phone)
         file_path = os.path.basename(output)
         path = f"http://{host_ip}:{port_num}/static/generated_target_wordlist/" + file_path
-        return {"message": "File saved successfully", "url":path}
+        return {"detail":{"message": "File saved successfully", "url":path}}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail={"message":str(e), "data": {"url":None}})     
 
 @router.post("/generate-target-mask-list/")
 async def generate_target_mask_list(
@@ -73,7 +72,7 @@ async def generate_target_mask_list(
     
 
     if birth and not re.match(r'^\d{2}-\d{2}-\d{4}$', birth):
-        raise HTTPException(status_code=400, detail="Birth date must be in DD-MM-YYYY format")
+        raise HTTPException(status_code=400, detail={"message": "Birth date must be in DD-MM-YYYY format", "data": {"url":None}})
     try:
         updates = {
             'max_mask_generate': max_mask_generate
@@ -84,6 +83,7 @@ async def generate_target_mask_list(
         output = run_masklist(full_name, birth, email, account_name, id_num, phone)
         file_path = os.path.basename(output)
         path = f"http://{host_ip}:{port_num}/static/generated_target_masklist/" + file_path
-        return {"message": "File saved successfully", "url":path}    
+        return {"detail":{"message": "File saved successfully", "url":path}}   
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail = {"message":str(e), "data": {"url":None}})
+    
