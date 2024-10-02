@@ -94,7 +94,7 @@ def run_masklist(name='', birth='', email='', accountName='', id='', phone=''):
     # Kiểm tra và in thông báo lỗi nếu có
     if stderr:
         print("Errors:", stderr)
-
+    
     return file_mask_path
 
     # result = subprocess.run(['python', python_file, '--mask_file_path', file_mask_path], capture_output=True, text=True)

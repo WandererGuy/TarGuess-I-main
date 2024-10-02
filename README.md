@@ -32,17 +32,18 @@ https://stackoverflow.com/questions/74734500/cant-find-entry-point-zst28-throw-b
 ```
 train_command.bat 
 ```
-### Run app 
+### Run demo app 
 ```
 activate_app.bat
 ```
+
+
+### RUN REAL (with produced weight aka a probility file GUESS\src\result_folder\new_order.txt with password have PII in it , and GUESS\src\result_folder\trawling.txt without PII )
 ```
-python api.py
+conda activate targuess_env
+python main.py
 ```
 
-
-
-python server_api.py
 
 ## Utilities 
 ### format_finder.py 
