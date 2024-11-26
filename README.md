@@ -12,7 +12,7 @@ pip install fastapi uvicorn pydantic
 ### set up C++ for VScode
 install extension Code Runner + C++ in Vscode 
 download msys2 and run ... add .. to become environment path (like https://code.visualstudio.com/docs/languages/cpp)
-place libstdc++-6.dll file somewhere in /ucrt folder into C++ run code folder(GUESS/src/)
+place libstdc++-6.dll file somewhere in /ucrt folder into C++ run code folder(GUESS/src/) (usually in "C:\msys64\ucrt64\bin\libstdc++-6.dll")
 fix path in config/config_setup_cpp.txt (so that can use g++ in C++ session)
 
 
@@ -26,21 +26,21 @@ exe error
 place libstdc++-6.dll file somewhere in /ucrt folder into C++ run code folder(GUESS/src/)
 https://stackoverflow.com/questions/74734500/cant-find-entry-point-zst28-throw-bad-array-new-lengthv-in-dll-filepath
 
+
+## prepare
+check config/config.ini file if wanna change ip 
+
 ## Usage 
 ### Training 
-**training and move model trained to ./GUESS**
+**training and move model trained to ./GUESS, ready for inference**
 ```
 train_command.bat 
-```
-### Run demo app 
-```
-activate_app.bat
 ```
 
 
 ### RUN REAL (with produced weight aka a probility file GUESS\src\result_folder\new_order.txt with password have PII in it , and GUESS\src\result_folder\trawling.txt without PII )
 ```
-conda activate targuess_env
+conda activate path_to_targuess_env
 python main.py
 ```
 
@@ -65,10 +65,4 @@ python TRAIN\src\tailieuvn_data\create_train_dataset.py
 
 
 
-### before training:
-**have a raw csv file**
-**cd process_name**
-**python process_name.py -> to create a process_name/output.txt**
-**cd ..**
-**with this txt file , below script create a dict to fix name and do stuffs**
-**python TRAIN\src\tailieuvn_data\create_train_dataset.py**
+

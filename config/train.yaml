@@ -1,5 +1,8 @@
+# can change this value 
+# raw_csv_path: 'PREPROCESS/0.csv'
+# hash_dict_path: 'TRAIN/src/tailieuvn_data/hash_dict.txt'
 
-raw_csv_path: 'PREPROCESS/0.csv'
+# do not change this value 
 update_csv_path: 'TRAIN/src/tailieuvn_data/update_0.csv'
 pre_final_csv_path: "TRAIN/src/tailieuvn_data/pre_final.csv"
 new_final_csv_path: 'TRAIN/src/tailieuvn_data/final.csv'

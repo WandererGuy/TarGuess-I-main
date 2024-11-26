@@ -6,7 +6,8 @@ remove duplicate element
 analyze new_order format in graph 
 '''
 
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
+import os 
 
 
 
@@ -299,19 +300,48 @@ def resolve_conflict(file_path):
         for value in new_pcfg_value_ls:
             new_file.write(value + '\n')
 
+def finalize(new_order_path, final_path):
+    with open (new_order_path, 'r') as file:
+        data = file.readlines()
+        for i, item in enumerate(data):
+            if item == '\n':
+                final_data = data[:i]
+                break 
+    with open (final_path, 'w') as file:
+        for item in final_data:
+            file.write(item)
+
+def extract_fill_mask(file_path, dest_path):
+    with open (file_path, 'r') as file:
+        data = file.readlines()
+        for i, item in enumerate(data):
+            if item == '\n':
+                final_data = data[i+1:]
+                break 
+    with open (dest_path, 'w') as file:
+        for item in final_data:
+            file.write(item)
 
 if __name__ == '__main__':
-    rule_file_path = 'GUESS/src/result_folder/OUTPUT_TRAIN.txt'
-    new_order_path = 'GUESS/src/result_folder/new_order.txt'
-    trawling_path = 'GUESS/src/result_folder/trawling.txt'
-    better_new_order_path = 'GUESS/src/result_folder/better_new_order.txt'
+    f = os.path.join('GUESS', 'src', 'train_result')
+    rule_file_path = os.path.join(f,'OUTPUT_TRAIN.txt')
+    new_order_path = os.path.join(f,'new_order.txt')
+    trawling_path = os.path.join(f,'trawling.txt')
+    final_path = os.path.join(f,'train_result_refined.txt')
+    
+    fill_mask_path = os.path.join(f,'fill_mask.txt')
     write_new_order(rule_file_path, new_order_path)
     remove_duplicate_elements(rule_file_path, new_order_path)
-
-    # format_prob(new_order_path)
     resolve_conflict(new_order_path)
-
     targuess_trawling_rule(rule_file_path, new_order_path, trawling_path)
     remove_duplicate_elements(rule_file_path, trawling_path)
-    # format_prob(trawling_path)
+    finalize(new_order_path, final_path)
+    extract_fill_mask(file_path = new_order_path, dest_path = fill_mask_path)
+    print ('done training and write refined result at ', final_path)
 
+    '''
+    OUTPUT_TRAIN.txt: target mask + trawling mask + pcfg word fill mask
+    new_order_path: target mask + pcfg word fill mask
+    trawling_path: trawling mask
+    train_result_refined.txt: target mask sorted by keyspace then probability sorted
+    '''

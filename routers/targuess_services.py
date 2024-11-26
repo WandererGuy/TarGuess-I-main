@@ -25,17 +25,17 @@ async def generate_target_wordlist(
     id_num: str = Form(None),
     phone: str = Form(None),
     maximum_guess_num: int = Form(...),
-    minimum_prob: int = Form(...),
+    minimum_prob: float = Form(...),
     password_min_len: int = Form(...),
     password_max_len: int = Form(...)
 ):
+    full_name = full_name or ""
+    birth = birth or ""
+    email = email or ""
+    account_name = account_name or ""
+    id_num = id_num or ""
+    phone = phone or ""
     try:
-        full_name = full_name or ""
-        birth = birth or ""
-        email = email or ""
-        account_name = account_name or ""
-        id_num = id_num or ""
-        phone = phone or ""
 
         if birth and not re.match(r'^\d{2}-\d{2}-\d{4}$', birth):
             raise HTTPException(status_code=400, detail={"message": "Birth date must be in DD-MM-YYYY format", "data": {"url":None}})        
@@ -85,7 +85,7 @@ async def generate_target_mask_list(
 
         output = run_masklist(full_name, birth, email, account_name, id_num, phone)
         output = os.path.join(parent_dir, output).replace('\\', '/')
-        print (output)
+        print ('raw output: ', output)
         sorted_mask_file_path = output.replace("." + output.split('.')[-1], "_sorted." +  output.split('.')[-1])
         sort_by_complexity(mask_file_path = output, sorted_mask_file_path = sorted_mask_file_path)
         deduplicate_file_lines(mask_file_path = sorted_mask_file_path)

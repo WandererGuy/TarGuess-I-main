@@ -7,12 +7,10 @@ import configparser
 import subprocess
 from dateutil import parser
 import os 
-from pydantic import BaseModel, validator, ValidationError
 import re
 import unidecode
 import uuid
-
-output_file_mask = 'static/generated_target_masklist/mask.hcmask'  # Replace with your desired output file path
+import logging 
 
 def generate_unique_filename(UPLOAD_FOLDER, extension="txt"):
     if extension != None:
@@ -26,8 +24,6 @@ def generate_unique_filename(UPLOAD_FOLDER, extension="txt"):
         if not os.path.exists(file_path):
             return filename 
         
-
-
 def process_birthday(birthday):
     try:
         # Attempt to parse the birthday in various formats
@@ -60,50 +56,37 @@ def run_masklist(name='', birth='', email='', accountName='', id='', phone=''):
                 break
             fullName += item
             fullName += ' '
-    print (birth)
-    print (fullName)
     birth = process_birthday(birth)
     if birth == "Invalid date. Please enter a valid date (e.g., DD-MM-YYYY).":
         return birth
-    print ('write input to files')
-    with open ("GUESS/src/result_folder/test.txt", "w") as f:
+    
+    p = os.path.join('GUESS','src', 'result_folder', str(uuid.uuid4()) +'.txt')
+    print (f'write target info to {p} for later command')
+    print ('write order: email + password + fullName + id + accountName + phone + birth')
+
+    with open (p, "w") as f:
         f.write(email + '\\t' + password + '\\t' + fullName + '\\t' + id + '\\t' + accountName + '\\t' + phone + '\\t' + birth)
-    
-    current_directory = os.getcwd()
-# Print the current working directory
-    print("Current Working Directory:", current_directory)
 
-
-    file_mask = generate_unique_filename('static/generated_target_masklist', extension='hcmask')
-    file_mask_path = os.path.join('static/generated_target_masklist', file_mask)
-    python_file = "GUESS_MASK/automate_cracking.py"
-# eragonkisyrong96@gmail.com	buiduymanh1996	manh		wantedbyzeus	01647732700	14-3-1995
-    
-    # Run the batch file
-    print ('running python file to generate guesses')
-
-    process = subprocess.Popen(['python', python_file, '--mask_file_path', file_mask_path], 
+    file_mask = generate_unique_filename(os.path.join('static','generated_target_masklist'), extension='hcmask')
+    file_mask_path = os.path.join('static','generated_target_masklist', file_mask)
+    python_file = os.path.join('GUESS_MASK','automate_cracking.py') 
+    # eragonkisyrong96@gmail.com	buiduymanh1996	manh		wantedbyzeus	01647732700	14-3-1995
+    print ('command running python file to generate guesses')
+    process = subprocess.Popen(['python', 
+                                python_file, 
+                                '--mask_file_path', 
+                                file_mask_path, 
+                                '--target_info_file',
+                                p
+                                ], 
                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-
-    # Giao tiếp với tiến trình con
+    print ('final out put in :', file_mask_path)
     stdout, stderr = process.communicate()
-
-    # In kết quả đầu ra
     print("Output:", stdout)
-
-    # Kiểm tra và in thông báo lỗi nếu có
     if stderr:
         print("Errors:", stderr)
     
     return file_mask_path
-
-    # result = subprocess.run(['python', python_file, '--mask_file_path', file_mask_path], capture_output=True, text=True)
-    # print("Output:", result.stdout)
-    # if result.stderr == None:
-    #     print("Errors:", result.stderr)   
-    # return file_mask_path
-
-
 
 # Function to handle the file download
 input_file_wordlist = 'GUESS/src/result_folder/output.txt'  # Replace with your actual input file path
@@ -143,8 +126,10 @@ def run_wordlist(name='', birth='', email='', accountName='', id='', phone=''):
     if name != '':
         name = name.lower()
         name = unidecode.unidecode(name)
-
+        name = name.strip()
         my_list = name.split(' ')
+        if len(my_list) < 3:
+            raise HTTPException(status_code=400, detail={"message": "Full Name must have 3 or more compnents", "data": {"url":None}})
         my_list = [my_list[-1]] + my_list[:-1]
         # Joins elements with '|' and avoids extra '|' at the end
         for index, item in enumerate(my_list):
@@ -153,46 +138,40 @@ def run_wordlist(name='', birth='', email='', accountName='', id='', phone=''):
                 break
             fullName += item
             fullName += ' '
-    print (birth)
-    print (fullName)
     birth = process_birthday(birth)
     if birth == "Invalid date. Please enter a valid date (e.g., DD-MM-YYYY).":
         return birth
-    print ('write input to files')
     check_ls = [email, password, fullName, id, accountName, phone, birth]
     for i in range (len(check_ls)):
-        
         if check_ls[i]  == "" or check_ls[i]  == '' or check_ls[i] == '""' or check_ls[i] == "''" or check_ls[i] == None:
             check_ls[i] = ""
-        print (check_ls[i])    
-    with open ("GUESS/src/result_folder/test.txt", "w") as f:
+    p = os.path.join('GUESS','src', 'result_folder', 'test.txt')
+    print (f'write target info to {p} for later command')
+    print ('write order: email + password + fullName + id + accountName + phone + birth')
+
+    with open (p, "w") as f:
         string = check_ls[0] + '\\t' + check_ls[1] + '\\t' + check_ls[2] + '\\t' + check_ls[3] + '\\t' + check_ls[4] + '\\t' + check_ls[5] + '\\t' + check_ls[6]
         f.write(string)
-    batch_file = "GUESS\src\command.bat"
-# eragonkisyrong96@gmail.com	buiduymanh1996	manh		wantedbyzeus	01647732700	14-3-1995
-
-    # Run the batch file
+    batch_file = os.path.join('GUESS','src', 'command.bat')
+    # eragonkisyrong96@gmail.com	buiduymanh1996	manh		wantedbyzeus	01647732700	14-3-1995
     print ('running batch file to generate guesses')
-    # result = subprocess.run([batch_file], capture_output=True, text=True)
 
 
-    result = subprocess.Popen([batch_file], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    result = subprocess.Popen([batch_file], 
+                              stdout=subprocess.PIPE, 
+                              stderr=subprocess.PIPE, 
+                              text=True)
     stdout, stderr = result.communicate()
-
     print("Output:", stdout)
     if stderr:
-
         print("Errors:", stderr)
-    # with open ("GUESS/src/result_folder/output.txt", "r") as f_output:
-    # output = f_output.read()
-    # print (output)
     output_file_wordlist = generate_unique_filename(output_file_wordlist_folder)
-    output_file_wordlist_path = output_file_wordlist_folder + '/' + output_file_wordlist
+    output_file_wordlist_path = os.path.join(output_file_wordlist_folder, output_file_wordlist)
     format_text_file(input_file_wordlist, output_file_wordlist_path)
     return output_file_wordlist
 
 def update_wordlist_config(updates):
-    file_path = 'GUESS\src\config.ini'
+    file_path = os.path.join('GUESS', 'src', 'config.ini')
     with open(file_path, 'r') as file:
         lines = file.readlines()
 
@@ -206,7 +185,7 @@ def update_wordlist_config(updates):
 
 
 def update_masklist_config(updates):
-    file_path = 'GUESS_MASK\config.ini'
+    file_path = os.path.join('GUESS_MASK','config.ini')
     with open(file_path, 'r') as file:
         lines = file.readlines()
 

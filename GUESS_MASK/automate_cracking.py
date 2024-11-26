@@ -1,20 +1,17 @@
 from format_finder import create_format_dict
-
-# name_str = ['ynhi', 'nguyen', 'luu']
-# birth = '20001231'
-# email = 'nhi30k@gmail.com'
-# phone = '0383962428'
-# account = 'ynhiluu3112'
-# gid = '001201000681'
+import os 
 import argparse
 import configparser
+import uuid
 config = configparser.ConfigParser()
-config.read('GUESS_MASK/config.ini')
+config.read(os.path.join('GUESS_MASK', 'config.ini'))
 max_mask_generate = config['DEFAULT']['max_mask_generate'] 
+config.read(os.path.join('config', 'config.ini'))
+train_result_refined_path = config['GUESS_MASK']['train_result_refined_path']
 
-def read_input():
+def read_input(target_info_file):
     info_dict = {}
-    with open ("GUESS/src/result_folder/test.txt", "r") as f:
+    with open (target_info_file, "r") as f:
         line = f.readline()
         line = line.strip('\n')
         email, _, fullName, gid, accountName, phone, birth = line.split('\\t')
@@ -31,7 +28,7 @@ def replace_format(select_num, info_dict):
     format_dict = create_format_dict(name_str, birth, email, phone, account, gid)
     raw_lst = []
     new_lst = []
-    with open ('test.txt', 'r') as file:
+    with open (train_result_refined_path, 'r') as file:
         lines = file.readlines()
         for index, line in enumerate(lines):
             if index == select_num:
@@ -69,16 +66,20 @@ def generate_mask_file(mask_file_path, file_path):
 def main():
     parser = argparse.ArgumentParser(description="parse input data")
     parser.add_argument('--mask_file_path', type=str)
+    parser.add_argument('--target_info_file', type=str)
     args = parser.parse_args()
     mask_file_path = args.mask_file_path
-
-    print (mask_file_path)
-    f = 'format_translation.txt'
-    info_dict = read_input()
+    target_info_file = args.target_info_file
+    os.makedirs(os.path.dirname(mask_file_path), exist_ok=True)
+    t = os.path.join('GUESS_MASK','format_translation')
+    os.makedirs(t, exist_ok=True)
+    f = os.path.join(t, str(uuid.uuid4()) + '.txt')
+    info_dict = read_input(target_info_file)
     with open(f, 'w') as file:
         raw_lst, new_lst = replace_format(max_mask_generate, info_dict)
         for raw, new in zip(raw_lst, new_lst):
             file.write(f"{raw}\t{new}\n")
+    # f is just intermediate file to store format translation
     generate_mask_file(mask_file_path, f)
 
 if __name__ == '__main__':

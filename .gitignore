@@ -6,4 +6,5 @@ PREPROCESS/28M.zip
 PREPROCESS/28M_zing.csv
 PREPROCESS/7M.csv
 PREPROCESS/crawl/example.log
-config/config.ini
+GUESS_MASK/format_translation
+static

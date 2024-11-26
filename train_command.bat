@@ -5,6 +5,8 @@
 @REM # train, 
 @REM # move file output to GUESS, 
 @REM # re-order pattern in file
+@REM Path to the config file
+
 
 
 @echo off
@@ -16,12 +18,11 @@ targuess1_train.exe
 echo Moving output file...
 cd ..
 cd ..
-move "TRAIN\src\OUTPUT_TRAIN.txt" "GUESS\src\result_folder"
+move "TRAIN\src\OUTPUT_TRAIN.txt" "GUESS\src\train_result"
 echo re-order pattern file output...
 timeout /t 5 /nobreak
-call conda activate D:\_work_\2024\MANH\current-project\PASS-GUESS-project\targuess\TarGuess-I-main\targuess_env
-python GUESS\src\b_create_new_rule.py
 echo copy person.cpp to GUESS to apply new rule 
 copy "TRAIN\src\person.cpp" "GUESS\src"
 echo All Done. Please exit.
-pause
+timeout /t 3 /nobreak
+exit

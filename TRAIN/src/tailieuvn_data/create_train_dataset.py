@@ -31,6 +31,7 @@ import time
 import unidecode
 import pandas as pd     
 import yaml
+import argparse
 hash_dict = {}
 error_count = 0 
 
@@ -40,9 +41,9 @@ def load_config(config_path='config/train.yaml'):
         return yaml.safe_load(file)
 
 
-def create_hash_dict():
+def create_hash_dict(hash_dict_path):
     global hash_dict
-    with open ('TRAIN/src/tailieuvn_data/hash_dict.txt', 'r') as f_dict:
+    with open (hash_dict_path, 'r') as f_dict:
         lines = f_dict.readlines()
         print ('element',len(lines))
         lines_unique = list(set(lines))
@@ -77,12 +78,15 @@ def replace_password(hash_password):
     else:
         return None 
     
-def fill_plain_pass(config):
+def fill_plain_pass(config, password_type):
     update_csv_file = config['update_csv_path']
     df = pd.read_csv(update_csv_file)
     df = df.map(turn_string)
     print("Length of the DataFrame ORIGINAL:", len(df))
-    df['plain_password'] = df['password'].apply(replace_password)
+    if password_type == 'hash':
+        df['plain_password'] = df['password'].apply(replace_password)
+    else:
+        df['plain_password'] = df['password']
     # Remove rows where 'plain_password' is None
     df = df.dropna(subset=['plain_password'])
     print("Length of the DataFrame have plain crack:", len(df))
@@ -192,7 +196,7 @@ def lower_word(word):
     return word.lower()
 
 
-def post_process_csv(file_path):
+def post_process_csv(new_final_csv_path, file_path):
     '''read name txt 
     create dict for look up 
     read csv
@@ -228,17 +232,28 @@ def post_process_csv(file_path):
     df = df.drop(remove_row)
     print ('******* done remove *******')
         # df.at[index,'PossibleNameClue'] = xoa_dau(new_item).strip() 
-    df.to_csv(config['new_final_csv_path'], index=False)
+    df.to_csv(new_final_csv_path, index=False)
 
 
-if __name__ == '__main__':
-        config = load_config()
-        update_raw_csv(config)
-        time.sleep(5)
-        create_hash_dict()
-        df = fill_plain_pass(config)
-        finalize(config, df)
-        post_process_csv('TRAIN/src/tailieuvn_data/pre_final.csv')
-        print ('******* done write final csv to final.txt *******')
-        export_txt('TRAIN/src/tailieuvn_data/final.csv')
-        print ('number of error birthday',error_count)
+def main():
+    parser = argparse.ArgumentParser(description="parse input data")
+    parser.add_argument('--raw_dataset_path', type=str)
+    parser.add_argument('--password_type', type=str)
+    parser.add_argument('--hash_dict_path', type=str)
+    args = parser.parse_args()
+    config = load_config()
+    config['raw_csv_path'] =  args.raw_dataset_path
+    config['hash_dict_path'] = args.hash_dict_path
+    update_raw_csv(config)  
+    time.sleep(5)
+    create_hash_dict(config['hash_dict_path'])
+    df = fill_plain_pass(config, args.password_type)
+    finalize(config, df)
+    post_process_csv(config['new_final_csv_path'], config['pre_final_csv_path'])
+    print ('******* done write final csv to final.txt *******')
+    export_txt(config['new_final_csv_path'])
+    print ('number of error birthday',error_count)
+
+
+if __name__ == "__main__":
+    main()

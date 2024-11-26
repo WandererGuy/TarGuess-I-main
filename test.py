@@ -1,11 +1,11 @@
 from format_finder import create_format_dict
 
-name_str = ['ynhi', 'nguyen', 'luu']
+name_str = ['ynhi', 'thi', 'luu']
 birth = '20001231'
-email = 'nhi30k@gmail.com'
-phone = '0383962428'
-account = 'ynhiluu3112'
-gid = '001201000681'
+email = 'nhi50k@gmail.com'
+phone = '0383999928'
+account = 'ynhioppo3112'
+gid = '001201999681'
 
 
 def replace_format():
