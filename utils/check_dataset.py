@@ -17,6 +17,7 @@ template
 '''
 import pandas as pd
 import os 
+from routers.model import MyHTTPException
 report_str = r"""
 where:
     first_name: First name (e.g., Nam)
@@ -32,6 +33,9 @@ no_necessary_columns = ['gender', 'address'] # still include to match template b
 # turn all dataset to be this form 
 
 def check_password_type(pass_ls):
+    print ('check password type')
+    print (pass_ls)
+    print ('first password to check as the standard quality hash to compare others  ', pass_ls[0])
     len_pass = len(pass_ls[0])
     thres_error = len(pass_ls)*0.1
     error_password = 0
@@ -60,15 +64,21 @@ def check_valid_and_refine(filepath):
     elif filepath.endswith('.xlsx'):
         df = pd.read_excel(filepath)
     else:
-        raise ValueError(f"Unsupported file format: {filepath}. \
+        message = f"Unsupported file format: {filepath}. \
                          Support filepath for training \
-                        dataset is .csv or .xlsx")
+                        dataset is .csv or .xlsx"
+        raise MyHTTPException(status_code=400,
+                              message = message
+        )
 
     for item in necessary_columns:
         if item not in df.columns:
-            raise ValueError(f"Column {item} not found in the dataset. \
+            message = f"Column {item} not found in the dataset. \
                 must have columns for training dataset are {necessary_columns}.\
-                {report_str}")
+                {report_str}"
+            raise MyHTTPException(status_code=400,
+                                message = message)
+
     # drop error passwords
     password_type, error_dict = check_password_type(df["password"])
     print ('detect password as ', password_type)

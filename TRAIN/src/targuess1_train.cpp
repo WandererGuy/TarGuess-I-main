@@ -359,7 +359,7 @@ int main(int argc, char * argv[]) {
 
 			}; 
 			outputFile.close();
-        	std::cout << "Data has been written to training_output.txt\n";
+        	std::cout << "Data generate during training has been written to training_output.txt\n";
 
 		} else {
         // Print an error message if the file couldn't be opened

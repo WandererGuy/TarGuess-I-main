@@ -34,7 +34,7 @@ import yaml
 import argparse
 hash_dict = {}
 error_count = 0 
-
+import shutil
 
 def load_config(config_path='config/train.yaml'):
     with open(config_path, 'r') as file:
@@ -43,7 +43,7 @@ def load_config(config_path='config/train.yaml'):
 
 def create_hash_dict(hash_dict_path):
     global hash_dict
-    with open (hash_dict_path, 'r') as f_dict:
+    with open (hash_dict_path, 'r', encoding='utf-8', errors='ignore') as f_dict:
         lines = f_dict.readlines()
         print ('element',len(lines))
         lines_unique = list(set(lines))
@@ -114,9 +114,9 @@ def fix_birthday(birthday):
             return None
         return f'{y}{m}{d}'
 
-def export_txt(input_filename):
-    output_filename = input_filename.replace('.csv', '.txt')
+def export_txt(input_filename, output_filename):
     # Reading from CSV and writing to a tab-delimited text file
+    print ('------------------- export csv to txt -------------------')
     with open(input_filename, newline='', encoding='utf-8') as infile, open(output_filename, 'w', newline='', encoding='utf-8') as outfile:
         reader = csv.reader(infile)
         writer = csv.writer(outfile, delimiter='\t')
@@ -240,10 +240,13 @@ def main():
     parser.add_argument('--raw_dataset_path', type=str)
     parser.add_argument('--password_type', type=str)
     parser.add_argument('--hash_dict_path', type=str)
+    parser.add_argument('--save_train_path', type=str)
+
     args = parser.parse_args()
     config = load_config()
     config['raw_csv_path'] =  args.raw_dataset_path
     config['hash_dict_path'] = args.hash_dict_path
+    save_train_path = args.save_train_path
     update_raw_csv(config)  
     time.sleep(5)
     create_hash_dict(config['hash_dict_path'])
@@ -251,7 +254,8 @@ def main():
     finalize(config, df)
     post_process_csv(config['new_final_csv_path'], config['pre_final_csv_path'])
     print ('******* done write final csv to final.txt *******')
-    export_txt(config['new_final_csv_path'])
+    export_txt(config['new_final_csv_path'], config['new_final_txt_path'])
+    shutil.copyfile(config['new_final_txt_path'], save_train_path)
     print ('number of error birthday',error_count)
 
 

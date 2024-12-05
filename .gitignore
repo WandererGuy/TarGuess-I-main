@@ -1,10 +1,13 @@
 targuess_env/
-PREPROCESS/crawl/new_env/
 *.png
 *.jpg
+PREPROCESS/crawl/new_env/
 PREPROCESS/28M.zip
 PREPROCESS/28M_zing.csv
 PREPROCESS/7M.csv
 PREPROCESS/crawl/example.log
-GUESS_MASK/format_translation
+
+
 static
+GUESS/src/result_folder
+GUESS_MASK/format_translation

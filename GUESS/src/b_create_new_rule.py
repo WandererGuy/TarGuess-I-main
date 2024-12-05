@@ -251,12 +251,13 @@ def resolve_conflict(file_path):
         for line in lines:
             data = line.split('\t')
             if len(data) == 3:
-                if 'L' in data[0]:
-                    existing_letter_length_for_fill.append(data[0].replace('L', ''))
-                if 'D' in data[0]:
-                    existing_digit_length_for_fill.append(data[0].replace('D', ''))
-                if 'S' in data[0]:
-                    existing_symbol_length_for_fill.append(data[0].replace('S', ''))
+                mask = data[0]
+                if 'L' in mask:
+                    existing_letter_length_for_fill.append(mask.replace('L', ''))
+                if 'D' in mask:
+                    existing_digit_length_for_fill.append(mask.replace('D', ''))
+                if 'S' in mask:
+                    existing_symbol_length_for_fill.append(mask.replace('S', ''))
         for item in available_list:
             if item in existing_letter_length_for_fill:
                 highest_letter_len = item

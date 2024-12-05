@@ -15,14 +15,16 @@ echo Compiling the program...
 g++ targuess1_train.cpp person.cpp timer.cpp -o targuess1_train
 echo Running the program...
 targuess1_train.exe
+echo write result in TRAIN/src/OUTPUT_TRAIN.txt
+timeout /t 5 /nobreak
 echo Moving output file...
 cd ..
 cd ..
 move "TRAIN\src\OUTPUT_TRAIN.txt" "GUESS\src\train_result"
-echo re-order pattern file output...
 timeout /t 5 /nobreak
 echo copy person.cpp to GUESS to apply new rule 
 copy "TRAIN\src\person.cpp" "GUESS\src"
 echo All Done. Please exit.
 timeout /t 3 /nobreak
+
 exit
