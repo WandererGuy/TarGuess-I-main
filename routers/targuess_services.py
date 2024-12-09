@@ -15,6 +15,8 @@ parent_dir = os.path.dirname(current_script_directory)
 host_ip = config['DEFAULT']['host'] 
 port_num = config['DEFAULT']['port'] 
 router = APIRouter()
+static_folder = os.path.join(parent_dir, 'static')
+output_wordlist_folder = os.path.join(static_folder, 'generated_target_wordlist')
 def fix_path(path):
     return path.replace('\\\\', '/').replace('\\', '/')
 
@@ -30,45 +32,6 @@ def check_name_valid(name = ''):
             raise MyHTTPException(status_code=400,
                                     message = message)
 
-# @router.post("/generate-target-wordlist/")
-# async def generate_target_wordlist(
-#     full_name: str = Form(None),
-#     birth: str = Form(None),
-#     email: str = Form(None),
-#     account_name: str = Form(None),
-#     id_num: str = Form(None),
-#     phone: str = Form(None),
-#     maximum_guess_num: int = Form(...),
-#     minimum_prob: float = Form(...),
-#     password_min_len: int = Form(...),
-#     password_max_len: int = Form(...)
-# ):
-#     full_name = full_name or ""
-#     birth = birth or ""
-#     email = email or ""
-#     account_name = account_name or ""
-#     id_num = id_num or ""
-#     phone = phone or ""
-#     try:
-
-#         if birth and not re.match(r'^\d{2}-\d{2}-\d{4}$', birth):
-#             raise HTTPException(status_code=400, detail={"message": "Birth date must be in DD-MM-YYYY format", "data": {"url":None}})        
-#         updates = {
-#             'maximum_guess_num': maximum_guess_num,
-#             'minimum_prob': minimum_prob,
-#             'password_max_len': password_max_len,
-#             'password_min_len': password_min_len
-#         }
-#         # change config ini file 
-#         update_wordlist_config(updates)
-        
-#         output = run_wordlist(full_name, birth, email, account_name, id_num, phone)
-#         file_path = os.path.basename(output)
-#         path = f"http://{host_ip}:{port_num}/static/generated_target_wordlist/" + file_path
-#         return {"detail":{"message": "File saved successfully", "url":path}}
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail={"message":str(e), "data": {"url":None}})     
-output_wordlist_folder = 'static/generated_target_wordlist'
 @router.post("/generate-target-wordlist/")
 async def generate_target_wordlist(
     full_name: str = Form(None),
@@ -88,10 +51,10 @@ async def generate_target_wordlist(
     phone = phone or ""
     
 
-    if birth and not re.match(r'^\d{2}-\d{2}-\d{4}$', birth):
-        raise MyHTTPException(status_code=400,
-                              message = "Birth date must be in DD-MM-YYYY format")
-    check_name_valid(name = full_name)
+    # if birth and not re.match(r'^\d{2}-\d{2}-\d{4}$', birth):
+    #     raise MyHTTPException(status_code=400,
+    #                           message = "Birth date must be in DD-MM-YYYY format")
+    # check_name_valid(name = full_name)
     if not os.path.exists(train_result_refined_path):
         message = f"file_path {train_result_refined_path} does not exist"
         return reply_bad_request(message = message)
@@ -115,7 +78,7 @@ async def generate_target_wordlist(
         target_wordlist_path  = os.path.join(output_wordlist_folder, wordlist_name)
         main_fill_mask(sorted_mask_file_path, target_wordlist_path, only_wordlist = True)
         url = f"http://{host_ip}:{port_num}/static/generated_target_wordlist/" + wordlist_name
-        return reply_success(message = "Result saved successfully", result = {"path":target_wordlist_path, "url":url})
+        return reply_success(message = "Result saved successfully", result = {"path":fix_path(target_wordlist_path), "url":url})
     except Exception as e:
         return reply_server_error(message = str(e))
     
@@ -139,11 +102,11 @@ async def generate_target_mask_list(
     phone = phone or ""
     
 
-    if birth and not re.match(r'^\d{2}-\d{2}-\d{4}$', birth):
-        raise MyHTTPException(status_code=400, 
-                              message="Birth date must be in DD-MM-YYYY format"
-                              )
-    check_name_valid(name = full_name)
+    # if birth and not re.match(r'^\d{2}-\d{2}-\d{4}$', birth):
+    #     raise MyHTTPException(status_code=400, 
+    #                           message="Birth date must be in DD-MM-YYYY format"
+    #                           )
+    # check_name_valid(name = full_name)
     try:
         output = run_masklist(max_mask_generate, 
                               train_result_refined_path,

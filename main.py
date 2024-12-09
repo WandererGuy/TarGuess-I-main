@@ -34,6 +34,16 @@ app.include_router(tar.router)
 app.include_router(train.router)
 app.add_exception_handler(MyHTTPException, my_exception_handler)
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+def empty_to_false(value):
+    value = value.strip('\n').strip()
+    if value in (None, '', 'false', 'False', '0'):
+        return False
+    elif value in ('true', 'True', '1'):
+        return True
+        
+    return bool(value)
+
 # Endpoint to receive an image and start the processing pipeline
 @app.get("/")
 async def root():
@@ -42,7 +52,8 @@ async def root():
 
 def main():
     print('INITIALIZING FASTAPI SERVER')
-    if not production: uvicorn.run("main:app", host=host_ip, port=int(port_num), reload=True)
+    if empty_to_false(production) == False: 
+        uvicorn.run("main:app", host=host_ip, port=int(port_num), reload=True)
     else: uvicorn.run(app, host=host_ip, port=int(port_num), reload=False)
 
 if __name__ == "__main__":

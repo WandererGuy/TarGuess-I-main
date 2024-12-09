@@ -33,9 +33,9 @@ def process_birthday(birthday):
         formatted_date = parsed_date.strftime("%Y%m%d")
         return formatted_date
     except ValueError:
-        return "Invalid date. Please enter a valid date (e.g., DD-MM-YYYY)."
+        raise HTTPException(status_code=400, detail= "Invalid date. Please enter a valid date (e.g., DD-MM-YYYY).")
 
-def run_masklist(max_mask_generate, train_result_refined_path, name='', birth='', email='', accountName='', id='', phone=''):
+def run_masklist(max_mask_generate, train_result_refined_path, name, birth, email, accountName, id, phone):
     # Initializes an empty string for the full name
     print ('Receiving inputs')
 
@@ -61,9 +61,8 @@ def run_masklist(max_mask_generate, train_result_refined_path, name='', birth=''
                 break
             fullName += item
             fullName += ' '
-    birth = process_birthday(birth)
-    if birth == "Invalid date. Please enter a valid date (e.g., DD-MM-YYYY).":
-        return birth
+    if birth != '':
+        birth = process_birthday(birth)
     
     p = os.path.join('GUESS','src', 'result_folder', str(uuid.uuid4()) +'.txt')
     print (f'write target info to {p} for later command')
@@ -98,8 +97,8 @@ def run_masklist(max_mask_generate, train_result_refined_path, name='', birth=''
     return file_mask_path
 
 # Function to handle the file download
-input_file_wordlist = 'GUESS/src/result_folder/output.txt'  # Replace with your actual input file path
-output_file_wordlist_folder = 'static/generated_target_wordlist'  # Replace with your desired output file path
+input_file_wordlist = os.path.join('GUESS','src','result_folder','output.txt')  # Replace with your actual input file path
+output_file_wordlist_folder = os.path.join('static','generated_target_wordlist')  # Replace with your desired output file path
 
 def format_text_file(input_file_wordlistpath, output_file_wordlistpath):
     # Read lines from the input file
@@ -122,65 +121,6 @@ def format_text_file(input_file_wordlistpath, output_file_wordlistpath):
                 file.write(f"{password:<{max_length}} {probability}\n")
 
 
-
-
-
-# def run_wordlist(name='', birth='', email='', accountName='', id='', phone=''):
-#     # Initializes an empty string for the full name
-#     print ('Receiving inputs')
-
-#     fullName = ''
-#     password = ''
-#     # Splits the name into a list and rearranges to last name first
-#     if name != '':
-#         name = name.lower()
-#         name = unidecode.unidecode(name)
-#         name = name.strip()
-#         my_list = name.split(' ')
-#         # if len(my_list) < 3:
-#         #     message = "Full Name must have 3 or more compnents"
-#         #     raise MyHTTPException(status_code=400,
-#         #                             message = message)
-
-#         my_list = [my_list[-1]] + my_list[:-1]
-#         # Joins elements with '|' and avoids extra '|' at the end
-#         for index, item in enumerate(my_list):
-#             if index == len(my_list) - 1:
-#                 fullName += item
-#                 break
-#             fullName += item
-#             fullName += ' '
-#     birth = process_birthday(birth)
-#     if birth == "Invalid date. Please enter a valid date (e.g., DD-MM-YYYY).":
-#         return birth
-#     check_ls = [email, password, fullName, id, accountName, phone, birth]
-#     for i in range (len(check_ls)):
-#         if check_ls[i]  == "" or check_ls[i]  == '' or check_ls[i] == '""' or check_ls[i] == "''" or check_ls[i] == None:
-#             check_ls[i] = ""
-#     p = os.path.join('GUESS','src', 'result_folder', 'test.txt')
-#     print (f'write target info to {p} for later command')
-#     print ('write order: email + password + fullName + id + accountName + phone + birth')
-
-#     with open (p, "w") as f:
-#         string = check_ls[0] + '\\t' + check_ls[1] + '\\t' + check_ls[2] + '\\t' + check_ls[3] + '\\t' + check_ls[4] + '\\t' + check_ls[5] + '\\t' + check_ls[6]
-#         f.write(string)
-#     batch_file = os.path.join('GUESS','src', 'command.bat')
-#     # eragonkisyrong96@gmail.com	buiduymanh1996	manh		wantedbyzeus	01647732700	14-3-1995
-#     print ('running batch file to generate guesses')
-
-
-#     result = subprocess.Popen([batch_file], 
-#                               stdout=subprocess.PIPE, 
-#                               stderr=subprocess.PIPE, 
-#                               text=True)
-#     stdout, stderr = result.communicate()
-#     print("Output:", stdout)
-#     if stderr:
-#         print("Errors:", stderr)
-#     output_file_wordlist = generate_unique_filename(output_file_wordlist_folder)
-#     output_file_wordlist_path = os.path.join(output_file_wordlist_folder, output_file_wordlist)
-#     format_text_file(input_file_wordlist, output_file_wordlist_path)
-#     return output_file_wordlist
 
 def update_wordlist_config(updates):
     file_path = os.path.join('GUESS', 'src', 'config.ini')
