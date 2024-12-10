@@ -16,6 +16,7 @@ host_ip = config['DEFAULT']['host']
 port_num = config['DEFAULT']['port'] 
 router = APIRouter()
 static_folder = os.path.join(parent_dir, 'static')
+train_result_folder = os.path.join(static_folder, 'train_result')
 output_wordlist_folder = os.path.join(static_folder, 'generated_target_wordlist')
 def fix_path(path):
     return path.replace('\\\\', '/').replace('\\', '/')
@@ -55,6 +56,7 @@ async def generate_target_wordlist(
     #     raise MyHTTPException(status_code=400,
     #                           message = "Birth date must be in DD-MM-YYYY format")
     # check_name_valid(name = full_name)
+    train_result_refined_path = os.path.join(train_result_folder, train_result_refined_path)
     if not os.path.exists(train_result_refined_path):
         message = f"file_path {train_result_refined_path} does not exist"
         return reply_bad_request(message = message)

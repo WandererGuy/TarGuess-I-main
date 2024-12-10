@@ -8,6 +8,7 @@ PREPROCESS/7M.csv
 PREPROCESS/crawl/example.log
 
 
-static
+static/*
+!static/train_result/
 GUESS/src/result_folder
 GUESS_MASK/format_translation
