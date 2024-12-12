@@ -9,6 +9,7 @@ PREPROCESS/crawl/example.log
 
 
 static/*
-!static/train_result/
+!static/train_result/default.txt
 GUESS/src/result_folder
 GUESS_MASK/format_translation
+**/__pycache__/
