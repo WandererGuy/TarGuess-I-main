@@ -32,16 +32,13 @@ check config/config.ini file if wanna change ip
 
 ## Usage 
 ### Training 
-**training and move model trained to ./GUESS, ready for inference**
-```
-train_command.bat 
-```
-
-
 ### RUN REAL (with produced weight aka a probility file GUESS\src\result_folder\new_order.txt with password have PII in it , and GUESS\src\result_folder\trawling.txt without PII )
 ```
 conda activate path_to_targuess_env
 python main.py
+```
+```
+START.bat
 ```
 
 

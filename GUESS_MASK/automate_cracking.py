@@ -21,24 +21,33 @@ def read_input(target_info_file):
         info_dict['birth'] = birth
     return info_dict
 
+
 def replace_format(max_mask_generate, info_dict, train_result_refined_path):
     name_str, birth, email, phone, account, gid = info_dict['name_str'], info_dict['birth'], info_dict['email'], info_dict['phone'], info_dict['account'], info_dict['gid']
     format_dict = create_format_dict(name_str, birth, email, phone, account, gid)
     raw_lst = []
     new_lst = []
+    print (format_dict)
     with open (train_result_refined_path, 'r') as file:
         lines = file.readlines()
         for index, line in enumerate(lines):
             if index == max_mask_generate:
                 break
+            invalid_mask = False
             line = line.strip('\n')
             raw = line.split('\t')[0]
             new = ''
             for i in range(len(raw)):
                 if raw[i] in format_dict.keys():
+                    if format_dict[raw[i]] == '': # skip mask with empty fill even 1 target info component in mask 
+                        # like Q?d?dA -> if even Q is '' then Q?d?dA is not valid mask this time 
+                        invalid_mask = True
+                        break
                     new += format_dict[raw[i]]
                 else:
                     new += raw[i]
+            if invalid_mask:
+                continue
             raw_lst.append(raw)
             new_lst.append(new)
             # print (raw, '\t', new)

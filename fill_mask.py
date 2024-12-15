@@ -199,9 +199,22 @@ def create_fill_json(fill_mask_path, fill_mask_json_path):
     #     dictionary = json.load(f)
     return json_dict
 
+def check_line_have_target_info(components, scan_ls):
+    # line must have at least one target info, not trawling mask 
+    '''
+    remove mask have no target info (since user dont provide that info field)
+    '''
+    for item in components:
+        if item not in scan_ls:
+            return True
+    return False
+
+
+
+
 def create_wordlist(mask_file, dictionary, limit_each_class):
     '''
-    prioritize replace by longest pattern liek ?l?l?l over ?l?l, 
+    prioritize replace by longest pattern like ?l?l?l over ?l?l, 
     so scan from longest class to shortest
     limit_each_class is the max vocab for fill each class deserve (classes are xmen?l?l?l, ?d?dbombay?d, ?l, ?s, ...)
     '''
@@ -215,6 +228,8 @@ def create_wordlist(mask_file, dictionary, limit_each_class):
             line = line.strip('\n')
             wordlist[line] = []
             components = break_down_component(line, scan_ls) # ?d?dbombay?d -> ?d?d, bombay, ?d
+            # if check_line_have_target_info(components, scan_ls) == False:
+            #     continue 
             transform_components = []
             for item in components:
                 if item in dictionary.keys():
@@ -287,7 +302,7 @@ def main_fill_mask(mask_file_path, target_wordlist_path, only_wordlist = False):
     # discard mask have value []
     discard_mask_ls = []
     f = open(target_wordlist_path, 'a')
-    ### write first item of mask for good representation to show other , then write the rest 
+    ### write first item of mask for good representation to show people , then write the rest 
     for index, (key, value) in tqdm(enumerate(wordlist.items()), total=len(wordlist)):
         if index % 5 == 0 and index != 0:
             f.close()
@@ -318,4 +333,4 @@ def main_fill_mask(mask_file_path, target_wordlist_path, only_wordlist = False):
         if not only_wordlist:f.write('--------------------------------------------------------------------\n')
     print ("number of discarded mask class")
     print (len(discard_mask_ls))
-    print (discard_mask_ls)
+    # print (discard_mask_ls)
