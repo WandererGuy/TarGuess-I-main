@@ -1,3 +1,5 @@
 @echo off
-call conda activate C:\Users\Admin\CODE\work\PASSWORD_CRACK\TarGuess-I-main\targuess_env
+setlocal
+set current_dir=%~dp0
+call conda activate "%current_dir%targuess_env"
 python main.py
