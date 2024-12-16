@@ -8,6 +8,8 @@ from fastapi.staticfiles import StaticFiles
 import os, sys
 sys.path.insert(0, os.path.abspath(".."))
 
+from change_ip import main as change_ip_main
+change_ip_main()
 from routers import targuess_services as tar
 from routers import train_targuess as train
 from routers.model import MyHTTPException, my_exception_handler
