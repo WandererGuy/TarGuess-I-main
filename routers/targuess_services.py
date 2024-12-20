@@ -80,7 +80,9 @@ async def generate_target_wordlist(
         target_wordlist_path  = os.path.join(output_wordlist_folder, wordlist_name)
         main_fill_mask(sorted_mask_file_path, target_wordlist_path, only_wordlist = True)
         url = f"http://{host_ip}:{port_num}/static/generated_target_wordlist/" + wordlist_name
-        return reply_success(message = "Result saved successfully", result = {"path":fix_path(target_wordlist_path), "url":url})
+        return reply_success(message = "Result saved successfully", 
+                             result = {"path":fix_path(target_wordlist_path), 
+                                       "url":url})
     except Exception as e:
         return reply_server_error(message = str(e))
     
@@ -109,6 +111,11 @@ async def generate_target_mask_list(
     #                           message="Birth date must be in DD-MM-YYYY format"
     #                           )
     # check_name_valid(name = full_name)
+    train_result_refined_path = os.path.join(train_result_folder, train_result_refined_path)
+    if not os.path.exists(train_result_refined_path):
+        message = f"file_path {train_result_refined_path} does not exist"
+        return reply_bad_request(message = message)
+
     try:
         output = run_masklist(max_mask_generate, 
                               train_result_refined_path,

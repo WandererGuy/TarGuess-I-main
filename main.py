@@ -4,12 +4,11 @@ import uvicorn
 import logging
 import configparser
 from fastapi.staticfiles import StaticFiles
-
+from time import sleep
 import os, sys
 sys.path.insert(0, os.path.abspath(".."))
 
 from change_ip import main as change_ip_main
-change_ip_main()
 from routers import targuess_services as tar
 from routers import train_targuess as train
 from routers.model import MyHTTPException, my_exception_handler
@@ -53,6 +52,8 @@ async def root():
 
 
 def main():
+    change_ip_main()
+    sleep(1)
     print('INITIALIZING FASTAPI SERVER')
     if empty_to_false(production) == False: 
         uvicorn.run("main:app", host=host_ip, port=int(port_num), reload=True, workers=3)

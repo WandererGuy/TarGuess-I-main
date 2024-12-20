@@ -39,7 +39,7 @@ def update_config_host(config_path, new_host):
 
             # Write the original line if no changes are made
             file.write(line)
-
+import time 
 def main():
     # Define the path to your config.ini file
     config_file = os.path.join('config', 'config.ini')  # Update this path if necessary
@@ -49,6 +49,7 @@ def main():
 
     try:
         update_config_host(config_file, new_ip)
+        time.sleep(3)
         print(f"Host IP address dynamically updated to: {new_ip}")
     except Exception as e:
         print(f"An error occurred: {e}")
