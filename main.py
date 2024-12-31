@@ -20,6 +20,7 @@ os.makedirs(os.path.join('static','generated_target_masklist'), exist_ok=True)
 os.makedirs(os.path.join('static','generated_target_wordlist'), exist_ok=True)
 os.makedirs(os.path.join('static','train_dataset'), exist_ok=True)
 os.makedirs(os.path.join('static','train_result'), exist_ok=True)
+os.makedirs(os.path.join('static','generated_target_fill_mask'), exist_ok=True)
 
 os.makedirs(os.path.join('GUESS_MASK','format_translation'), exist_ok=True)
 os.makedirs(os.path.join('GUESS','src', 'train_result'), exist_ok=True)

@@ -288,6 +288,7 @@ def main_fill_mask(mask_fill_dictionary, mask_file_path, target_wordlist_path, o
     though high entropy class can be discarded due to not meet LIMIT_COMBINATION_NUM
     '''
 
+    unique_set = set()
 
     print ('start making wordlist for each line in mask file')
     # mask_file = 'C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/generated_target_masklist/5ac50029-d881-4157-bc58-8eb9c91a9b24.hcmask'
@@ -308,11 +309,17 @@ def main_fill_mask(mask_fill_dictionary, mask_file_path, target_wordlist_path, o
         if not only_wordlist:
             f.write(key)
             f.write('\n')
+        if value[0] in unique_set:
+            continue
         f.write(value[0])
+        unique_set.add(value[0])
         f.write('\n')
         if not only_wordlist:f.write('--------------------------------------------------------------------\n')
     f.write('------------------------------------------------------------------------------------\n')
+    print ('------------------------------------------------------------------------------------')
+    end_flag = False
     for index, (key, value) in tqdm(enumerate(wordlist.items()), total=len(wordlist)):
+        
         if index % 5 == 0 and index != 0:
             f.close()
             f = open(target_wordlist_path, 'a')
@@ -322,10 +329,37 @@ def main_fill_mask(mask_fill_dictionary, mask_file_path, target_wordlist_path, o
         if not only_wordlist:
             f.write(key)
             f.write('\n')
-        for item in value[1:]:
+        for index, item in enumerate(value[1:]):
+            if index == len(value) - 2:
+                end_flag = True
+            if item in unique_set:
+                continue
             f.write(item)
             f.write('\n')
+            unique_set.add(item)
+        if end_flag:
+            f.write('\n\n')
+            end_flag = False
         if not only_wordlist:f.write('--------------------------------------------------------------------\n')
     print ("number of discarded mask class")
     print (len(discard_mask_ls))
     # print (discard_mask_ls)
+
+
+# for each mask , there exist a wordlist for it , each with own prob
+# this is for pcfg 
+def single_mask_analysis(mask, dictionary):
+    
+    scan_ls = SCAN_LS
+    components = break_down_component(mask, scan_ls) # ?d?dbombay?d -> ?d?d, bombay, ?d
+    # if check_line_have_target_info(components, scan_ls) == False:
+    #     continue 
+    print ('components', components)
+    require_mask_fill = []
+    for item in components:
+        if item in dictionary.keys():
+            value = dictionary[item] # 
+            require_mask_fill.append(value)
+        else:
+            require_mask_fill.append([item])
+    return require_mask_fill

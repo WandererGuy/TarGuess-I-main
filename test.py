@@ -20,10 +20,21 @@
 # # with open ('all_train_zing_dataset.txt', 'w', encoding = 'utf-8', errors='ignore') as f:
 # #     f.writelines(sum_ls)
 
-# from utils.common import convert, chunk_list, convert_txt_to_json
-# convert_txt_to_json('train_all_train_zing_dataset_preprocessed.txt')
-train_input_path = r'C:\Users\Admin\CODE\work\PASSWORD_CRACK\TarGuess-I-main\static\train_dataset\train_all_train_zing_dataset_preprocessed.json'
+
+# pcfg trawling 
+
+# pcfg 
 import json
-with open(train_input_path, 'r') as file:
-    data = json.load(file)
-print 
+json_file = open(r'C:\Users\Admin\CODE\work\PASSWORD_CRACK\TarGuess-I-main\static\generated_target_fill_mask\9eb837bd-7361-4873-a20b-3fc265564baa.json')
+from fill_mask import single_mask_analysis
+mask_fill_dictionary = json.load(json_file)
+
+single_mask = '?d?dbombay?d'
+res = single_mask_analysis(single_mask, mask_fill_dictionary)
+print (res)
+# class Mask():
+#     def __init__(self, mask, fill_mask_dict):
+#         self.mask = mask
+#         self.fill_mask_dict = fill_mask_dict
+
+#     def create

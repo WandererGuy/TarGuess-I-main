@@ -8,11 +8,12 @@ pos_dict = {
 }
 
 
-def check_short_pass(line, min_len=7):
+def check_short_pass(line, min_pass_len):
+
     for key, value in pos_dict.items():
         new_line = line
         new_line = new_line.replace(key, 'X')
-    if len(new_line) > min_len:
+    if len(new_line) > min_pass_len:
         return False
     else:
         return True
@@ -54,7 +55,7 @@ def deduplicate_file_lines(mask_file_path):
 
         
 
-def sort_by_complexity(mask_file_path, sorted_mask_file_path):
+def sort_by_complexity(mask_file_path, sorted_mask_file_path, min_pass_len):
     with open (mask_file_path, 'r') as f:
         lines = f.readlines()
         raw = {}
@@ -62,7 +63,7 @@ def sort_by_complexity(mask_file_path, sorted_mask_file_path):
             line = line.strip('\n')
             if line == '':
                 continue
-            if check_short_pass(line): # skip 7 char lenghth
+            if check_short_pass(line, min_pass_len): # skip 7 char lenghth
                 continue 
             total = 1
             for key, value in pos_dict.items():

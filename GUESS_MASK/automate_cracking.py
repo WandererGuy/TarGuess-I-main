@@ -3,6 +3,7 @@ import os
 import argparse
 import configparser
 import uuid
+from tqdm import tqdm
 config = configparser.ConfigParser()
 config.read(os.path.join('config', 'config.ini'))
 # train_result_refined_path = config['GUESS_MASK']['train_result_refined_path']
@@ -27,13 +28,13 @@ def replace_format(max_mask_generate, info_dict, train_result_refined_path):
     format_dict = create_format_dict(name_str, birth, email, phone, account, gid)
     raw_lst = []
     new_lst = []
-
+    count = 0 
     for key, value in format_dict.items():
         print (key, '\t', value)
     with open (train_result_refined_path, 'r') as file:
         lines = file.readlines()
-        for index, line in enumerate(lines):
-            if index == max_mask_generate:
+        for line in tqdm(lines, total = len(lines)):
+            if count == max_mask_generate:
                 break
             invalid_mask = False
             line = line.strip('\n')
@@ -52,6 +53,9 @@ def replace_format(max_mask_generate, info_dict, train_result_refined_path):
                 continue
             raw_lst.append(raw)
             new_lst.append(new)
+            count += 1
+            print ('count valid mask :', count)
+            print (raw, '\t', new)
             # print (raw, '\t', new)
     return raw_lst, new_lst
 
@@ -66,11 +70,15 @@ def generate_mask_file(mask_file_path, file_path):
         for line in lines:
             line = line.strip('\n')
             _, trans_format = line.split('\t')
+            
+            
             if 'D' in trans_format or 'L' in trans_format or 'S' in trans_format:
                 mask = create_mask(trans_format)
+                
                 mask_file.write(mask + '\n')
             else:
                 mask_file.write(trans_format + '\n')
+                
 
 def main():
     parser = argparse.ArgumentParser(description="parse input data")
@@ -95,6 +103,7 @@ def main():
         raw_lst, new_lst = replace_format(max_mask_generate, info_dict, train_result_refined_path)
         for raw, new in zip(raw_lst, new_lst):
             file.write(f"{raw}\t{new}\n")
+            
     print ('intermediate file created', f)
     # f is just intermediate file to store format translation
     generate_mask_file(mask_file_path, f)
