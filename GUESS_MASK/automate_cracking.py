@@ -27,7 +27,9 @@ def replace_format(max_mask_generate, info_dict, train_result_refined_path):
     format_dict = create_format_dict(name_str, birth, email, phone, account, gid)
     raw_lst = []
     new_lst = []
-    print (format_dict)
+
+    for key, value in format_dict.items():
+        print (key, '\t', value)
     with open (train_result_refined_path, 'r') as file:
         lines = file.readlines()
         for index, line in enumerate(lines):
@@ -87,6 +89,8 @@ def main():
     os.makedirs(t, exist_ok=True)
     f = os.path.join(t, str(uuid.uuid4()) + '.txt')
     info_dict = read_input(target_info_file)
+    print ('train_result_refined_path :', train_result_refined_path)
+
     with open(f, 'w') as file:
         raw_lst, new_lst = replace_format(max_mask_generate, info_dict, train_result_refined_path)
         for raw, new in zip(raw_lst, new_lst):

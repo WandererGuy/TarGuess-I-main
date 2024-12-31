@@ -11,6 +11,8 @@ sys.path.insert(0, os.path.abspath(".."))
 from change_ip import main as change_ip_main
 from routers import targuess_services as tar
 from routers import train_targuess as train
+from routers import process_name_server as process_name_router
+
 from routers.model import MyHTTPException, my_exception_handler
 
 os.makedirs('static', exist_ok=True)
@@ -33,6 +35,8 @@ production = config['DEFAULT']['production']
 app = FastAPI()
 app.include_router(tar.router)
 app.include_router(train.router)
+app.include_router(process_name_router.router)
+
 app.add_exception_handler(MyHTTPException, my_exception_handler)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -56,8 +60,8 @@ def main():
     sleep(1)
     print('INITIALIZING FASTAPI SERVER')
     if empty_to_false(production) == False: 
-        uvicorn.run("main:app", host=host_ip, port=int(port_num), reload=True, workers=3)
-    else: uvicorn.run("main:app", host=host_ip, port=int(port_num), reload=False, workers=3)
+        uvicorn.run("main:app", host=host_ip, port=int(port_num), reload=True, workers=1)
+    else: uvicorn.run("main:app", host=host_ip, port=int(port_num), reload=False, workers=1)
 
 if __name__ == "__main__":
     main()

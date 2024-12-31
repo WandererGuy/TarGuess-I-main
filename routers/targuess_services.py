@@ -6,7 +6,8 @@ from utils.server_utils import *
 from utils.sort_complexity import * 
 from pathlib import Path
 import traceback
-from fill_mask import main_fill_mask
+import json 
+from fill_mask import main_fill_mask, create_fill_json
 from routers.model import reply_bad_request, reply_server_error, reply_success, MyHTTPException
 config = configparser.ConfigParser()
 config.read('config/config.ini')
@@ -20,6 +21,7 @@ train_result_folder = os.path.join(static_folder, 'train_result')
 output_wordlist_folder = os.path.join(static_folder, 'generated_target_wordlist')
 def fix_path(path):
     return path.replace('\\\\', '/').replace('\\', '/')
+
 
 
 def check_name_valid(name = ''):
@@ -50,16 +52,26 @@ async def generate_target_wordlist(
     account_name = account_name or ""
     id_num = id_num or ""
     phone = phone or ""
-    
+    if not os.path.exists(train_result_refined_path):
+        message = f"file_path {train_result_refined_path} does not exist"
+        return reply_bad_request(message = message)
+
+    print ('start making json fill dictionary')
+    folder_parent = os.path.dirname(train_result_refined_path)
+    fill_mask_path = os.path.join(train_result_folder, folder_parent, 'fill_mask.txt')
+    fill_mask_json_path = os.path.join(train_result_folder, folder_parent, 'fill_mask.json')
+    if not os.path.exists(fill_mask_json_path):
+        mask_fill_dictionary = create_fill_json(fill_mask_path, fill_mask_json_path)
+    else:
+        with open(fill_mask_json_path, "r") as json_file:
+            mask_fill_dictionary = json.load(json_file)
+
 
     # if birth and not re.match(r'^\d{2}-\d{2}-\d{4}$', birth):
     #     raise MyHTTPException(status_code=400,
     #                           message = "Birth date must be in DD-MM-YYYY format")
     # check_name_valid(name = full_name)
-    train_result_refined_path = os.path.join(train_result_folder, train_result_refined_path)
-    if not os.path.exists(train_result_refined_path):
-        message = f"file_path {train_result_refined_path} does not exist"
-        return reply_bad_request(message = message)
+
     try:            
         output = run_masklist(max_mask_generate, 
                               train_result_refined_path, 
@@ -78,7 +90,7 @@ async def generate_target_wordlist(
 
         wordlist_name = str(uuid.uuid4()) + ".txt"
         target_wordlist_path  = os.path.join(output_wordlist_folder, wordlist_name)
-        main_fill_mask(sorted_mask_file_path, target_wordlist_path, only_wordlist = True)
+        main_fill_mask(mask_fill_dictionary, sorted_mask_file_path, target_wordlist_path, only_wordlist = True)
         url = f"http://{host_ip}:{port_num}/static/generated_target_wordlist/" + wordlist_name
         return reply_success(message = "Result saved successfully", 
                              result = {"path":fix_path(target_wordlist_path), 
@@ -110,8 +122,7 @@ async def generate_target_mask_list(
     #     raise MyHTTPException(status_code=400, 
     #                           message="Birth date must be in DD-MM-YYYY format"
     #                           )
-    # check_name_valid(name = full_name)
-    train_result_refined_path = os.path.join(train_result_folder, train_result_refined_path)
+    # check_name_valid(name = full_name) c cc
     if not os.path.exists(train_result_refined_path):
         message = f"file_path {train_result_refined_path} does not exist"
         return reply_bad_request(message = message)

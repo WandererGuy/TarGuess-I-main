@@ -18,6 +18,14 @@ void person::findStr(string& pat_str, string psw, string str, char c) {
 	// unsigned int pos = psw.find(str);
 	string::size_type pos = psw.find(str);
 	int len = str.length();
+	if (len < 2){
+		return;
+	}
+	 // author forgot that only format > 1 char can be consider a format like in paper said 
+	
+	//Note that, to improve accuracy, we match using the longestprefix rule and also only consider PII-segments with len ≥ 2. For example, if john06071982 matches John Smith’s account name “john0607”, it will be parsed into A1B5 using the longestprefix rule, but not N3B2. In addition, we have only considered full MMDDdates in the definition of B1 ∼ B10, yet many users tend to use an abbr. of date when possible (e.g., “198267” instead of “19820607”). Thus, when matching a birthday-based segment in the training phase, if an abbreviation happens, the tag related to the corresponding full segment will be counted by one; In the password generation process, both full and abbreviated date segments will be produced. For instance, both “john06071982” and “john671982” will be produced if the structure N3B2 is used for guess generation
+	
+	
 	string flag = "";
 	for (int i = 0; i < len; i++)
 		flag += c;
@@ -27,9 +35,8 @@ void person::findStr(string& pat_str, string psw, string str, char c) {
 				return;
 		}
 		pat_str.replace(pos, len, flag);
-
-
 	}
+	
 }
 
 
@@ -63,7 +70,8 @@ void person::processName(string& pat_str, string psw) {
 	// so more format is better
 
 	string tmp[6];
-
+	if (name_len == 0)
+		return;
 	for (int i = 0; i < name_len; i++) {
 		if (i>0) {
 
@@ -90,15 +98,23 @@ void person::processName(string& pat_str, string psw) {
 	findStr(pat_str, psw, tmp[4] + name_str[0], 'f'); // sczhang
 	findStr(pat_str, psw, name_str[0] + tmp[4], 'g'); // zhangsc
 
-
+	if (name_len >= 2)
+	{
 	findStr(pat_str, psw, name_str[1], 'V'); // san
+	}
+	if (name_len == 3)
+	{
 	findStr(pat_str, psw, name_str[2], 'W'); // chuan
+	}
+	if (name_len == 4)
+	{
+	findStr(pat_str, psw, name_str[2]+name_str[3], 'W'); // chuan
+	}
 
-
-
-
+	if (name_len >= 1)
+	{
 	findStr(pat_str, psw, tmp[5] + name_str[0][0], 'X'); // scz
-
+	}
 	}
 	// fundamental char >= 2 char , can create a fundamental format 
 

@@ -12,7 +12,8 @@ pip install fastapi uvicorn pydantic
 ### set up C++ for VScode
 install extension Code Runner + C++ in Vscode 
 download msys2 and run ... add .. to become environment path (like https://code.visualstudio.com/docs/languages/cpp)
-place libstdc++-6.dll file somewhere in /ucrt folder into C++ run code folder(GUESS/src/) (usually in "C:\msys64\ucrt64\bin\libstdc++-6.dll")
+copy file libstdc++-6.dll file somewhere in /ucrt folder (usually in "C:\msys64\ucrt64\bin\libstdc++-6.dll")
+then put it into C++ run code folder(GUESS/src/ and TRAIN/src) 
 fix path in config/config_setup_cpp.txt (so that can use g++ in C++ session)
 
 

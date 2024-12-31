@@ -76,6 +76,7 @@ def run_masklist(max_mask_generate, train_result_refined_path, name, birth, emai
     python_file = os.path.join('GUESS_MASK','automate_cracking.py') 
     # eragonkisyrong96@gmail.com	buiduymanh1996	manh		wantedbyzeus	01647732700	14-3-1995
     print ('command running python file to generate guesses')
+    print ('train_result_refined_path :', train_result_refined_path)
     process = subprocess.Popen(['python', 
                                 python_file, 
                                 '--mask_file_path', 

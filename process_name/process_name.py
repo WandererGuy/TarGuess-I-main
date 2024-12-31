@@ -31,17 +31,28 @@ can happen, some mistake name with family name famous case like
 
 
 
-
+import os 
 import pandas as pd
 from process_name_utils import *
 
 letter_list = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ '
 digit_list = '0123456789'
 symbol_list = '!@#$%^&*()-_=+[]{};’:”,./<>?'
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
 
-def extract_name():
-    # Replace 'yourfile.csv' with the path to your CSV file
-    file_path = 'D:/_work_/2024/MANH/current-project/PASS-GUESS-project/targuess/TarGuess-I-main/TRAIN/src/tailieuvn_data/final.csv'
+
+from multiprocessing import Pool
+from tqdm import tqdm
+
+NAME_OUTPUT_NAME = 'output.txt'
+NAME_ERROR_NAME = 'error.txt'
+
+
+
+
+def extract_name(file_path):
+    # Replace 'yourfile.csv' with the path to your raw CSV file
     df = pd.read_csv(file_path)
     # Print the column names
     print(df.columns.tolist())
@@ -186,17 +197,7 @@ def fix_name(name):
 
 # print (fix_name('781 Nhancaoquang'))
 
-from tqdm import tqdm
-# Extract names
-name_ls = extract_name()
 
-
-# Open the error file in append mode for logging errors
-error_file = open('error.txt', 'w')
-error_file.close()
-
-file = open('output.txt', 'w')
-file.close()
 
 # Open the output file in write mode
 # Loop through the names
@@ -211,25 +212,72 @@ def split_list(lst):
     part3 = lst[2 * part_size:]
 
     return [part1, part2, part3]
-
 def process_all_name(name_ls):
-    for i in tqdm(range(len(name_ls))):
-        name = name_ls[i]
-        try:
-            new_name = fix_name(name)
-            file = open('output.txt', 'a')
-            file.write(f"{name}\n ----> {new_name}\n")
-            if i+1 % 50 == 0 :
-                file.close()
-        except Exception as e:
-            error_file = open('error.txt', 'a')
-            error_file.write('**************************************************\n')
+    print ('chunk len :',len(name_ls))
+    tmp_ls = []
+    error_tmp_ls = []
+    with open(NAME_ERROR_NAME, 'a', encoding = 'utf-8', errors = 'ignore') as error_file:
+        with open(NAME_OUTPUT_NAME, 'a', encoding = 'utf-8', errors = 'ignore') as file:
+            for i in tqdm(range(len(name_ls)), total = len(name_ls)):
+                name = name_ls[i]
+                try:
+                    new_name = fix_name(name)
+                    tmp_ls.append(f"{name}\n ----> {new_name}\n")
+                except Exception as e:
+                    error_tmp_ls.append('**************************************************\n')
+                    error_tmp_ls.append(f"{name} \n {e}\n")
+                if i+1 % 10000 == 0 :
+                    file.writelines(tmp_ls)
+                    error_file.writelines(error_tmp_ls)
+                    tmp_ls = []
+                    error_tmp_ls = []
+            file.writelines(tmp_ls)
+            error_file.writelines(error_tmp_ls)
 
-            error_file.write(f"{name} \n {e}\n")
-            error_file.close()
+
+def chunk_list(lst, n):
+    """
+    Splits the list `lst` into `n` chunks.
+    The first few chunks will have one more element if `lst` isn't divisible by `n`.
+    """
+    if n <= 0:
+        raise ValueError("Number of chunks 'n' must be a positive integer.")
+    length = len(lst)
+    chunk_size = length // n
+    excess = length % n
+    chunks = []
+    start = 0
+    for i in range(n):
+        # If there are excess elements, distribute one to this chunk
+        end = start + chunk_size + (1 if i < excess else 0)
+        chunks.append(lst[start:end])
+        start = end
+    return chunks
 
 
-process_all_name(name_ls)
+    # Extract names
+    # file_path = r'C:\Users\Admin\CODE\work\PASSWORD_CRACK\TarGuess-I-main\PREPROCESS\4.csv'
+def main():
+    file_path = os.path.join(parent_dir,'TRAIN','src','tailieuvn_data','pre_final.csv')
+
+    name_ls = extract_name(file_path)
+
+    # Open the error file in append mode for logging errors
+    error_file = open(NAME_ERROR_NAME, 'w')
+    error_file.close()
+    file = open(NAME_OUTPUT_NAME, 'w')
+    file.close()
+    print (len(name_ls))
+    import multiprocessing
+    cpu_count = multiprocessing.cpu_count()
+    cpu_count = cpu_count - 1
+    chunks = chunk_list(name_ls, cpu_count)
+    with Pool(cpu_count) as p:
+        p.map(process_all_name, chunks) # all cpu will together take care of this list 
+
+if __name__ == '__main__':
+    main()
+    # process_all_name(name_ls)
 # import multiprocessing 
 
 # # Create a pool of processes

@@ -34,7 +34,8 @@ no_necessary_columns = ['gender', 'address'] # still include to match template b
 
 def check_password_type(pass_ls):
     print ('check password type')
-    print (pass_ls)
+    # print (pass_ls)
+    # print (type(pass_ls))
     print ('first password to check as the standard quality hash to compare others  ', pass_ls[0])
     len_pass = len(pass_ls[0])
     thres_error = len(pass_ls)*0.1
@@ -46,7 +47,9 @@ def check_password_type(pass_ls):
         else:
             if len(item) != len_pass:
                 error_password += 1
-                error_dict[i] = item
+                # password at index 0 is row 2 in excel , or index excel 1
+                # so to remove password at index 0 , we must drop row excel index 1 
+                error_dict[i+1] = item
         if error_password > thres_error:
                 print ('detect password as plaintext because')
                 print ('all password if hash must have same length')
@@ -80,10 +83,13 @@ def check_valid_and_refine(filepath):
                                 message = message)
 
     # drop error passwords
-    password_type, error_dict = check_password_type(df["password"])
+    password_type, error_dict = check_password_type(df["password"].to_list())
     print ('detect password as ', password_type)
+    # password at index 0 is row 2 in excel , or index excel 1
+    # so to remove password at index 0 , we must drop row excel index 1 
     drop_rows = list(error_dict.keys())
-    df = df.drop(index=drop_rows)
+    index_row_to_drop = df.index[drop_rows]
+    df = df.drop(index_row_to_drop)
     new_df = df[necessary_columns]
     new_df = new_df.dropna(subset=['password'])
     for item in no_necessary_columns:

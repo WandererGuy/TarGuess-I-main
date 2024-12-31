@@ -32,11 +32,14 @@ import unidecode
 import pandas as pd     
 import yaml
 import argparse
+import shutil
+import os 
+
 hash_dict = {}
 error_count = 0 
-import shutil
 
-def load_config(config_path='config/train.yaml'):
+NAME_OUTPUT_FILE = None
+def load_config(config_path=os.path.join('config','train.yaml')):
     with open(config_path, 'r') as file:
         return yaml.safe_load(file)
 
@@ -60,14 +63,18 @@ def turn_string(text):
 def update_raw_csv(config):
     csv_file = config['raw_csv_path']
     df = pd.read_csv(csv_file)
+    df = df.astype(str)
     new_df = df[['username', 'password', 'email', 'firstname', 'lastname', 'birthday', 'gender', 'address', 'tel']]
     new_df['plain_password'] = ''
     new_df['fullname'] = new_df['firstname'] + ' ' + new_df['lastname']
-    gender_map = {1: 'Male', 0: 'Female'}
+    gender_map = {'1': 'Male', '0': 'Female'}
     new_df['gender'] = new_df['gender'].map(gender_map)
 
     # Split the email into two parts at the '@'
-    new_df[['email_prefix', 'email_domain']] = new_df['email'].str.split('@', expand=True)
+    new_df['email'] = new_df['email'].fillna('')  # Replace NaN with empty strings
+    new_df = new_df[new_df['email'].str.contains('@', na=False)]  # Filter rows with valid emails
+    # if line dont contain @ then first column is email , second is nan
+    new_df[['email_prefix', 'email_domain']] = new_df['email'].str.split('@', expand=True, n = 1) 
     new_df['email_prefix'] = new_df['email'] # well guess still need full email
     update_df = new_df[['username', 'password', 'plain_password', 'email_prefix','email_domain',  'fullname', 'birthday', 'gender', 'address', 'tel']]
     update_df.to_csv(config['update_csv_path'], index=False)
@@ -94,25 +101,51 @@ def fill_plain_pass(config, password_type):
 
 def fix_birthday(birthday):
     global error_count
+        
     if birthday == 'nan' or birthday == '0':
         return None
     else: 
-        try:
-            d, m, y = birthday.split('-')
-            if len(d) < 2:
-                d = '0' + d
-            if len(m) < 2:
-                m = '0' + m
-        except Exception as e:
-            print ('******')
-            print (birthday)
-            # Print the error message
-            print(f"An error occurred: {e}")
-            # Print the traceback
-            traceback.print_exc()
-            error_count += 1
-            return None
-        return f'{y}{m}{d}'
+        if '-' in birthday:
+            if len(birthday.split('-')) == 3:
+                d, m, y = birthday.split('-')
+                if len(d) < 2:
+                    d = '0' + d
+                if len(m) < 2:
+                    m = '0' + m
+            else:
+                # print ('******')
+                # print (birthday)
+                # Print the error message
+                # print(f"An error occurred: {e}")
+                # Print the traceback
+                # traceback.print_exc()
+                error_count += 1
+                return None
+            final_birthday = f'{y}{m}{d}'
+            final_birthday = final_birthday.split('.')[0] # in case floating value 
+
+            return final_birthday
+        
+        elif '/' in birthday:
+            if len(birthday.split('/')) == 3:
+                d, m, y = birthday.split('/')
+                if len(d) < 2:
+                    d = '0' + d
+                if len(m) < 2:
+                    m = '0' + m
+            else:
+                # print ('******')
+                # print (birthday)
+                # Print the error message
+                # print(f"An error occurred: {e}")
+                # Print the traceback
+                # traceback.print_exc()
+                error_count += 1
+                return None
+            final_birthday = f'{y}{m}{d}'
+            final_birthday = final_birthday.split('.')[0] # in case floating value 
+            print (final_birthday)
+            return final_birthday
 
 def export_txt(input_filename, output_filename):
     # Reading from CSV and writing to a tab-delimited text file
@@ -192,9 +225,33 @@ def look_up(name, name_dict):
         miss_name.append(e)
         return None
 
+password_err = 0 
 def lower_word(word):
-    return word.lower()
+    global password_err
+    try:
+        return word.lower()
+    except:
+        password_err += 1
 
+
+
+pseudo_birthday = '19991218'
+pseudo_year = '1999'
+pseudo_month = '12'
+pseudo_day = '18'
+def handle_birth(birth): 
+    birth = str(birth)
+    if 'Year' in birth:
+        birth = birth.replace('Year', pseudo_year)
+    if 'Month' in birth:
+        birth = birth.replace('Month', pseudo_month)
+    if 'Day' in birth:
+        birth = birth.replace('Day', pseudo_day)
+    try:
+        birth = int(birth)
+    except:
+        birth = int(pseudo_birthday)
+    return birth
 
 def post_process_csv(new_final_csv_path, file_path):
     '''read name txt 
@@ -203,9 +260,8 @@ def post_process_csv(new_final_csv_path, file_path):
     substitute name with fix name 
     if name == None -> delete row 
     write on new csv '''
-    name_file = 'process_name/output.txt'
     name_dict = {}
-    with open (name_file, 'r') as file :
+    with open (NAME_OUTPUT_FILE, 'r') as file :
         lines = file.readlines()
         for line in lines:
             
@@ -220,9 +276,12 @@ def post_process_csv(new_final_csv_path, file_path):
                 ori_name = line
 
     df = pd.read_csv(file_path)
+    # df = df.dropna(subset=['Birth'])
+    # Convert 'Birth' column to integer
+    df['Birth'] = df['Birth'].apply(lambda x: handle_birth(x) if not pd.isna(x) else x)
+    df['Birth'] = df['Birth'].fillna(pseudo_birthday).astype(int)
     df['Name'] = df['Name'].apply(lambda x: look_up(x, name_dict))
     # lower password for simpler 
-    
     df['Password'] = df['Password'].apply(lower_word)
     # for name == None or '' -> bad for learning folr model -> remove 
     remove_row = []
@@ -236,28 +295,42 @@ def post_process_csv(new_final_csv_path, file_path):
 
 
 def main():
+    global NAME_OUTPUT_FILE
     parser = argparse.ArgumentParser(description="parse input data")
     parser.add_argument('--raw_dataset_path', type=str)
     parser.add_argument('--password_type', type=str)
     parser.add_argument('--hash_dict_path', type=str)
     parser.add_argument('--save_train_path', type=str)
-
+    parser.add_argument('--fix_name', type=str)
+    parser.add_argument('--name_output_file', type=str)
+    
     args = parser.parse_args()
     config = load_config()
     config['raw_csv_path'] =  args.raw_dataset_path
     config['hash_dict_path'] = args.hash_dict_path
-    save_train_path = args.save_train_path
-    update_raw_csv(config)  
-    time.sleep(5)
-    create_hash_dict(config['hash_dict_path'])
-    df = fill_plain_pass(config, args.password_type)
-    finalize(config, df)
-    post_process_csv(config['new_final_csv_path'], config['pre_final_csv_path'])
-    print ('******* done write final csv to final.txt *******')
-    export_txt(config['new_final_csv_path'], config['new_final_txt_path'])
-    shutil.copyfile(config['new_final_txt_path'], save_train_path)
-    print ('number of error birthday',error_count)
-
+    flag = args.fix_name
+    print ('flag', flag)
+    if flag == 'False':
+            print ('******* FIRST RUN create_train_dataset.py *******')
+            update_raw_csv(config)  
+            time.sleep(5)
+            create_hash_dict(config['hash_dict_path'])
+            df = fill_plain_pass(config, args.password_type)
+            finalize(config, df)
+    else:
+            print ('******* SECOND RUN create_train_dataset.py *******')
+            save_train_path = args.save_train_path
+            NAME_OUTPUT_FILE = args.name_output_file
+            post_process_csv(config['new_final_csv_path'], config['pre_final_csv_path'])
+            print ('******* done write final csv to final.txt *******')
+            export_txt(config['new_final_csv_path'], config['new_final_txt_path'])
+            shutil.copyfile(config['new_final_txt_path'], save_train_path)
+            before_len =  len(pd.read_csv(config['raw_csv_path']))
+            after_len = len(pd.read_csv(config['new_final_csv_path']))
+            error_count = before_len - after_len
+            print ('invalid email, invalid name, invalid password')
+            print ('TOTAL have REMOVE ROWS', error_count)
+            print ('number of error password, have value is nan:',password_err)
 
 if __name__ == "__main__":
     main()

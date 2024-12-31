@@ -3,9 +3,11 @@ def read_file_to_list(filename):
     with open(filename, encoding="utf8") as file:
         return [line.strip() for line in file]
 
-word_list = read_file_to_list('name_dict.txt')
-name_list = read_file_to_list('Vietnamese_transform_dict.txt')
-english_list = read_file_to_list('english_popular.txt')
+import os 
+current_dir = os.path.dirname(os.path.abspath(__file__))
+word_list = read_file_to_list(os.path.join(current_dir, 'name_dict.txt'))
+name_list = read_file_to_list(os.path.join(current_dir,'Vietnamese_transform_dict.txt'))
+english_list = read_file_to_list(os.path.join(current_dir,'english_popular.txt'))
 
 letter_list = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ '
 digit_list = '0123456789'

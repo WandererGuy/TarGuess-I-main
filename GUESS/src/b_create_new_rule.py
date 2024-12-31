@@ -8,7 +8,7 @@ analyze new_order format in graph
 
 # import matplotlib.pyplot as plt
 import os 
-
+from tqdm import tqdm
 
 
 def calculate_figsize(num_elements, base_width=6, base_height=4, scale_factor=0.5):
@@ -38,24 +38,24 @@ def filter(label):
                break
      return flag
 
+
 def write_new_order(rule_file_path, new_order_path):
     labels_ls = []
     probabilities_ls = []
-
     first_ls_label = []
     first_ls_prob = []
     second_ls_label = []
     second_ls_prob = []
     number = ['0','1','2','3','4','5','6','7','8','9','.']
-    file_path = rule_file_path
-    with open (file_path, 'r') as file:
+    print ('file path: ', rule_file_path)
+    with open (rule_file_path, 'r') as file:
         data = file.readlines()
         for index, item in enumerate(data):
             if item == '\n':
                 final_data = data[:index]
                 break 
-    data = final_data
-    for index,item in enumerate(data):
+    
+    for index,item in enumerate(final_data):
                 line = item.strip()
 
             # if line == '':
@@ -99,8 +99,16 @@ def write_new_order(rule_file_path, new_order_path):
 
     with open(new_order_path, 'w', encoding='utf-8') as f:
         print ('start write to new order')
-        for i in range(len(first_ls_label)):
-            f.write(first_ls_label[i] + '\t' + str(first_ls_prob[i])+'\n')
+        l = len(first_ls_label)
+        for i in range(l):
+            try:
+                print (f'{i}/{l}')
+                
+                f.write(first_ls_label[i] + '\t' + str(first_ls_prob[i])+'\n')
+            except:
+                import time 
+                time.sleep(10)
+                continue 
         print ('done write to new order')
         f.close()
         # for i in range(len(second_ls_label)):
@@ -136,25 +144,30 @@ def write_new_order(rule_file_path, new_order_path):
 
 '''
 
-
 def remove_duplicate_elements(input_file, output_file):
     # Example data
+    
     final_data = []
     with open (input_file, 'r') as file:
         data = file.readlines()
-        for index, item in enumerate(data):
+        t = len(data)
+        for index, item in tqdm(enumerate(data), total = t):
+            
             if item == '\n':
                 final_data = data[index+1:]
                 break 
     
-    sample_class_ls = []
+    sample_class_ls = set()
     keep_ls = []
-    for item in final_data:
+    t = len(final_data)
+    for index, item in tqdm(enumerate(final_data), total = t):
+        
         item_detail = item.split('\t')
         sample_class = item_detail[1]
         if sample_class not in sample_class_ls:
-            sample_class_ls.append(sample_class)
+            sample_class_ls.add(sample_class)
             keep_ls.append(item)
+    
 
     with open (output_file, 'a') as file:
         file.write('\n')
@@ -312,6 +325,7 @@ def finalize(new_order_path, final_path):
         for item in final_data:
             file.write(item)
 
+import time 
 def extract_fill_mask(file_path, dest_path):
     with open (file_path, 'r') as file:
         data = file.readlines()
@@ -322,6 +336,7 @@ def extract_fill_mask(file_path, dest_path):
     with open (dest_path, 'w') as file:
         for item in final_data:
             file.write(item)
+    time.sleep(5)
 
 if __name__ == '__main__':
     f = os.path.join('GUESS', 'src', 'train_result')
@@ -331,12 +346,20 @@ if __name__ == '__main__':
     final_path = os.path.join(f,'train_result_refined.txt')
     
     fill_mask_path = os.path.join(f,'fill_mask.txt')
+    print ('-------------- post process OUTPUT.txt --------------')
+    print ('-------------- start write new order --------------')
     write_new_order(rule_file_path, new_order_path)
+    print ('-------------- removing duplicate element --------------')
     remove_duplicate_elements(rule_file_path, new_order_path)
+    print ('-------------- resolving conflict --------------')
     resolve_conflict(new_order_path)
+    print ('-------------- traguess trawling rule --------------')
     targuess_trawling_rule(rule_file_path, new_order_path, trawling_path)
+    print ('-------------- removing duplicate element --------------')
     remove_duplicate_elements(rule_file_path, trawling_path)
+    print ('-------------- finalizing final path --------------')
     finalize(new_order_path, final_path)
+    print ('-------------- extract fill mask --------------')
     extract_fill_mask(file_path = new_order_path, dest_path = fill_mask_path)
     print ('done training and write refined result at ', final_path)
 

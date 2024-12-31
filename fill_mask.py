@@ -111,11 +111,11 @@ def break_down_component(text, scan_ls):
         ?l?l?lgaymen?d?d?l?s?l?l?liknow
     process:
         tmp , in each loop becomes
-        ------gaymen?d?d?l?s------
-        ------gaymen----?l?s------
-        ------gaymen------?s------
-        ------gaymen--------------
-        ------gaymen--------------
+        ------gaymen?d?d?l?s------iknow
+        ------gaymen----?l?s------iknow
+        ------gaymen------?s------iknow
+        ------gaymen--------------iknow
+        ------gaymen--------------iknow
     d =  {'?l?l?l': [[0, 6], [20, 26]], '?d?d': [[12, 16]], '?l': [[16, 18]], '?s': [[18, 20]]}
     place_holder_occupy_index = [[0, 1, 2, 3, 4, 5], [20, 21, 22, 23, 24, 25], [12, 13, 14, 15], [16, 17], [18, 19]]
     non_place_holder_occy_index = [[6, 7, 8, 9, 10, 11], [26, 27, 28, 29, 30]]
@@ -280,7 +280,7 @@ def create_wordlist(mask_file, dictionary, limit_each_class):
 
 
 
-def main_fill_mask(mask_file_path, target_wordlist_path, only_wordlist = False):
+def main_fill_mask(mask_fill_dictionary, mask_file_path, target_wordlist_path, only_wordlist = False):
     '''
     main usage: a target mask file , for each mask class , create wordlist no exceed LIMIT_COMBINATION_NUM
     create wordlist from fill_mask.txt + mask_file
@@ -288,11 +288,6 @@ def main_fill_mask(mask_file_path, target_wordlist_path, only_wordlist = False):
     though high entropy class can be discarded due to not meet LIMIT_COMBINATION_NUM
     '''
 
-    print ('start making json fill dictionary')
-    f = os.path.join('GUESS', 'src', 'train_result')
-    fill_mask_path = os.path.join(f,'fill_mask.txt')
-    fill_mask_json_path = os.path.join(f,'fill_mask.json')
-    mask_fill_dictionary = create_fill_json(fill_mask_path, fill_mask_json_path)
 
     print ('start making wordlist for each line in mask file')
     # mask_file = 'C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/generated_target_masklist/5ac50029-d881-4157-bc58-8eb9c91a9b24.hcmask'

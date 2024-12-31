@@ -118,6 +118,7 @@ string getPattern(string email, string psw) {
 		last = c;
 	}
 	// outputFile << "pattern: "<<pat_str<< std::endl;
+	
 
 	return pat_str;
 }
@@ -255,6 +256,7 @@ int main(int argc, char * argv[]) {
 		/////////////// reading file and initial
 		fin.open(config_inf["training_set_path"].c_str()); // train in pattern
 		fout.open(config_inf["model_output_path"].c_str()); // output
+		
 
 		if (config_inf.find("print_info_interval") != config_inf.end())
 			interval = atoi(config_inf["print_info_interval"].c_str());

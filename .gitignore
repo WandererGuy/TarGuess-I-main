@@ -6,10 +6,15 @@ PREPROCESS/28M.zip
 PREPROCESS/28M_zing.csv
 PREPROCESS/7M.csv
 PREPROCESS/crawl/example.log
+TRAIN/src/training_output.txt
+process_name/output/all.txt
+static/generated_target_masklist
+static/generated_target_wordlist
+static/train_dataset
+static/train_result/*
 
-
-static/*
-!static/train_result/default.txt
+!static/train_result/default
+!static/train_result/targuess_original
 GUESS/src/result_folder
 GUESS_MASK/format_translation
 **/__pycache__/

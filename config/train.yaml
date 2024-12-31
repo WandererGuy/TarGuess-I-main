@@ -6,7 +6,10 @@
 # do not change this value 
 update_csv_path: 'TRAIN/src/tailieuvn_data/update_0.csv'
 pre_final_csv_path: "TRAIN/src/tailieuvn_data/pre_final.csv"
+
 new_final_csv_path: 'TRAIN/src/tailieuvn_data/final.csv'
 
 # do not change this value, unless change in TRAIN\src\config.ini , this training_set_path=tailieuvn_data\final.txt
 new_final_txt_path: 'TRAIN/src/tailieuvn_data/final.txt'
+
+
