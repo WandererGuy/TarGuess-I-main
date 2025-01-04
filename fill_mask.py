@@ -169,10 +169,11 @@ def break_down_component(text, scan_ls):
     if print_flag:print (res)
     return res
 
-def create_fill_json(fill_mask_path, fill_mask_json_path):
+def create_fill_json(fill_mask_path, fill_mask_json_path, additional_json_path):
     '''
     create json dictionary for filling into mask 
     '''
+    additional_json_dict = {}
     thres_prob = 0
     success = 0
     json_dict = {}
@@ -191,13 +192,14 @@ def create_fill_json(fill_mask_path, fill_mask_json_path):
             trans_type = translate_format(class_type)
             if trans_type not in json_dict.keys():
                 json_dict[trans_type] = []
+                additional_json_dict[trans_type] = []
             if float(prob) > thres_prob:
                 json_dict[trans_type].append(value_fill)
-    with open (fill_mask_json_path, 'w') as file:
-        json.dump(json_dict, file, indent=4)
+                additional_json_dict[trans_type].append((value_fill, prob))
+            
     # with open(fill_mask_json_path, 'r') as f:
     #     dictionary = json.load(f)
-    return json_dict
+    return json_dict, additional_json_dict
 
 def check_line_have_target_info(components, scan_ls):
     # line must have at least one target info, not trawling mask 
@@ -354,12 +356,12 @@ def single_mask_analysis(mask, dictionary):
     components = break_down_component(mask, scan_ls) # ?d?dbombay?d -> ?d?d, bombay, ?d
     # if check_line_have_target_info(components, scan_ls) == False:
     #     continue 
-    print ('components', components)
+    
     require_mask_fill = []
     for item in components:
         if item in dictionary.keys():
-            value = dictionary[item] # 
+            value = dictionary[item] 
             require_mask_fill.append(value)
         else:
-            require_mask_fill.append([item])
+            require_mask_fill.append([[item, '1.0']])
     return require_mask_fill

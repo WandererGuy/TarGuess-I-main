@@ -73,6 +73,8 @@ def run_masklist(max_mask_generate, train_result_refined_path, name, birth, emai
 
     file_mask = generate_unique_filename(os.path.join('static','generated_target_masklist'), extension='hcmask')
     file_mask_path = os.path.join('static','generated_target_masklist', file_mask)
+    mask_prob_path = os.path.join('static','generated_target_masklist', file_mask.replace('.hcmask', '_prob.json'))
+
     python_file = os.path.join('GUESS_MASK','automate_cracking.py') 
     # eragonkisyrong96@gmail.com	buiduymanh1996	manh		wantedbyzeus	01647732700	14-3-1995
     print ('command running python file to generate guesses')
@@ -86,7 +88,9 @@ def run_masklist(max_mask_generate, train_result_refined_path, name, birth, emai
                                 '--max_mask_generate',
                                 max_mask_generate, 
                                 '--train_result_refined_path',
-                                train_result_refined_path
+                                train_result_refined_path, 
+                                '--mask_prob_path',
+                                mask_prob_path
                                 ], 
                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     print ('final out put in :', file_mask_path)
@@ -95,7 +99,7 @@ def run_masklist(max_mask_generate, train_result_refined_path, name, birth, emai
     if stderr:
         print("Errors:", stderr)
     
-    return file_mask_path
+    return file_mask_path, mask_prob_path
 
 # Function to handle the file download
 input_file_wordlist = os.path.join('GUESS','src','result_folder','output.txt')  # Replace with your actual input file path

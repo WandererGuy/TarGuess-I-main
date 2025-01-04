@@ -10,6 +10,7 @@ TRAIN/src/training_output.txt
 process_name/output/all.txt
 static/generated_target_masklist
 static/generated_target_wordlist
+static/generated_target_fill_mask
 static/train_dataset
 static/train_result/*
 
@@ -18,3 +19,4 @@ static/train_result/*
 GUESS/src/result_folder
 GUESS_MASK/format_translation
 **/__pycache__/
+TRAIN/src/training_output.txt

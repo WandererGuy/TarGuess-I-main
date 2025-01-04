@@ -24,14 +24,76 @@
 # pcfg trawling 
 
 # pcfg 
+from tqdm import tqdm
 import json
-json_file = open(r'C:\Users\Admin\CODE\work\PASSWORD_CRACK\TarGuess-I-main\static\generated_target_fill_mask\9eb837bd-7361-4873-a20b-3fc265564baa.json')
 from fill_mask import single_mask_analysis
+from itertools import product
+import time 
+
+MAX_VOCAB = 10
+def create_wordlist_single_mask(single_mask, mask_fill_dictionary):
+    # single_mask = '?d?dbombay?d'
+    res = single_mask_analysis(single_mask, mask_fill_dictionary)
+    new_res = []
+    
+    for item in res:
+        
+        if len(item) > MAX_VOCAB:
+            item = item[:MAX_VOCAB]
+ 
+        new_res.append(item)
+    # Generate the Cartesian product
+    combinations = list(product(*new_res))
+    pcfg_ls = {}
+    # Calculate and display probabilities
+    for combo in combinations:
+        password = ''
+        prob = 1
+        for component in combo:
+            password += component[0]
+            prob *= float(component[1])
+        if password not in pcfg_ls:
+            pcfg_ls[password] = prob
+        pcfg_ls[password] += prob
+    return pcfg_ls
+
+
+def add_to_dict(key, value, all_pcfg_wordlist):
+    if key in all_pcfg_wordlist:
+        all_pcfg_wordlist[key] += value
+    else:
+        all_pcfg_wordlist[key] = value
+
+    return all_pcfg_wordlist
+
+
+'''
+'''
+
+json_file = open(r'C:\Users\Admin\CODE\work\PASSWORD_CRACK\TarGuess-I-main\static\generated_target_fill_mask\ddac6335-4872-4e3d-beb4-740bf33f082c_additional.json')
 mask_fill_dictionary = json.load(json_file)
 
-single_mask = '?d?dbombay?d'
-res = single_mask_analysis(single_mask, mask_fill_dictionary)
-print (res)
+
+pcfg_ls = {}
+target_mask_file_path = r'C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/generated_target_masklist/6828971a-036c-4841-afaf-d64986282a13_sorted.hcmask'
+all_pcfg_wordlist = {}
+
+
+with open(target_mask_file_path, 'r') as f:
+    lines = f.readlines()
+    for line in tqdm(lines, total = len(lines)):
+        single_mask = line.strip('\n').strip()
+        single_mask_wordlist_dict = create_wordlist_single_mask(single_mask, mask_fill_dictionary)
+        for key, value in single_mask_wordlist_dict.items():
+            all_pcfg_wordlist = add_to_dict(key, value, all_pcfg_wordlist)
+
+sorted_items_desc = sorted(all_pcfg_wordlist.items(), key=lambda item: item[1], reverse=True)
+
+with open('pcfg_wordlist.txt', 'w') as f:
+    for key, value in tqdm(sorted_items_desc, total = len(sorted_items_desc)):
+        f.write(f'{key} {value}\n')
+
+
 # class Mask():
 #     def __init__(self, mask, fill_mask_dict):
 #         self.mask = mask

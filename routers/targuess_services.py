@@ -7,6 +7,7 @@ from utils.sort_complexity import *
 from pathlib import Path
 import traceback
 import json 
+from utils.create_pcfg_wordlist import make_pcfg_wordlist
 from fill_mask import main_fill_mask, create_fill_json
 from routers.model import reply_bad_request, reply_server_error, reply_success, MyHTTPException
 config = configparser.ConfigParser()
@@ -37,6 +38,22 @@ def check_name_valid(name = ''):
             raise MyHTTPException(status_code=400,
                                     message = message)
 
+
+'''
+normal wordlist :
+- sorted mask file by keyspqce (or complexity)
+- fill mask dictionary into those mask (prob descend)
+- keep filling for that mask until cannot fill above 100000 passwords per mask 
+LIMIT_COMBINATION_NUM = 10**5 # total combination allow for each mask class  
+
+
+pcfg wordlist: (testing to see if better) (actually care about prob specific number )
+- any mask file is ok (here choose sorted mask file)
+- fill mask dictionary into those mask (prob descend)
+calculate prob of each password (p(alice123manh) = P(MASK)*p(alice)*p(123)*p(manh) 
+if 'manh' is in the mask already then prob(manh)) = 1
+- max vocab for each fill is 10 as set 
+'''
 @router.post("/generate-target-wordlist/")
 async def generate_target_wordlist(
     full_name: str = Form(None),
@@ -80,22 +97,20 @@ async def generate_target_wordlist(
     n = str(uuid.uuid4())
     fill_mask_target_path = os.path.join(output_target_fill_mask_folder,f'{n}.txt')
     fill_mask_target_json_path = os.path.join(output_target_fill_mask_folder,f'{n}.json')
+    additional_json_path = os.path.join(output_target_fill_mask_folder,f'{n}_additional.json')
     main_kw(new_kw_ls, 
         fill_mask_path, 
         fill_mask_target_path)
     time.sleep(2)
-    mask_fill_dictionary = create_fill_json(fill_mask_path, fill_mask_target_json_path)
-    with open(fill_mask_target_json_path, "r") as json_file:
-            mask_fill_dictionary = json.load(json_file)
-
-
-    # if birth and not re.match(r'^\d{2}-\d{2}-\d{4}$', birth):
-    #     raise MyHTTPException(status_code=400,
-    #                           message = "Birth date must be in DD-MM-YYYY format")
-    # check_name_valid(name = full_name)
+    mask_fill_dictionary, additional_json_dict = create_fill_json(fill_mask_path, fill_mask_target_json_path, additional_json_path)
+    
+    # with open (fill_mask_target_json_path, 'w') as file:
+    #     json.dump(mask_fill_dictionary, file, indent=4)
+    # with open (additional_json_path, 'w') as file:
+    #     json.dump(additional_json_dict, file, indent=4)
 
     try:            
-        output = run_masklist(max_mask_generate, 
+        output, mask_prob_path = run_masklist(max_mask_generate, 
                               train_result_refined_path, 
                               name = full_name, 
                               birth = birth, 
@@ -115,15 +130,22 @@ async def generate_target_wordlist(
         print ('sorted_mask_file_path: ', sorted_mask_file_path)
 
         wordlist_name = str(uuid.uuid4()) + ".txt"
+        pcfg_wordlist_name = wordlist_name.replace(".txt", "_pcfg.txt")
         target_wordlist_path  = os.path.join(output_wordlist_folder, wordlist_name)
+        target_pcfg_wordlist_path = os.path.join(output_wordlist_folder, pcfg_wordlist_name)
         main_fill_mask(mask_fill_dictionary, sorted_mask_file_path, target_wordlist_path, only_wordlist = True)
-        with open(target_wordlist_path, "r") as f:
-            lines = f.readlines()
-            print ('number of passwords in wordlist: ', len(lines))
+
+        make_pcfg_wordlist(mask_fill_dictionary = additional_json_dict, 
+                        mask_prob_path = mask_prob_path, 
+                        destination_pcfg_wordlist_path = target_pcfg_wordlist_path)
+
         url = f"http://{host_ip}:{port_num}/static/generated_target_wordlist/" + wordlist_name
+        url_pcfg = f"http://{host_ip}:{port_num}/static/generated_target_wordlist/" + pcfg_wordlist_name
         return reply_success(message = "Result saved successfully", 
                              result = {"path":fix_path(target_wordlist_path), 
-                                       "url":url})
+                                       "pcfg_path":fix_path(target_pcfg_wordlist_path),
+                                       "url":url,
+                                        "url_pcfg":url_pcfg})
     except Exception as e:
         return reply_server_error(message = str(e))
     
@@ -158,7 +180,7 @@ async def generate_target_mask_list(
         return reply_bad_request(message = message)
 
     try:
-        output = run_masklist(max_mask_generate, 
+        output, _ = run_masklist(max_mask_generate, 
                               train_result_refined_path,
                               name = full_name, 
                               birth = birth, 
@@ -184,3 +206,11 @@ async def generate_target_mask_list(
 
     except Exception as e:
         return reply_server_error(message = str(e))
+
+
+    # if birth and not re.match(r'^\d{2}-\d{2}-\d{4}$', birth):
+    #     raise MyHTTPException(status_code=400,
+    #                           message = "Birth date must be in DD-MM-YYYY format")
+    # check_name_valid(name = full_name)
+
+
