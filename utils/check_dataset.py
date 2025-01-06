@@ -24,10 +24,11 @@ where:
     last_name: Last name and middle name (e.g., Nguyen Hoai)
     birthday: Birthday in this form (e.g., 19-1-1985)
     username: Username used on a website (e.g., manhsuperman99)
-    password: plaintext or hash password , if hash password must change hash_dict_path in config/train.yaml (e.g. e10adc3949ba59abbe56e057f20f883e)
+    password: plaintext or hash password , if hash password with plaintext value is in hash_dict_path (e.g. e10adc3949ba59abbe56e057f20f883e)
     id: Unique identifier starting from 1 and incrementing
     email: Email address (e.g., manh30k@gmail.com)
 """
+
 necessary_columns = ['id', 'username', 'password', 'email', 'firstname', 'lastname', 'birthday', 'tel']
 no_necessary_columns = ['gender', 'address'] # still include to match template but left blank all 
 # turn all dataset to be this form 
@@ -57,13 +58,13 @@ def check_password_type(pass_ls):
                 print ('while first item has length of ', len_pass)
                 return 'plaintext'
     print ('dict of error password at index to be remove')
-    print (error_dict)
+    # print (error_dict)
     return 'hash', error_dict
 
 
 def check_valid_and_refine(filepath):
     if filepath.endswith('.csv'):
-        df = pd.read_csv(filepath, index_col=0)
+        df = pd.read_csv(filepath)
     elif filepath.endswith('.xlsx'):
         df = pd.read_excel(filepath)
     else:
@@ -76,8 +77,7 @@ def check_valid_and_refine(filepath):
 
     for item in necessary_columns:
         if item not in df.columns:
-            message = f"Column {item} not found in the dataset. \
-                must have columns for training dataset are {necessary_columns}.\
+            message = f"Column \'{item}\' not found in the dataset. Table must have columns for training dataset are {necessary_columns}.\
                 {report_str}"
             raise MyHTTPException(status_code=400,
                                 message = message)

@@ -23,80 +23,92 @@
 
 # pcfg trawling 
 
-# pcfg 
-from tqdm import tqdm
-import json
-from fill_mask import single_mask_analysis
-from itertools import product
-import time 
+import os 
 
-MAX_VOCAB = 10
-def create_wordlist_single_mask(single_mask, mask_fill_dictionary):
-    # single_mask = '?d?dbombay?d'
-    res = single_mask_analysis(single_mask, mask_fill_dictionary)
-    new_res = []
-    
-    for item in res:
+class User:
+    def __init__(self, password="", full_name="", birth="", email="", account_name="", id_num="", phone=""):
+        self.password = password.lower()
+        self.full_name = str(full_name)
+        self.birth = birth
+        self.email = email
+        self.account_name = account_name
+        self.id_num = id_num
+        self.phone = phone
+        self.split_name()  # Call the split_name method properly
+
+    def split_name(self):
+        self.full_name = self.full_name.strip()
+        # Ensure full_name has at least two parts to split
+        if ' ' in self.full_name:
+            self.firstname = self.full_name.rsplit(' ', 1)[1]
+            self.lastname = self.full_name.rsplit(' ', 1)[0]
+        else:
+            self.firstname = self.full_name  # If no space, assume full_name is just the first name
+            self.lastname = ""
+            # in code, fullname = firstname + ' '  + lastname 
         
-        if len(item) > MAX_VOCAB:
-            item = item[:MAX_VOCAB]
- 
-        new_res.append(item)
-    # Generate the Cartesian product
-    combinations = list(product(*new_res))
-    pcfg_ls = {}
-    # Calculate and display probabilities
-    for combo in combinations:
-        password = ''
-        prob = 1
-        for component in combo:
-            password += component[0]
-            prob *= float(component[1])
-        if password not in pcfg_ls:
-            pcfg_ls[password] = prob
-        pcfg_ls[password] += prob
-    return pcfg_ls
+
+zing = r"C:\Users\Admin\CODE\work\PASSWORD_CRACK\PASSCRACK_MATERIAL\WORDLISTS\ZING_TAILIEUVN_LEAK\28M_zing_split_cleaned"
+tailieu = r"C:\Users\Admin\CODE\work\PASSWORD_CRACK\PASSCRACK_MATERIAL\WORDLISTS\ZING_TAILIEUVN_LEAK\7M_split_cleaned"
+# for filename in os.listdir(zing):
+#     file_path = os.path.join(zing, filename)
+#     print (file_path)
+
+# for filename in os.listdir(tailieu):
+#     file_path = os.path.join(tailieu, filename)
+
+# create person json for easier access, collect 
+test_file = os.listdir(zing)[0]
+test_file = os.path.join(zing, test_file)
+import pandas as pd 
+df = pd.read_csv(test_file)
+new_df = df[['accountname', 'password', 'email', 'fullname', 'birthday', 'telephone']]
+
+user_data = []
+# Process each row and create a User object
+for _, row in new_df.iterrows():
+    account_name = row['accountname']
+    password = row['password']
+    email = row['email']
+    full_name = row['fullname']
+    birth = row['birthday']
+    phone = row['telephone']
+
+    # Create a User object
+    user = User(
+        password=password,
+        full_name=full_name,
+        birth=birth,
+        email=email,
+        account_name=account_name,
+        phone=phone
+    )
+
+    # Add the User object to the list
+    # Add the processed user data to the list
+    user_data.append({
+        'id': None,  # Add a placeholder or actual id if available
+        'username': user.account_name,
+        'password': user.password,
+        'email': user.email,
+        'firstname': user.firstname,
+        'lastname': user.lastname,
+        'birthday': user.birth,
+        'tel': user.phone
+    })
+
+necessary_cols = ['id', 'username', 'password', 'email', 'firstname', 'lastname', 'birthday', 'tel']
+
+# Create a new DataFrame with the necessary columns
+processed_df = pd.DataFrame(user_data, columns=necessary_cols)
+count = 0 
+for _, row in processed_df.iterrows():
+    print (row)
+    count += 1
+    if count == 5:
+        break
 
 
-def add_to_dict(key, value, all_pcfg_wordlist):
-    if key in all_pcfg_wordlist:
-        all_pcfg_wordlist[key] += value
-    else:
-        all_pcfg_wordlist[key] = value
-
-    return all_pcfg_wordlist
+    
 
 
-'''
-'''
-
-json_file = open(r'C:\Users\Admin\CODE\work\PASSWORD_CRACK\TarGuess-I-main\static\generated_target_fill_mask\ddac6335-4872-4e3d-beb4-740bf33f082c_additional.json')
-mask_fill_dictionary = json.load(json_file)
-
-
-pcfg_ls = {}
-target_mask_file_path = r'C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/generated_target_masklist/6828971a-036c-4841-afaf-d64986282a13_sorted.hcmask'
-all_pcfg_wordlist = {}
-
-
-with open(target_mask_file_path, 'r') as f:
-    lines = f.readlines()
-    for line in tqdm(lines, total = len(lines)):
-        single_mask = line.strip('\n').strip()
-        single_mask_wordlist_dict = create_wordlist_single_mask(single_mask, mask_fill_dictionary)
-        for key, value in single_mask_wordlist_dict.items():
-            all_pcfg_wordlist = add_to_dict(key, value, all_pcfg_wordlist)
-
-sorted_items_desc = sorted(all_pcfg_wordlist.items(), key=lambda item: item[1], reverse=True)
-
-with open('pcfg_wordlist.txt', 'w') as f:
-    for key, value in tqdm(sorted_items_desc, total = len(sorted_items_desc)):
-        f.write(f'{key} {value}\n')
-
-
-# class Mask():
-#     def __init__(self, mask, fill_mask_dict):
-#         self.mask = mask
-#         self.fill_mask_dict = fill_mask_dict
-
-#     def create

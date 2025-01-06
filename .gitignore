@@ -1,6 +1,7 @@
 targuess_env/
 *.png
 *.jpg
+TRAIN/src/tailieuvn_data/*.csv
 PREPROCESS/crawl/new_env/
 PREPROCESS/28M.zip
 PREPROCESS/28M_zing.csv
@@ -13,10 +14,12 @@ static/generated_target_wordlist
 static/generated_target_fill_mask
 static/train_dataset
 static/train_result/*
-
 !static/train_result/default
 !static/train_result/targuess_original
 GUESS/src/result_folder
 GUESS_MASK/format_translation
 **/__pycache__/
 TRAIN/src/training_output.txt
+/processed_csv
+/process_name/output
+TRAIN/src/tailieuvn_data/update_0.csv

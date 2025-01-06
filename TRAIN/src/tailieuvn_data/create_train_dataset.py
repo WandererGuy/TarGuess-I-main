@@ -248,6 +248,8 @@ def handle_birth(birth):
     if 'Day' in birth:
         birth = birth.replace('Day', pseudo_day)
     try:
+        
+        birth = birth.split('.', 1)[0] # sometimes it has float number 
         birth = int(birth)
     except:
         birth = int(pseudo_birthday)

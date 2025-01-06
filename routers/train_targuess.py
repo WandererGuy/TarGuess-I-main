@@ -102,8 +102,13 @@ async def preprocess_train_dataset(
         # just remove to make sure new result do write 
         if os.path.exists(final_txt):
             os.remove(final_txt)
+    except Exception as e:
+        return reply_server_error(e)
+
         # preprocess and validate dataset 
-        raw_dataset_path, password_type = check_valid_and_refine(dataset_path)
+
+    raw_dataset_path, password_type = check_valid_and_refine(dataset_path)
+    try:
         python_file = os.path.join(parent_dir, 'TRAIN', 'src', 'tailieuvn_data', 'create_train_dataset.py')
 
 
