@@ -28,6 +28,8 @@ where:
     id: Unique identifier starting from 1 and incrementing
     email: Email address (e.g., manh30k@gmail.com)
 """
+current_dir = os.path.dirname(os.path.abspath(__file__))
+example_csv = os.path.join(current_dir, 'sample_input_for_preprocess_API.csv')
 
 necessary_columns = ['id', 'username', 'password', 'email', 'firstname', 'lastname', 'birthday', 'tel']
 no_necessary_columns = ['gender', 'address'] # still include to match template but left blank all 
@@ -77,7 +79,7 @@ def check_valid_and_refine(filepath):
 
     for item in necessary_columns:
         if item not in df.columns:
-            message = f"Column \'{item}\' not found in the dataset. Table must have columns for training dataset are {necessary_columns}.\
+            message = f"Column \'{item}\' not found in the dataset. Example of input csv file in path: {example_csv}. Table must have columns for training dataset are {necessary_columns}.\
                 {report_str}"
             raise MyHTTPException(status_code=400,
                                 message = message)
