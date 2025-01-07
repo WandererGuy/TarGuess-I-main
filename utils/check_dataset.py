@@ -34,7 +34,7 @@ example_csv = os.path.join(current_dir, 'sample_input_for_preprocess_API.csv')
 necessary_columns = ['id', 'username', 'password', 'email', 'firstname', 'lastname', 'birthday', 'tel']
 no_necessary_columns = ['gender', 'address'] # still include to match template but left blank all 
 # turn all dataset to be this form 
-
+import time 
 def check_password_type(pass_ls):
     print ('check password type')
     # print (pass_ls)
@@ -45,6 +45,8 @@ def check_password_type(pass_ls):
     error_password = 0
     error_dict = {}
     for i,item in enumerate(pass_ls):
+        if isinstance(item, float) or isinstance(item, int): # also known as nan 
+            continue
         if item == '' or item == None or item.lower() == 'nan':
             continue
         else:

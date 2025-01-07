@@ -58,6 +58,12 @@ def create_hash_dict(hash_dict_path):
                 hash_dict[hash_pass] = plain
         print ('have hash and plain',len(hash_dict))
 
+def remove_nan(fullname):
+    if ' nan' in fullname:
+        fullname = fullname.replace(' nan', '')
+    return fullname
+
+
 def turn_string(text):
     return str(text)
 def update_raw_csv(config):
@@ -67,6 +73,7 @@ def update_raw_csv(config):
     new_df = df[['username', 'password', 'email', 'firstname', 'lastname', 'birthday', 'gender', 'address', 'tel']]
     new_df['plain_password'] = ''
     new_df['fullname'] = new_df['firstname'] + ' ' + new_df['lastname']
+    new_df['fullname'] = new_df['fullname'].apply(remove_nan)
     gender_map = {'1': 'Male', '0': 'Female'}
     new_df['gender'] = new_df['gender'].map(gender_map)
 
