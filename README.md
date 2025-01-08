@@ -1,4 +1,3 @@
-# Abstraction triumphs all 
 # project PASSWORD GUESSING FOR FORENSIC 
 ## Installation 
 conda create -p ..... targuess_env python==3.10  (or 3.10.14)
@@ -9,7 +8,7 @@ pip install fastapi uvicorn pydantic
 
 
 
-### set up C++ for VScode
+### set up C++ for VScode (don't need anymore since using python code)
 install extension Code Runner + C++ in Vscode 
 download msys2 and run ... add .. to become environment path (like https://code.visualstudio.com/docs/languages/cpp)
 copy file libstdc++-6.dll file somewhere in /ucrt folder (usually in "C:\msys64\ucrt64\bin\libstdc++-6.dll")
@@ -28,8 +27,10 @@ place libstdc++-6.dll file somewhere in /ucrt folder into C++ run code folder(GU
 https://stackoverflow.com/questions/74734500/cant-find-entry-point-zst28-throw-bad-array-new-lengthv-in-dll-filepath
 
 
-## prepare
-check config/config.ini file if wanna change ip 
+## prepare env
+```
+conda env create -f environment.yml
+```
 
 ## Usage 
 ### Training 
@@ -38,12 +39,13 @@ check config/config.ini file if wanna change ip
 conda activate path_to_targuess_env
 python main.py
 ```
+or <br>
 ```
 START.bat
 ```
 
 
-## Utilities 
+## Other Utilities 
 ### format_finder.py 
 is for format translation, so change person.cpp rule , require change manually format_finder.py as well
 
@@ -58,8 +60,6 @@ python my_extract_method.py
 cd process_name 
 python process_name.py
 
-### create txt for (training) from tailieu leak csv 
-python TRAIN\src\tailieuvn_data\create_train_dataset.py
 
 
 

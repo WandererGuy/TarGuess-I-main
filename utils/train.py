@@ -13,7 +13,16 @@ def find_class(char):
 
 
 def collect_clue(all_dict):
-    ''' resspectively replace in this order 
+    '''
+    given a target format dict 
+    group relevant format into groups, then keep only the format not empty 
+    
+        all_dict: target format dict
+        better_cluster: format dict in group and each format not empty 
+    '''
+    ''' 
+        learn from cpp targuess
+        they respectively replace in this order they resspectively replace in this order 
         not by max length , 
         but by this order only 
 
@@ -51,10 +60,9 @@ def collect_clue(all_dict):
         for i in value: # 'C'
             if i not in all_dict.keys():
                 continue
-            v = all_dict[i] # 'lol
-            if v == '': # empty field
+            if all_dict[i]  == '': 
                 continue
-            better_cluster[key].append({i:v})
+            better_cluster[key].append({i:all_dict[i]})
     return better_cluster
 
 
@@ -76,7 +84,16 @@ def find_substring_indices(main_str, sub_str):
     
 
 def create_pattern(pwd, better_cluster):
-    # account: [{'A': 'hoatrangnguyen_05'}, {'u': '05'}, {'v': 'hoatrangnguyen'} = {}
+    # better_cluster :{ account: [{'A': 'hoatrangnguyen_05'}, {'u': '05'}, {'v': 'hoatrangnguyen'} = {}
+    '''
+    function: find clearer mask to find trawling strings that fill in target mask 
+    clearer mask : mask have no format mask key
+    example:
+        racingboycrazy123 -> clearer mask is: ---------crazy--- 
+        (where v, u is format mask key, v is account letter, u is account digit), 
+        'crazy' dont belong to any format so NOT be replaced by '-' 
+    '''
+
     note = {}
     for key, value in better_cluster.items():
         for i in value:
@@ -128,9 +145,25 @@ def deduplicate_dict(dict1):
 
 
 def find_class_fill(text):
+    '''
+    given a string , find the trawling fill class of that string
+    deptrai : D6
+    278 : L3
+    '''
     return find_class(text[0]) + str(len(text))
 
 def find_fill(clearer_mask):
+    '''
+    function: find clearer mask to find trawling strings that fill in target mask 
+    clearer mask : mask have no format mask key
+    example:
+        racingboycrazy123 -> clearer mask is: ---------crazy--- 
+        (where v, u is format mask key, v is account letter, u is account digit), 
+        'crazy' dont belong to any format so NOT be replaced by '-' 
+    '''
+    '''
+    collect trawling strings then find their class (trawling fill class)
+    '''
     res = {}
     tmp_str = ''
     for i in range (len(clearer_mask)):
@@ -153,7 +186,10 @@ def find_fill(clearer_mask):
 
     return new_res
 
-def check_trawling_mask(mask):
+def check_trawling_mask(mask:str) -> bool:
+    '''
+    check whether a mask is a trawling mask or target mask 
+    '''
     trawling_symbol = ['D', 'L', 'S']
     for i in range (len(mask)):
         if mask[i] in trawling_symbol:

@@ -67,6 +67,7 @@ async def generate_target_wordlist(
     other_keywords: str = Form(None)
 ):
     min_pass_len = 4
+
     full_name = full_name or ""
     birth = birth or ""
     email = email or ""
@@ -157,11 +158,24 @@ async def generate_target_mask_list(
     account_name: str = Form(None),
     id_num: str = Form(None),
     phone: str = Form(None),
-    max_mask_generate: str = Form(...), # given personal info , get available mask valid from top to bottom of refined train result
-                                        
+    max_mask_generate: str = Form(...),                          
     train_result_refined_path: str = Form(...)
 ):
+    '''
+    generate mask list for a target person 
+    Args:
+        full_name: full name of target person
+        birth: birth date of target person in form (DD-MM-YYYY)
+        email: email of target person (must have @)
+        account_name: account name or username of target person (on any website)
+        id_num: id number of target person
+        phone: phone number of target person
+        max_mask_generate: maximum number of mask to generate (cannot exceed train_result_refined_path mask number) 
+        (given the personal info of target person) (from high probability to low probability) ()the more info given , the more mask can be mapped from the train_result_refined_path)
+        train_result_refined_path: path to refined train result output
+    '''
     min_pass_len = 4
+
     full_name = full_name or ""
     birth = birth or ""
     email = email or ""
@@ -169,12 +183,6 @@ async def generate_target_mask_list(
     id_num = id_num or ""
     phone = phone or ""
     
-
-    # if birth and not re.match(r'^\d{2}-\d{2}-\d{4}$', birth):
-    #     raise MyHTTPException(status_code=400, 
-    #                           message="Birth date must be in DD-MM-YYYY format"
-    #                           )
-    # check_name_valid(name = full_name) c cc
     if not os.path.exists(train_result_refined_path):
         message = f"file_path {train_result_refined_path} does not exist"
         return reply_bad_request(message = message)

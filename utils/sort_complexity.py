@@ -49,13 +49,13 @@ def deduplicate_file_lines(mask_file_path):
     with open(mask_file_path, 'w') as f:
         f.writelines(unique_lines)
 
-# Example usage:
-# mask_file_path = 'path/to/your/file.txt'
-# deduplicate(mask_file_path)
-
-        
-
-def sort_by_complexity(mask_file_path, sorted_mask_file_path, min_pass_len):
+def sort_by_complexity(mask_file_path, 
+                       sorted_mask_file_path, 
+                       min_pass_len):
+    '''
+    sort by complexity (aka number keyspaces)
+    then with the masks have the same complexity,  sort by probability
+    '''
     with open (mask_file_path, 'r') as f:
         lines = f.readlines()
         raw = {}
@@ -63,7 +63,7 @@ def sort_by_complexity(mask_file_path, sorted_mask_file_path, min_pass_len):
             line = line.strip('\n')
             if line == '':
                 continue
-            if check_short_pass(line, min_pass_len): # skip 7 char lenghth
+            if check_short_pass(line, min_pass_len): # skip min_pass_len char lenghth
                 continue 
             total = 1
             for key, value in pos_dict.items():

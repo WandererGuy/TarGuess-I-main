@@ -64,8 +64,21 @@ import os
 from utils.train_pipeline import training
 
     
-    
-    
+def add_extra_mask(final_path):
+        # add phone and gid 
+        phone_flag = False
+        gid_flag = False
+        with open (final_path, 'r') as f:
+            lines = f.readlines()
+            if 'C\n' in lines: phone_flag = True
+            if 'G\n' in lines: gid_flag = True 
+
+        with open (final_path, 'a') as f:
+            if lines[-1].strip('\n').strip() != '':
+                f.write('\n')
+            if phone_flag: f.write('C\n')
+            if gid_flag: f.write('G')
+
         
 
 
@@ -85,7 +98,7 @@ async def preprocess_train_dataset(
     for item in [a, b, c, train_input_file]:
         if os.path.exists(item):
             os.remove(item)
-            print ('delete  ', item)
+            print ('delete', item)
 
     for item in [dataset_path, hash_dict_path]:
         if not os.path.exists(item):
@@ -98,15 +111,11 @@ async def preprocess_train_dataset(
         save_train_path = os.path.join(train_dataset_folder, save_name)
         save_train_json_path = os.path.join(train_dataset_folder, save_name_json)
         final_txt = load_config()['new_final_txt_path']
-
         # just remove to make sure new result do write 
         if os.path.exists(final_txt):
             os.remove(final_txt)
     except Exception as e:
         return reply_server_error(e)
-
-        # preprocess and validate dataset 
-
     raw_dataset_path, password_type = check_valid_and_refine(dataset_path)
     try:
         python_file = os.path.join(parent_dir, 'TRAIN', 'src', 'tailieuvn_data', 'create_train_dataset.py')
@@ -142,6 +151,8 @@ async def preprocess_train_dataset(
         if stderr:
             print("Errors:", stderr)
         time.sleep(3)
+
+
         new_name_file = os.path.basename(dataset_path).split('.')[0] + '.txt'
         name_output_file = os.path.join(parent_dir, 'process_name', 'output', new_name_file)
         print ('use pre final csv to generate name dict in ')
@@ -188,7 +199,6 @@ async def preprocess_train_dataset(
          
         url = f"http://{host_ip}:{port_num}/static/train_dataset/" + save_name_json
         convert_txt_to_json(save_train_path, save_train_json_path)
-        
         return reply_success(message = 'dataset ready for training', 
                              result = {
                             'save_train_path': fix_path(save_train_json_path), 
@@ -274,30 +284,23 @@ async def train_targuess(
     with open(train_input_path, 'r') as file:
         print ('load train input file...')
         data = json.load(file)
-        print ('load train input file done')
-
     try:    
-
         save_folder_name = str(uuid.uuid4()) 
         save_folder_path = os.path.join(train_result_folder, save_folder_name)
         os.makedirs(save_folder_path, exist_ok=True)
 
         target_train_output_path = os.path.join(save_folder_path, 'target_train_output.txt')     
         extra_target_train_output_path = os.path.join(save_folder_path, 'target_train_output_extra.txt') 
-        trawling_train_output_path = os.path.join(save_folder_path, 'trawling_train_output.txt')
-        extra_trawling_train_output_path = os.path.join(save_folder_path, 'trawling_train_output_extra.txt')
+        # trawling_train_output_path = os.path.join(save_folder_path, 'trawling_train_output.txt')
+        # extra_trawling_train_output_path = os.path.join(save_folder_path, 'trawling_train_output_extra.txt')
         final_path = os.path.join(save_folder_path,'train_result_refined.txt')
 
         print ('------------------------- start training -------------------------')
-        
         print ('lets start training')
         res = training(data,
-                       save_folder_path, 
-                    train_input_path, 
-                    target_train_output_path, 
-                    extra_target_train_output_path, 
-                    trawling_train_output_path,
-                    extra_trawling_train_output_path)
+                        target_train_output_path, 
+                        extra_target_train_output_path)        
+
         if res == "Done":
             print ('----- DONE TRAINING -----')
             print ('save train result in folder', save_folder_path)
@@ -327,6 +330,7 @@ async def train_targuess(
                 print("Errors:", stderr)
 
         url = f"http://{host_ip}:{port_num}/static/train_result/{save_folder_name}/" + 'train_result_refined.txt'
+        add_extra_mask(final_path)
 
         return reply_success(message = 'Done training and refine mask file, ready for infer (guess) password.',
                              result = {

@@ -46,14 +46,14 @@
 #     for line in ls:
 #         f.write(line)
 
-path = r"C:\Users\Admin\CODE\work\PASSWORD_CRACK\PASSCRACK_MATERIAL\WORDLISTS\ZING_TAILIEUVN_LEAK\RAW_MATERIALS\28M\28M-Vietnam-zing.vn-Leading-News-Platform-UsersDB-csv-2015.csv"
-ls = []
-with open(path, 'r', encoding='utf-8', errors='ignore') as f:
-    lines = f.readlines()
-    for index, line in enumerate(lines):
-        if 15902226 >= index >= 14853650:
-            ls.append(line)
-with open('xai.csv', 'w', encoding='utf-8', errors='ignore') as f:
-    for item in ls:
-        f.write(item)            
+# path = r"C:\Users\Admin\CODE\work\PASSWORD_CRACK\PASSCRACK_MATERIAL\WORDLISTS\ZING_TAILIEUVN_LEAK\RAW_MATERIALS\28M\28M-Vietnam-zing.vn-Leading-News-Platform-UsersDB-csv-2015.csv"
+# ls = []
+# with open(path, 'r', encoding='utf-8', errors='ignore') as f:
+#     lines = f.readlines()
+#     for index, line in enumerate(lines):
+#         if 16808989+2 >= index >= 14853650:
+#             ls.append(line)
+# with open('xai.csv', 'w', encoding='utf-8', errors='ignore') as f:
+#     for item in ls:
+#         f.write(item)  
 

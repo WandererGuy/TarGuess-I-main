@@ -1,50 +1,40 @@
 from GUESS_MASK.format_finder import create_format_dict
-import json
-from utils.train import deduplicate_dict, create_pattern, check_trawling_mask, collect_clue, \
-find_fill, sort_dict_by_occurence
+from utils.train import (deduplicate_dict, 
+                         create_pattern, 
+                         check_trawling_mask, 
+                         collect_clue, 
+                        find_fill, 
+                        sort_dict_by_occurence)
 import sys
 from tqdm import tqdm
 import os
-# import argparse
 
-# # Create the parser
-# parser = argparse.ArgumentParser(description="something")
-
-# # Add arguments
-# parser.add_argument('--save_folder_path', type=str)
-# parser.add_argument('--train_input_path', type=str)
-# parser.add_argument('--target_train_output_path', type=str)
-# parser.add_argument('--extra_target_train_output_path', type=str)
-# parser.add_argument('--trawling_train_output_path', type=str)
-# parser.add_argument('--extra_trawling_train_output_path', type=str)
-
-
-# Parse the arguments
-# args = parser.parse_args()
-
-# save_folder_path = args.save_folder_path
-# train_input_path = args.train_input_path
-
-# target_train_output_path = args.target_train_output_path
-# extra_target_train_output_path = args.extra_target_train_output_path
-# trawling_train_output_path = args.trawling_train_output_path
-# extra_trawling_train_output_path = args.extra_trawling_train_output_path
-'''
-from a password 
-find mask 
-find trawling fill dict 
-'''
 
 
 def training(data, 
-             save_folder_path, 
-             train_input_path, 
              target_train_output_path, 
-             extra_target_train_output_path, 
-             trawling_train_output_path,
-             extra_trawling_train_output_path):  
+             extra_target_train_output_path
+            ) -> str:
+    '''
+    Function:
+        from a person info and his/her password 
+        find the target mask for that password 
+    Process:
+        A person info can extract format dictionary 
+        from this format dictionary + person password, can find: target mask + trawling fill dictionary
+        to find the target mask:
+            by slowly replace part > 2 char, and following order of replace follow by 
+            cluster_dict = {'phone': ['C'], 
+                            'account': ['A', 'u', 'v'],
+                            'name': ['N', 'a', 'b', 'c', 'd', 'f', 'g', 'V', 'W', 'X'],
+                            'birth': ['O', 'Q', 'R', 'F', 'H', 'I', 'J', 'K', 'Y', 'Z', 'M'],
+                            'email': ['E', 's', 't'],
+                            'gid': ['G', 'w']}
+        to find trawling fill dictionary:
 
-    os.makedirs(save_folder_path, exist_ok = True)
+    
+    '''
+
     fail = 0 
     fill_class_dict = {}
     fill_dict = {}
@@ -55,10 +45,6 @@ def training(data,
     print ('Start training ...')
     for index, (key, value) in tqdm(enumerate(data.items()), 
                                               total = len(data)):
-        # if index > 10000:
-        #     break
-        # if index % 1000 == 0:
-        #     print ('index : ', key)
         
         try:
             email = key
@@ -81,12 +67,23 @@ def training(data,
             print (e) 
             fail += 1
             continue
-    print ('total fail : ', fail)
+    print ('total fail person info for training : ', fail)
 
     for item in tqdm(tmp_ls, total = len(tmp_ls)):
         password = item[0]
         all_dict = item[1]
+        # keep non-empty format and group format into 6 groups
+
+
         better_cluster = deduplicate_dict(collect_clue(all_dict))
+        '''
+        function: find clearer mask to find trawling strings that fill in target mask 
+        clearer mask : mask have no format mask key
+        example:
+            racingboycrazy123 -> clearer mask is: ---------crazy--- 
+            (where v, u is format mask key, v is account letter, u is account digit), 
+            'crazy' dont belong to any format so NOT be replaced by '-' 
+        '''
         python_pattern, clearer_mask = create_pattern(password, better_cluster)
         if check_trawling_mask(python_pattern) == False:
 
@@ -112,8 +109,6 @@ def training(data,
                         fill_dict[key] += value[1]
                     fill_class_dict[key] = (value[0], fill_dict[key])
 
-        
-                        
     sorted_dict = dict(sorted(all_pattern.items(), key=lambda item: item[1], reverse=True))
     total = 0 
     for key, value in sorted_dict.items():
@@ -128,8 +123,6 @@ def training(data,
     # with open('clearer_mask.txt', 'w') as file:
     #     for key, value in sorted_dict.items():
     #         file.write(f'{key}\t{value}\n')
-
-
 
     # with open('clearer_mask_better.txt', 'w') as file:
     res, res_prob = sort_dict_by_occurence(fill_class_dict)
@@ -155,7 +148,5 @@ def training(data,
                             first_value = item[first_key]
                             file_extra.write(f'{key}\t{first_key}\t{first_value}\n')
 
-            
-    
-    print ('Done')
+
     return 'Done'

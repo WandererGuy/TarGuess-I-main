@@ -24,6 +24,7 @@ os.makedirs(os.path.join('static','generated_target_fill_mask'), exist_ok=True)
 
 os.makedirs(os.path.join('GUESS_MASK','format_translation'), exist_ok=True)
 os.makedirs(os.path.join('GUESS','src', 'train_result'), exist_ok=True)
+os.makedirs(os.path.join('process_name','output'), exist_ok=True)
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename='fastapi.log', filemode='w')
 logger = logging.getLogger(__name__)
@@ -58,7 +59,7 @@ async def root():
 
 def main():
     change_ip_main()
-    sleep(1)
+    sleep(2)
     print('INITIALIZING FASTAPI SERVER')
     if empty_to_false(production) == False: 
         uvicorn.run("main:app", host=host_ip, port=int(port_num), reload=True, workers=1)

@@ -12,15 +12,11 @@ def create_format_dict(name_str: list,
                        ):
     '''
     simulate TRAIN\src\person.cpp in python 
+    given a person info, 
+    return a dictionary of format
     '''
     
     all_dict = {}
-    # print ('name_str', name_str)
-    # print ('birth', birth)
-    # print ('email', email)
-    # print ('phone', phone)
-    # print ('account', account)
-    # print ('gid', gid)
     ##### NAME #####
     tmp_5 = tmp_4 = tmp_2 = tmp_1 = tmp_0 = ''
     if len(name_str) == 0 or name_str == ['']:

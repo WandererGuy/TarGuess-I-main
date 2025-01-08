@@ -120,12 +120,6 @@ def fix_birthday(birthday):
                 if len(m) < 2:
                     m = '0' + m
             else:
-                # print ('******')
-                # print (birthday)
-                # Print the error message
-                # print(f"An error occurred: {e}")
-                # Print the traceback
-                # traceback.print_exc()
                 error_count += 1
                 return None
             final_birthday = f'{y}{m}{d}'
@@ -141,12 +135,6 @@ def fix_birthday(birthday):
                 if len(m) < 2:
                     m = '0' + m
             else:
-                # print ('******')
-                # print (birthday)
-                # Print the error message
-                # print(f"An error occurred: {e}")
-                # Print the traceback
-                # traceback.print_exc()
                 error_count += 1
                 return None
             final_birthday = f'{y}{m}{d}'
@@ -318,7 +306,7 @@ def main():
     config['raw_csv_path'] =  args.raw_dataset_path
     config['hash_dict_path'] = args.hash_dict_path
     flag = args.fix_name
-    print ('flag', flag)
+    
     if flag == 'False':
             print ('******* FIRST RUN create_train_dataset.py *******')
             update_raw_csv(config)  

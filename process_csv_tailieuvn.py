@@ -126,17 +126,80 @@ def main(test_file):
     # Save the DataFrame as a CSV file
     processed_df.to_csv(f'{save_folder}/{test_file_name}', index=False)
 
+def count_columns(csv_line):
+    inside_quote = False
+    columns = 0
+    for char in csv_line:
+        if char == '"':
+            inside_quote = not inside_quote
+        elif char == ',' and not inside_quote:
+            columns += 1
+    return columns + 1  # Add 1 for the last column
+
+
+
+
+def checking_invalid_line(folder, filename_ls, num_cols):
+    error_num = 0 
+    for filename in filename_ls:
+        
+        with open (os.path.join(folder, filename), 'r', encoding='utf-8', errors='ignore') as f:
+            print ('checking for error line in ', os.path.join(folder, filename))
+            lines = f.readlines()
+            for line in lines:
+                if count_columns(csv_line = line) != num_cols:                    
+                    error_num += 1
+        if error_num > 0:
+            print ('in file', os.path.join(folder, filename))
+            print ('error num', error_num)
+            print ('total line', len(lines))
+            raise Exception('file invalid lines, please fix it')
+
+
+def removing_invalid_line(folder, filename, num_cols):
+    '''
+    make sure the csv is good condition  to proceed to next step 
+    '''
+    valid_ls = []
+    # for filename in os.listdir(folder):
+    with open (os.path.join(folder, filename), 'r', encoding='utf-8', errors='ignore') as f:
+        print ('checking error line in ', os.path.join(folder, filename))
+        lines = f.readlines()
+        for line in lines:
+            if count_columns(csv_line = line) != num_cols:                    
+                # raise Exception('invalid line, please fix it')
+                pass
+            else:
+                valid_ls.append(line)
+    os.rename(os.path.join(folder, filename), os.path.join(folder, filename.replace('.csv', '_old.csv')))
+    with open (os.path.join(folder, filename), 'w', encoding='utf-8', errors='ignore') as f:
+        for item in valid_ls:
+            f.write(item)
+    print ('new file replace in same path', os.path.join(folder, filename))
 
 if __name__ == "__main__":
-    # zing = r"C:\Users\Admin\CODE\work\PASSWORD_CRACK\PASSCRACK_MATERIAL\WORDLISTS\ZING_TAILIEUVN_LEAK\28M_zing_split_cleaned"
+    '''
+    first check for file with error line 
+    then fix that specific file by removing_invalid_line fucntion
+    '''
     tailieu = r"C:\Users\Admin\CODE\work\PASSWORD_CRACK\PASSCRACK_MATERIAL\WORDLISTS\ZING_TAILIEUVN_LEAK\7M_split_cleaned"
-    # for filename in os.listdir(zing):
-    #     file_path = os.path.join(zing, filename)
-    #     print (file_path)
+    standard = 'csvid,username,password,email,firstname,lastname,birthday,gender,address,tel'
+    num_cols = count_columns(csv_line = standard)    
+    print ('number of columns', num_cols)
+
+    
+    fix_flag = False
+    filename_to_fix = None
+
+    if fix_flag == True:
+        removing_invalid_line(tailieu, 
+                              filename_to_fix, 
+                              num_cols)
+    filename_ls = os.listdir(tailieu)
+    checking_invalid_line(tailieu, filename_ls, num_cols)
+
 
     # for filename in os.listdir(tailieu):
-    #     file_path = os.path.join(tailieu, filename)
-    for filename in os.listdir(tailieu):
-            file_path = os.path.join(tailieu, filename)
-            main(test_file = file_path)
+    #         file_path = os.path.join(tailieu, filename)
+    #         main(test_file = file_path)
 

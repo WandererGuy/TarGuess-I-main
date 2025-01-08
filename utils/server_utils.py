@@ -35,26 +35,27 @@ def process_birthday(birthday):
     except ValueError:
         raise HTTPException(status_code=400, detail= "Invalid date. Please enter a valid date (e.g., DD-MM-YYYY).")
 
-def run_masklist(max_mask_generate, train_result_refined_path, name, birth, email, accountName, id, phone):
-    # Initializes an empty string for the full name
-    print ('Receiving inputs')
-
+def run_masklist(max_mask_generate: str, 
+                 train_result_refined_path: str, 
+                 name: str, 
+                 birth:str, 
+                 email:str, 
+                 accountName:str, 
+                 id:str, 
+                 phone:str
+                 ) -> tuple[str, str] :
+    '''
+    generate mask list for a target person
+    also, that mask list with probability for later pcfg wordlist creation
+    '''
     fullName = ''
     password = ''
     # Splits the name into a list and rearranges to last name first
     if name != '':
-        name = name.lower()
+        name = name.strip().lower()
         name = unidecode.unidecode(name)
-        name = name.strip()
         my_list = name.split(' ')
-        # if len(my_list) < 3:
-        #     message = "Full Name must have 3 or more compnents"
-        #     raise MyHTTPException(status_code=400,
-        #                             message = message)
-
-
         my_list = [my_list[-1]] + my_list[:-1]
-        # Joins elements with '|' and avoids extra '|' at the end
         for index, item in enumerate(my_list):
             if index == len(my_list) - 1:
                 fullName += item
@@ -76,24 +77,30 @@ def run_masklist(max_mask_generate, train_result_refined_path, name, birth, emai
     mask_prob_path = os.path.join('static','generated_target_masklist', file_mask.replace('.hcmask', '_prob.json'))
 
     python_file = os.path.join('GUESS_MASK','automate_cracking.py') 
-    # eragonkisyrong96@gmail.com	buiduymanh1996	manh		wantedbyzeus	01647732700	14-3-1995
+    cmd = ['python', 
+            python_file, 
+            '--mask_file_path', 
+            file_mask_path, 
+            '--target_info_file',
+            p,
+            '--max_mask_generate',
+            max_mask_generate, 
+            '--train_result_refined_path',
+            train_result_refined_path, 
+            '--mask_prob_path',
+            mask_prob_path
+            ]
     print ('command running python file to generate guesses')
-    print ('train_result_refined_path :', train_result_refined_path)
-    process = subprocess.Popen(['python', 
-                                python_file, 
-                                '--mask_file_path', 
-                                file_mask_path, 
-                                '--target_info_file',
-                                p,
-                                '--max_mask_generate',
-                                max_mask_generate, 
-                                '--train_result_refined_path',
-                                train_result_refined_path, 
-                                '--mask_prob_path',
-                                mask_prob_path
-                                ], 
+    cm = ' '.join(cmd)
+    print (cm)
+    print ('creating mask list using: ')
+    print ('Input: train_result_refined_path :')
+    print(train_result_refined_path)
+    print ('Output:')
+    print(file_mask_path)
+
+    process = subprocess.Popen(cmd, 
                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    print ('final out put in :', file_mask_path)
     stdout, stderr = process.communicate()
     print("Output:", stdout)
     if stderr:
