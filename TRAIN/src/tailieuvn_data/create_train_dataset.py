@@ -39,6 +39,9 @@ hash_dict = {}
 error_count = 0 
 
 NAME_OUTPUT_FILE = None
+
+
+
 def load_config(config_path=os.path.join('config','train.yaml')):
     with open(config_path, 'r') as file:
         return yaml.safe_load(file)
@@ -46,6 +49,7 @@ def load_config(config_path=os.path.join('config','train.yaml')):
 
 def create_hash_dict(hash_dict_path):
     global hash_dict
+    ('>>> creating_hash_dict, mapping hash to potfile <<<')
     with open (hash_dict_path, 'r', encoding='utf-8', errors='ignore') as f_dict:
         lines = f_dict.readlines()
         print ('element',len(lines))
@@ -66,8 +70,8 @@ def remove_nan(fullname):
 
 def turn_string(text):
     return str(text)
-def update_raw_csv(config):
-    csv_file = config['raw_csv_path']
+def update_raw_csv(raw_csv_path, update_csv_path):
+    csv_file = raw_csv_path
     df = pd.read_csv(csv_file)
     df = df.astype(str)
     new_df = df[['username', 'password', 'email', 'firstname', 'lastname', 'birthday', 'gender', 'address', 'tel']]
@@ -84,7 +88,7 @@ def update_raw_csv(config):
     new_df[['email_prefix', 'email_domain']] = new_df['email'].str.split('@', expand=True, n = 1) 
     new_df['email_prefix'] = new_df['email'] # well guess still need full email
     update_df = new_df[['username', 'password', 'plain_password', 'email_prefix','email_domain',  'fullname', 'birthday', 'gender', 'address', 'tel']]
-    update_df.to_csv(config['update_csv_path'], index=False)
+    update_df.to_csv(update_csv_path, index=False)
 
 def replace_password(hash_password):
     if hash_password in hash_dict:
@@ -93,6 +97,7 @@ def replace_password(hash_password):
         return None 
     
 def fill_plain_pass(config, password_type):
+    print('>>> fill_plain_pass <<<') 
     update_csv_file = config['update_csv_path']
     df = pd.read_csv(update_csv_file)
     df = df.map(turn_string)
@@ -102,7 +107,19 @@ def fill_plain_pass(config, password_type):
     else:
         df['plain_password'] = df['password']
     # Remove rows where 'plain_password' is None
-    df = df.dropna(subset=['plain_password'])
+    # for index, item in df['plain_password'].items():
+    #     if pd.isna(item) or item in [None, '', 'nan', 'None']:
+    #         remove_rows.append(index)
+
+    # df = df.drop(remove_rows)
+    df['plain_password'] = df['plain_password'].apply(lambda x: None if pd.isna(x) else x)
+
+    remove_row = []
+    for index, item in df['plain_password'].items():
+        if item == None:
+            remove_row.append(index)
+    print ('remove row with uncracked/invalid password (aka value == None)', len(remove_row))
+    df = df.drop(remove_row)
     print("Length of the DataFrame have plain crack:", len(df))
     return df
 
@@ -139,7 +156,7 @@ def fix_birthday(birthday):
                 return None
             final_birthday = f'{y}{m}{d}'
             final_birthday = final_birthday.split('.')[0] # in case floating value 
-            print (final_birthday)
+            
             return final_birthday
 
 def export_txt(input_filename, output_filename):
@@ -212,21 +229,30 @@ def finalize(config, df):
     new_df.to_csv(config['pre_final_csv_path'], index=False)
 
 miss_name = []
+pseudo_name = None
 def look_up(name, name_dict):
     global miss_name
     try:
-        return name_dict[name].lower() 
+        if name == None:
+            return pseudo_name
+        t  = name_dict[name].lower() 
+        if t == "none" or t.strip() == "":
+            miss_name.append(e)
+            return pseudo_name
+        return t
     except Exception as e: # not in dict name 
         miss_name.append(e)
-        return None
+        return pseudo_name
+    
 
 password_err = 0 
-def lower_word(word):
+def lower_word(password):
     global password_err
     try:
-        return word.lower()
+        return password.lower()
     except:
         password_err += 1
+        return None
 
 
 
@@ -257,6 +283,7 @@ def post_process_csv(new_final_csv_path, file_path):
     substitute name with fix name 
     if name == None -> delete row 
     write on new csv '''
+    print ('>>> post_process_csv <<<')
     name_dict = {}
     with open (NAME_OUTPUT_FILE, 'r') as file :
         lines = file.readlines()
@@ -268,7 +295,7 @@ def post_process_csv(new_final_csv_path, file_path):
                 if ori_name not in name_dict:
                     name_dict[ori_name] = fix_name
                 else:
-                    print ('WTF it duplicate lmao')
+                    pass
             else:
                 ori_name = line
 
@@ -278,18 +305,21 @@ def post_process_csv(new_final_csv_path, file_path):
     df['Birth'] = df['Birth'].apply(lambda x: handle_birth(x) if not pd.isna(x) else x)
     df['Birth'] = df['Birth'].fillna(pseudo_birthday).astype(int)
     df['Name'] = df['Name'].apply(lambda x: look_up(x, name_dict))
-    # lower password for simpler 
+    df['Name'] = df['Name'].apply(lambda x: pseudo_name if pd.isna(x) else x)
     df['Password'] = df['Password'].apply(lower_word)
     # for name == None or '' -> bad for learning folr model -> remove 
     remove_row = []
     for index, item in df['Name'].items():
-        if item == None or item == '' or item == 'nan' or item == 'None':
+        if item == pseudo_name:
             remove_row.append(index)
+    print ('remove row with invalid name', len(remove_row))
     df = df.drop(remove_row)
-    print ('******* done remove *******')
+    print ('******* done remove uncrack/invalid name *******')
+
         # df.at[index,'PossibleNameClue'] = xoa_dau(new_item).strip() 
     df.to_csv(new_final_csv_path, index=False)
 
+file_log = open('filelog.log', 'a')
 
 def main():
     global NAME_OUTPUT_FILE
@@ -307,14 +337,20 @@ def main():
     config['hash_dict_path'] = args.hash_dict_path
     flag = args.fix_name
     
-    if flag == 'False':
+    if flag == 'False': # before process name 
             print ('******* FIRST RUN create_train_dataset.py *******')
-            update_raw_csv(config)  
+            update_raw_csv(config['raw_csv_path'], config['update_csv_path'])  
             time.sleep(5)
             create_hash_dict(config['hash_dict_path'])
             df = fill_plain_pass(config, args.password_type)
             finalize(config, df)
-    else:
+    else: # after process name 
+            '''
+            FOR TRAIN SMOOTLY , i replace 
+            invalid name with pseudo name , 
+            invalid birthday with pseudo birthday 
+            and remove rows with uncrack password or invalid one 
+            '''
             print ('******* SECOND RUN create_train_dataset.py *******')
             save_train_path = args.save_train_path
             NAME_OUTPUT_FILE = args.name_output_file
@@ -325,9 +361,20 @@ def main():
             before_len =  len(pd.read_csv(config['raw_csv_path']))
             after_len = len(pd.read_csv(config['new_final_csv_path']))
             error_count = before_len - after_len
-            print ('invalid email, invalid name, invalid password')
-            print ('TOTAL have REMOVE ROWS', error_count)
-            print ('number of error password, have value is nan:',password_err)
+            # Open a file to write the output
+            # Log messages instead of printing
+            print('invalid name, invalid password')
+            print('number of REMOVE invalid names (except nan):', len(miss_name))
+            print('number of REMOVE uncrack password (except nan): ', password_err)
+            print('TOTAL have REMOVE ROWS (nan name + nan password + invali named + invalid password): ', error_count)
+            print('csv record number before: ', before_len)
+            print('csv record number after: ', after_len)
 
+            print('invalid name, invalid password', file=file_log)
+            print('number of REMOVE invalid names (except nan):', len(miss_name), file=file_log)
+            print('number of REMOVE uncrack password (except nan): ', password_err, file=file_log)
+            print('TOTAL have REMOVE ROWS (nan name + nan password + invali named + invalid password): ', error_count, file=file_log)
+            print('csv record number before: ', before_len, file=file_log)
+            print('csv record number after: ', after_len, file=file_log)
 if __name__ == "__main__":
     main()

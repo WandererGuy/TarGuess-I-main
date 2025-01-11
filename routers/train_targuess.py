@@ -89,6 +89,8 @@ async def preprocess_train_dataset(
     dataset_path: str = Form(...),
     hash_dict_path: str = Form(None)
     ):
+    
+    print ('\n\npreprocess train dataset', os.path.basename(dataset_path), file = open('filelog.log', 'a'))
     conf = load_config()
     a = conf['update_csv_path']
     b = conf['pre_final_csv_path']

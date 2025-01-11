@@ -8,7 +8,7 @@ from pathlib import Path
 import traceback
 import json 
 from utils.create_pcfg_wordlist import make_pcfg_wordlist
-from fill_mask import main_fill_mask, create_fill_json
+from utils.fill_mask import main_fill_mask, create_fill_json
 from routers.model import reply_bad_request, reply_server_error, reply_success, MyHTTPException
 config = configparser.ConfigParser()
 config.read('config/config.ini')
@@ -24,8 +24,8 @@ output_target_fill_mask_folder = os.path.join(static_folder, 'generated_target_f
 def fix_path(path):
     return path.replace('\\\\', '/').replace('\\', '/')
 
-from keywords_handle import main as main_kw
-from keywords_handle import kw_ls_check
+from utils.keywords_handle import main as main_kw
+from utils.keywords_handle import kw_ls_check
 import time 
 def check_name_valid(name = ''):
     if name != '':

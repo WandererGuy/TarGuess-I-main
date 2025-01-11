@@ -1,0 +1,51 @@
+processed_csv\tailieuvn_xaa.csv
+{'status_code': 200, 'message': 'dataset ready for training', 'result': {'save_train_path': 'C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/train_dataset/cebfe37a-1601-4eea-aac7-5de59526995e.json', 'url': 'http://192.168.1.2:4003/static/train_dataset/cebfe37a-1601-4eea-aac7-5de59526995e.json'}}
+
+processed_csv\tailieuvn_xab.csv
+{'status_code': 200, 'message': 'dataset ready for training', 'result': {'save_train_path': 'C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/train_dataset/ececac6c-ce4d-4bf2-ad00-338bd06da770.json', 'url': 'http://192.168.1.2:4003/static/train_dataset/ececac6c-ce4d-4bf2-ad00-338bd06da770.json'}}
+
+processed_csv\tailieuvn_xac.csv
+{'status_code': 200, 'message': 'dataset ready for training', 'result': {'save_train_path': 'C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/train_dataset/9ab69ec3-6953-40b7-9a72-027eb727d5a4.json', 'url': 'http://192.168.1.2:4003/static/train_dataset/9ab69ec3-6953-40b7-9a72-027eb727d5a4.json'}}
+
+processed_csv\zing_xaa.csv
+{'status_code': 200, 'message': 'dataset ready for training', 'result': {'save_train_path': 'C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/train_dataset/429805f8-c230-456c-984e-e62236c49e55.json', 'url': 'http://192.168.1.2:4003/static/train_dataset/429805f8-c230-456c-984e-e62236c49e55.json'}}
+
+processed_csv\zing_xab.csv
+{'status_code': 200, 'message': 'dataset ready for training', 'result': {'save_train_path': 'C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/train_dataset/79355263-2b13-4fd5-87b7-00190073cf67.json', 'url': 'http://192.168.1.2:4003/static/train_dataset/79355263-2b13-4fd5-87b7-00190073cf67.json'}}
+
+processed_csv\zing_xac.csv
+{'status_code': 200, 'message': 'dataset ready for training', 'result': {'save_train_path': 'C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/train_dataset/f7398009-9496-4a62-8b89-c8477b8ab02a.json', 'url': 'http://192.168.1.2:4003/static/train_dataset/f7398009-9496-4a62-8b89-c8477b8ab02a.json'}}
+
+processed_csv\zing_xad.csv
+{'status_code': 200, 'message': 'dataset ready for training', 'result': {'save_train_path': 'C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/train_dataset/90d1a2a4-4a0f-4f53-bd15-854b7358680a.json', 'url': 'http://192.168.1.2:4003/static/train_dataset/90d1a2a4-4a0f-4f53-bd15-854b7358680a.json'}}
+
+processed_csv\zing_xae.csv
+{'status_code': 200, 'message': 'dataset ready for training', 'result': {'save_train_path': 'C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/train_dataset/f7aa09a3-e186-45c2-9a2c-b30d8cba886c.json', 'url': 'http://192.168.1.2:4003/static/train_dataset/f7aa09a3-e186-45c2-9a2c-b30d8cba886c.json'}}
+
+processed_csv\zing_xaf.csv
+{'status_code': 200, 'message': 'dataset ready for training', 'result': {'save_train_path': 'C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/train_dataset/8dfbca65-790b-4cfd-bc44-5e422c85bf3a.json', 'url': 'http://192.168.1.2:4003/static/train_dataset/8dfbca65-790b-4cfd-bc44-5e422c85bf3a.json'}}
+
+processed_csv\zing_xag.csv
+{'status_code': 200, 'message': 'dataset ready for training', 'result': {'save_train_path': 'C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/train_dataset/13c68aad-7012-43a3-8a80-1dc6838097e8.json', 'url': 'http://192.168.1.2:4003/static/train_dataset/13c68aad-7012-43a3-8a80-1dc6838097e8.json'}}
+
+processed_csv\zing_xah.csv
+{'status_code': 200, 'message': 'dataset ready for training', 'result': {'save_train_path': 'C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/train_dataset/7bbb2f9a-397c-4ef2-b849-5ec9e90f461e.json', 'url': 'http://192.168.1.2:4003/static/train_dataset/7bbb2f9a-397c-4ef2-b849-5ec9e90f461e.json'}}
+
+processed_csv\zing_xai.csv
+{'status_code': 200, 'message': 'dataset ready for training', 'result': {'save_train_path': 'C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/train_dataset/7377024d-f915-42c7-961f-c8b320a5f87a.json', 'url': 'http://192.168.1.2:4003/static/train_dataset/7377024d-f915-42c7-961f-c8b320a5f87a.json'}}
+
+processed_csv\zing_xaj.csv
+{'status_code': 200, 'message': 'dataset ready for training', 'result': {'save_train_path': 'C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/train_dataset/6f4fecbe-9f53-49cc-9904-9ffd2fd882d2.json', 'url': 'http://192.168.1.2:4003/static/train_dataset/6f4fecbe-9f53-49cc-9904-9ffd2fd882d2.json'}}
+
+processed_csv\zing_xak.csv
+{'status_code': 200, 'message': 'dataset ready for training', 'result': {'save_train_path': 'C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/train_dataset/6761e29e-bf7e-4ef5-ba95-ba9ed47e7a41.json', 'url': 'http://192.168.1.2:4003/static/train_dataset/6761e29e-bf7e-4ef5-ba95-ba9ed47e7a41.json'}}
+
+processed_csv\zing_xal.csv
+{'status_code': 200, 'message': 'dataset ready for training', 'result': {'save_train_path': 'C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/train_dataset/b1cab516-2a58-4ebd-879a-ab5efefee95e.json', 'url': 'http://192.168.1.2:4003/static/train_dataset/b1cab516-2a58-4ebd-879a-ab5efefee95e.json'}}
+
+processed_csv\zing_xam.csv
+{'status_code': 200, 'message': 'dataset ready for training', 'result': {'save_train_path': 'C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/train_dataset/ec5291f1-2f60-4b7b-acec-f9ca58f53433.json', 'url': 'http://192.168.1.2:4003/static/train_dataset/ec5291f1-2f60-4b7b-acec-f9ca58f53433.json'}}
+
+processed_csv\zing_xan.csv
+{'status_code': 200, 'message': 'dataset ready for training', 'result': {'save_train_path': 'C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/train_dataset/f9cccb12-eb18-4e05-8fcc-30569038bce8.json', 'url': 'http://192.168.1.2:4003/static/train_dataset/f9cccb12-eb18-4e05-8fcc-30569038bce8.json'}}
+

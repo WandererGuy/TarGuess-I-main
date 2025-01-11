@@ -1,7 +1,7 @@
 # pcfg 
 from tqdm import tqdm
 
-from fill_mask import single_mask_analysis
+from utils.fill_mask import single_mask_analysis
 from itertools import product
 import time 
 

@@ -1,0 +1,152 @@
+-----------------------------------------------
+preprocess train dataset tailieuvn_xaa.csv
+invalid name, invalid password
+number of REMOVE invalid names (except nan): 226442
+number of REMOVE uncrack password (except nan):  0
+TOTAL have REMOVE ROWS (nan name + nan password + invali named + invalid password):  396777
+csv record number before:  2492588
+csv record number after:  2095811
+
+
+preprocess train dataset tailieuvn_xab.csv
+invalid name, invalid password
+number of REMOVE invalid names (except nan): 188281
+number of REMOVE uncrack password (except nan):  0
+TOTAL have REMOVE ROWS (nan name + nan password + invali named + invalid password):  395355
+csv record number before:  2325907
+csv record number after:  1930552
+
+
+preprocess train dataset tailieuvn_xac.csv
+invalid name, invalid password
+number of REMOVE invalid names (except nan): 304667
+number of REMOVE uncrack password (except nan):  253
+TOTAL have REMOVE ROWS (nan name + nan password + invali named + invalid password):  726994
+csv record number before:  2433393
+csv record number after:  1706399
+
+
+preprocess train dataset zing_xaa.csv
+invalid name, invalid password
+number of REMOVE invalid names (except nan): 124521
+number of REMOVE uncrack password (except nan):  20
+TOTAL have REMOVE ROWS (nan name + nan password + invali named + invalid password):  1467688
+csv record number before:  1812267
+csv record number after:  344579
+
+
+preprocess train dataset zing_xab.csv
+invalid name, invalid password
+number of REMOVE invalid names (except nan): 128828
+number of REMOVE uncrack password (except nan):  24
+TOTAL have REMOVE ROWS (nan name + nan password + invali named + invalid password):  1454352
+csv record number before:  1793663
+csv record number after:  339311
+
+
+preprocess train dataset zing_xac.csv
+invalid name, invalid password
+number of REMOVE invalid names (except nan): 138370
+number of REMOVE uncrack password (except nan):  12
+TOTAL have REMOVE ROWS (nan name + nan password + invali named + invalid password):  1484679
+csv record number before:  1816348
+csv record number after:  331669
+
+
+preprocess train dataset zing_xad.csv
+invalid name, invalid password
+number of REMOVE invalid names (except nan): 142741
+number of REMOVE uncrack password (except nan):  14
+TOTAL have REMOVE ROWS (nan name + nan password + invali named + invalid password):  1480446
+csv record number before:  1822682
+csv record number after:  342236
+
+
+preprocess train dataset zing_xae.csv
+invalid name, invalid password
+number of REMOVE invalid names (except nan): 150603
+number of REMOVE uncrack password (except nan):  10
+TOTAL have REMOVE ROWS (nan name + nan password + invali named + invalid password):  1564119
+csv record number before:  1862642
+csv record number after:  298523
+
+
+preprocess train dataset zing_xaf.csv
+invalid name, invalid password
+number of REMOVE invalid names (except nan): 113927
+number of REMOVE uncrack password (except nan):  7
+TOTAL have REMOVE ROWS (nan name + nan password + invali named + invalid password):  1524475
+csv record number before:  1821901
+csv record number after:  297426
+
+
+preprocess train dataset zing_xag.csv
+invalid name, invalid password
+number of REMOVE invalid names (except nan): 113010
+number of REMOVE uncrack password (except nan):  1
+TOTAL have REMOVE ROWS (nan name + nan password + invali named + invalid password):  1520154
+csv record number before:  1819523
+csv record number after:  299369
+
+
+preprocess train dataset zing_xah.csv
+invalid name, invalid password
+number of REMOVE invalid names (except nan): 113241
+number of REMOVE uncrack password (except nan):  1
+TOTAL have REMOVE ROWS (nan name + nan password + invali named + invalid password):  1668990
+csv record number before:  1943716
+csv record number after:  274726
+
+
+preprocess train dataset zing_xai.csv
+invalid name, invalid password
+number of REMOVE invalid names (except nan): 99569
+number of REMOVE uncrack password (except nan):  5
+TOTAL have REMOVE ROWS (nan name + nan password + invali named + invalid password):  1721284
+csv record number before:  1943668
+csv record number after:  222384
+
+
+preprocess train dataset zing_xaj.csv
+invalid name, invalid password
+number of REMOVE invalid names (except nan): 201115
+number of REMOVE uncrack password (except nan):  16
+TOTAL have REMOVE ROWS (nan name + nan password + invali named + invalid password):  1659862
+csv record number before:  1938705
+csv record number after:  278843
+
+
+preprocess train dataset zing_xak.csv
+invalid name, invalid password
+number of REMOVE invalid names (except nan): 175869
+number of REMOVE uncrack password (except nan):  33
+TOTAL have REMOVE ROWS (nan name + nan password + invali named + invalid password):  1612496
+csv record number before:  1932190
+csv record number after:  319694
+
+
+preprocess train dataset zing_xal.csv
+invalid name, invalid password
+number of REMOVE invalid names (except nan): 345898
+number of REMOVE uncrack password (except nan):  76
+TOTAL have REMOVE ROWS (nan name + nan password + invali named + invalid password):  1564065
+csv record number before:  1996769
+csv record number after:  432704
+
+
+preprocess train dataset zing_xam.csv
+invalid name, invalid password
+number of REMOVE invalid names (except nan): 401729
+number of REMOVE uncrack password (except nan):  32
+TOTAL have REMOVE ROWS (nan name + nan password + invali named + invalid password):  1702907
+csv record number before:  2058648
+csv record number after:  355741
+
+
+preprocess train dataset zing_xan.csv
+invalid name, invalid password
+number of REMOVE invalid names (except nan): 246565
+number of REMOVE uncrack password (except nan):  31
+TOTAL have REMOVE ROWS (nan name + nan password + invali named + invalid password):  1320444
+csv record number before:  1563119
+csv record number after:  242675

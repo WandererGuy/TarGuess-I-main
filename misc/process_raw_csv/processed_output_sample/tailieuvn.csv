@@ -1,0 +1,12 @@
+id,username,password,email,firstname,lastname,birthday,tel
+1,rinocococ,e10adc3949ba59abbe56e057f20f883e,vtailieu@gmail.com,Trâm,Từ Minh,19-1-1985,0973276483
+2,lamfriends2000,c640856549e3cf8dfd35274ad9e62736,lamfriends2000@yahoo.com,Lam,Thai Xuan,,
+3,hanguyen,a667f8ec02cb7d3f205a36658367169e,congha76@yahoo.com,Ha,Nguyen,,
+4,ngocanhcdtk5,e2f5bbdb11e0089051185fe540227f85,ngocanhcdtk5@gmail.com,Anh,Nguyen Ngoc,,
+5,manh_sanh_co_don,e2f5bbdb11e0089051185fe540227f85,ngocanha3@gmail.com,Anh,Nguyen Ngoc,,
+6,manh_sanh_co_don_cdt,e2f5bbdb11e0089051185fe540227f85,ngocanh_hy87@yahoo.com,Anh,Nguyen Ngoc,,
+7,nonameteam,d48b279000cc65c062cb1e1d4a979ba3,nnt@gmail.com,Noname,Team,,
+8,myphuong,e71c617b3b17ecc166a6a5a8eccf0302,cdspthk1142@qtttc.edu.vn,Phương,Nguyễn Thị Mỹ,,
+9,phuong_my,e71c617b3b17ecc166a6a5a8eccf0302,giotlesau_872000@yahoo.com,Phương,Nguyễn Thị Mỹ,,
+10,dangquangtai,11c0e20f98e63cc8049a7c6168f1f483,haiauvocanh_goikevodanh2005@yahoo.com,Tai,Dang Quang,,
+11,daiquangtang,11c0e20f98e63cc8049a7c6168f1f483,haiauvocanh_goikevodanh2005@gmail.com,Tang,Dai Quang,,

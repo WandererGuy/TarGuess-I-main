@@ -98,6 +98,8 @@ def convert_txt_to_json(txt_path, json_path):
                     continue
                 # email, password, name, gid, account, phone, birth = line.split('\t')
                 email, password, name, gid, account, phone, birth = data
+                
+                
                 person_dict[email] = {'password': password,
                                     'name': name,
                                     'gid': gid,

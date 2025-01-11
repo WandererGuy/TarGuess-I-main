@@ -57,3 +57,46 @@
 #     for item in ls:
 #         f.write(item)  
 
+
+
+
+import os 
+# for filename in os.listdir('processed_csv'):
+#     print (filename)
+import ast 
+file_ls = []
+ls = []
+with open ('test.txt', 'r') as f:
+    lines = f.readlines()
+    for line in lines:
+        line = line.strip('\n')
+        if line.startswith('pro'):
+            file_ls.append(line)
+        if line.startswith('{'):
+            converted_dict = ast.literal_eval(line)
+            ls.append(converted_dict['result']['save_train_path'])
+
+# print (len(ls))
+# print (len(os.listdir('processed_csv')))
+res = list(zip(file_ls, ls))
+for item in res:
+    print (item)
+
+def merge_json(json_ls, save_path):
+    big_dict = {}
+    import json 
+    for path in json_ls:
+        with open (path, 'r') as f:
+            t = json.load(f)
+            big_dict.update(t)
+            overwritten_keys = big_dict.keys() & t.keys()  # Find common keys
+            print("Overwritten keys number:", len(overwritten_keys))  # Output: Overwritten keys: {'b'}
+
+    with open (save_path, 'w') as f:
+        json.dump(big_dict, f)
+
+
+# import os 
+# json_ls = []
+# merge_json(json_ls = , 
+#             save_path = 'zing_tailieuvn.json')
