@@ -59,14 +59,37 @@
 
 
 
+def merge_json(json_ls, save_path):
+    big_dict = {}
+    import json 
+    overwritten_keys = []
+    for path in json_ls:
+        with open (path, 'r') as f:
+            t = json.load(f)
+            for key, value in t.items():
+                if key not in big_dict.keys():
+                    big_dict[key] = value
+                else: 
+                    
+                    overwritten_keys.append(key)
+            # big_dict.update(t)
+            # overwritten_keys = big_dict.keys() & t.keys()  # Find common keys
+    print("Overwritten keys number:", len(overwritten_keys))  # Output: Overwritten keys: {'b'}
+
+    with open (save_path, 'w') as f:
+        json.dump(big_dict, f, indent=4)
+
+
+import json 
+
 
 import os 
-# for filename in os.listdir('processed_csv'):
-#     print (filename)
 import ast 
 file_ls = []
 ls = []
-with open ('test.txt', 'r') as f:
+path = r'C:\Users\Admin\CODE\work\PASSWORD_CRACK\TarGuess-I-main\misc\process_raw_csv\auto_preprocess_API_result\replace_name\test.txt'
+
+with open (path, 'r') as f:
     lines = f.readlines()
     for line in lines:
         line = line.strip('\n')
@@ -76,27 +99,27 @@ with open ('test.txt', 'r') as f:
             converted_dict = ast.literal_eval(line)
             ls.append(converted_dict['result']['save_train_path'])
 
-# print (len(ls))
-# print (len(os.listdir('processed_csv')))
 res = list(zip(file_ls, ls))
 for item in res:
     print (item)
 
-def merge_json(json_ls, save_path):
-    big_dict = {}
-    import json 
-    for path in json_ls:
-        with open (path, 'r') as f:
-            t = json.load(f)
-            big_dict.update(t)
-            overwritten_keys = big_dict.keys() & t.keys()  # Find common keys
-            print("Overwritten keys number:", len(overwritten_keys))  # Output: Overwritten keys: {'b'}
 
-    with open (save_path, 'w') as f:
-        json.dump(big_dict, f)
+save_path = os.path.join('merge_json_replace_name', 'zing.json')
+t = {}
+for item in res:
+    t[item[0]] = item[1]
+
+m = 0
+json_ls = []
+for key, value in t.items():
+    if 'zing' in key:
+        json_ls.append(value)
+        with open (value, 'r') as f:
+            k = len(json.load(f))
+            print (k)
+            m += k
+print (m)
 
 
-# import os 
-# json_ls = []
-# merge_json(json_ls = , 
-#             save_path = 'zing_tailieuvn.json')
+merge_json(json_ls = json_ls, 
+            save_path = save_path)

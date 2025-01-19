@@ -24,3 +24,7 @@ TRAIN/src/training_output.txt
 /process_name/output
 TRAIN/src/tailieuvn_data/update_0.csv
 /process_name/output_old
+/merge_json
+/merge_json_replace_name
+TRAIN/src/tailieuvn_data/raw.csv
+TRAIN/src/tailieuvn_data/final.txt

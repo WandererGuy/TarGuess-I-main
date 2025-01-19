@@ -153,6 +153,7 @@ def main() -> None:
         lines = file.readlines()
         for line in lines:
             line = line.strip('\n').strip()
+            if line == '': continue
             raw, prob = line.split('\t')
             for mask in mask_ls:
                 if mask.mask_after_train == raw and mask.prob == 0.0:

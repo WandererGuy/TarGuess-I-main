@@ -50,12 +50,12 @@ def write_new_order(rule_file_path, new_order_path):
     print ('file path: ', rule_file_path)
     with open (rule_file_path, 'r') as file:
         data = file.readlines()
-        for index, item in enumerate(data):
+        for index, item in tqdm(enumerate(data), total = len(data)):
             if item == '\n':
                 final_data = data[:index]
                 break 
     
-    for index,item in enumerate(final_data):
+    for index,item in tqdm(enumerate(final_data), total = len(final_data)):
                 line = item.strip()
 
             # if line == '':
@@ -88,7 +88,7 @@ def write_new_order(rule_file_path, new_order_path):
                 probabilities_ls.append(prob)
                 first_ls_label.append(labels)
                 first_ls_prob.append(prob)
-                print (labels,prob)
+                # print (labels,prob)
 
             # label, prob = line.split("\t")
             # labels_probs.append((label, float(prob)))
@@ -100,9 +100,9 @@ def write_new_order(rule_file_path, new_order_path):
     with open(new_order_path, 'w', encoding='utf-8') as f:
         print ('start write to new order')
         l = len(first_ls_label)
-        for i in range(l):
+        for i in tqdm(range(l), total = l):
             try:
-                print (f'{i}/{l}')
+                # print (f'{i}/{l}')
                 
                 f.write(first_ls_label[i] + '\t' + str(first_ls_prob[i])+'\n')
             except:
@@ -156,6 +156,7 @@ def remove_duplicate_elements(input_file, output_file):
             if item == '\n':
                 final_data = data[index+1:]
                 break 
+        
     
     sample_class_ls = set()
     keep_ls = []

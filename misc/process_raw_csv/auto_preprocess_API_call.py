@@ -1,7 +1,6 @@
 
 import os 
 import requests
-test_ls = ['xak', 'xal', 'xam', 'xan']
 with open('test.txt', 'w', encoding = 'utf-8') as f:
     url = "http://192.168.1.2:4003/preprocess-train-dataset/"
     for filename in os.listdir('processed_csv'):

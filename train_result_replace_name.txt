@@ -1,0 +1,32 @@
+
+C:\Users\Admin\CODE\work\PASSWORD_CRACK\TarGuess-I-main\merge_json_replace_name\zing_tailieuvn.json
+{
+    "status_code": 200,
+    "message": "Done training and refine mask file, ready for infer (guess) password.",
+    "result": {
+        "train_result_refined_path": "C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/train_result/2911da79-f63c-4b1c-874a-839c37da85c8/train_result_refined.txt",
+        "url": "http://192.168.1.2:4003/static/train_result/2911da79-f63c-4b1c-874a-839c37da85c8/train_result_refined.txt"
+    }
+}
+
+
+
+C:\Users\Admin\CODE\work\PASSWORD_CRACK\TarGuess-I-main\merge_json_replace_name\tailieuvn.json
+{
+    "status_code": 200,
+    "message": "Done training and refine mask file, ready for infer (guess) password.",
+    "result": {
+        "train_result_refined_path": "C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/train_result/c25c07b8-8f16-45fe-82d8-45d08a550ec8/train_result_refined.txt",
+        "url": "http://192.168.1.2:4003/static/train_result/c25c07b8-8f16-45fe-82d8-45d08a550ec8/train_result_refined.txt"
+    }
+}
+
+C:\Users\Admin\CODE\work\PASSWORD_CRACK\TarGuess-I-main\merge_json_replace_name\zing.json
+{
+    "status_code": 200,
+    "message": "Done training and refine mask file, ready for infer (guess) password.",
+    "result": {
+        "train_result_refined_path": "C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/train_result/6eef2ebe-e6ed-406b-a669-80d4948fc930/train_result_refined.txt",
+        "url": "http://192.168.1.2:4003/static/train_result/6eef2ebe-e6ed-406b-a669-80d4948fc930/train_result_refined.txt"
+    }
+}

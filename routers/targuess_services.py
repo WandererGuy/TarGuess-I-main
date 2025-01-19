@@ -63,7 +63,7 @@ async def generate_target_wordlist(
     id_num: str = Form(None),
     phone: str = Form(None),
     max_mask_generate: str = Form(...), # given personal info , get available mask valid from top to bottom of refined train result
-    train_result_refined_path: str = Form(...),
+    train_result_refined_path: str = Form(...), # name of refined train result folder , not full path
     other_keywords: str = Form(None)
 ):
     min_pass_len = 4
@@ -76,16 +76,20 @@ async def generate_target_wordlist(
     phone = phone or ""
     other_keywords = other_keywords or ""
 
-    keyword_ls = other_keywords.split(',')
-    new_kw_ls = []
-    for kw in keyword_ls:
-        new_kw_ls.append(kw.replace(' ', ''))
-    res, false_kw = kw_ls_check(new_kw_ls)
-    if not res:
-        return reply_bad_request(f'keyword \'{false_kw}\' must be in same class: all letter, all digit or all special character')
+    if other_keywords.strip() != '':
 
+        keyword_ls = other_keywords.split(',')
+        new_kw_ls = []
+        for kw in keyword_ls:
+            new_kw_ls.append(kw.replace(' ', ''))
+        res, false_kw = kw_ls_check(new_kw_ls)
+        if not res:
+            return reply_bad_request(f'keyword \'{false_kw}\' must be in same class: all letter, all digit or all special character')
 
+    else:
+        new_kw_ls = []
 
+    train_result_refined_path = os.path.join(train_result_folder, train_result_refined_path, 'train_result_refined.txt')
     if not os.path.exists(train_result_refined_path):
         message = f"file_path {train_result_refined_path} does not exist"
         return reply_bad_request(message = message)
@@ -159,7 +163,7 @@ async def generate_target_mask_list(
     id_num: str = Form(None),
     phone: str = Form(None),
     max_mask_generate: str = Form(...),                          
-    train_result_refined_path: str = Form(...)
+    train_result_refined_path: str = Form(...) # name of refined train result folder , not full path
 ):
     '''
     generate mask list for a target person 
@@ -182,7 +186,8 @@ async def generate_target_mask_list(
     account_name = account_name or ""
     id_num = id_num or ""
     phone = phone or ""
-    
+
+    train_result_refined_path = os.path.join(train_result_folder, train_result_refined_path, 'train_result_refined.txt')
     if not os.path.exists(train_result_refined_path):
         message = f"file_path {train_result_refined_path} does not exist"
         return reply_bad_request(message = message)

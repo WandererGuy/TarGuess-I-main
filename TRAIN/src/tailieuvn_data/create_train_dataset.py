@@ -39,6 +39,12 @@ hash_dict = {}
 error_count = 0 
 
 NAME_OUTPUT_FILE = None
+# allow_drop_pseudo_name = True
+# pseudo_name = None
+
+
+allow_drop_pseudo_name = True
+pseudo_name = None
 
 
 
@@ -229,7 +235,7 @@ def finalize(config, df):
     new_df.to_csv(config['pre_final_csv_path'], index=False)
 
 miss_name = []
-pseudo_name = None
+
 def look_up(name, name_dict):
     global miss_name
     try:
@@ -308,36 +314,57 @@ def post_process_csv(new_final_csv_path, file_path):
     df['Name'] = df['Name'].apply(lambda x: pseudo_name if pd.isna(x) else x)
     df['Password'] = df['Password'].apply(lower_word)
     # for name == None or '' -> bad for learning folr model -> remove 
-    remove_row = []
-    for index, item in df['Name'].items():
-        if item == pseudo_name:
-            remove_row.append(index)
-    print ('remove row with invalid name', len(remove_row))
-    df = df.drop(remove_row)
-    print ('******* done remove uncrack/invalid name *******')
+    if allow_drop_pseudo_name:
+        remove_row = []
+        for index, item in df['Name'].items():
+            if item == pseudo_name:
+                remove_row.append(index)
+        print ('remove row with invalid name', len(remove_row))
+        df = df.drop(remove_row)
+        print ('******* done remove uncrack/invalid name *******')
 
         # df.at[index,'PossibleNameClue'] = xoa_dau(new_item).strip() 
     df.to_csv(new_final_csv_path, index=False)
 
 file_log = open('filelog.log', 'a')
 
+def none_mapping(text):
+    if text in ["None", "none"]:
+        return None 
+    else:
+        return text
+
+def bool_mapping(text):
+    if text in ["True", "true"]:
+        return True 
+    elif text in ["False", "false"]:
+        return False 
+    else:
+        raise Exception('cannot convert to bool value ')
+
 def main():
     global NAME_OUTPUT_FILE
+    global allow_drop_pseudo_name 
+    global pseudo_name 
+
     parser = argparse.ArgumentParser(description="parse input data")
     parser.add_argument('--raw_dataset_path', type=str)
     parser.add_argument('--password_type', type=str)
     parser.add_argument('--hash_dict_path', type=str)
     parser.add_argument('--save_train_path', type=str)
-    parser.add_argument('--fix_name', type=str)
+    parser.add_argument('--fix_name', type=str, help="fix name or not")
     parser.add_argument('--name_output_file', type=str)
-    
+    parser.add_argument('--allow_drop_pseudo_name', type=str, help="allow drop rows have value in name col == pseudo name")
+    parser.add_argument('--pseudo_name', type=str, help="pseudo_name to replace name is none")
+
     args = parser.parse_args()
     config = load_config()
     config['raw_csv_path'] =  args.raw_dataset_path
     config['hash_dict_path'] = args.hash_dict_path
-    flag = args.fix_name
     
-    if flag == 'False': # before process name 
+    allow_drop_pseudo_name = bool_mapping(args.allow_drop_pseudo_name)
+    pseudo_name = none_mapping(args.pseudo_name)
+    if bool_mapping(args.fix_name) == False: # before process name 
             print ('******* FIRST RUN create_train_dataset.py *******')
             update_raw_csv(config['raw_csv_path'], config['update_csv_path'])  
             time.sleep(5)

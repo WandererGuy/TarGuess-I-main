@@ -122,6 +122,13 @@ async def preprocess_train_dataset(
     try:
         python_file = os.path.join(parent_dir, 'TRAIN', 'src', 'tailieuvn_data', 'create_train_dataset.py')
 
+        fix_name_first = 'False'
+        fix_name_second = 'True'
+        allow_drop_pseudo_name = 'False'
+        pseudo_name = "Khoai Phan Long"
+
+        # allow_drop_pseudo_name = 'True'
+        # pseudo_name = "None"
 
 #### create prefinal file -> use it it create process_name output -> create final file
         command = ['python', 
@@ -135,11 +142,15 @@ async def preprocess_train_dataset(
                 '--save_train_path',
                 save_train_path, 
                 '--fix_name',
-                'False', 
+                fix_name_first, 
                 '--name_output_file',
-                'random_name.txt'
+                'random_name.txt', # doesnt matter the name thsi time
+                '--allow_drop_pseudo_name', 
+                allow_drop_pseudo_name, 
+                '--pseudo_name', 
+                pseudo_name
                 ]
-        cm = ' '.join(command)
+        cm = ' '.join(str(elem) for elem in command)
         print ('running command ')
         print (cm)
         process = subprocess.Popen(command, 
@@ -167,7 +178,7 @@ async def preprocess_train_dataset(
         else:
             raise MyHTTPException(status_code=500, message='process_name something error happening')
 
-
+        
         command = ['python', 
                 python_file, 
                 '--raw_dataset_path', 
@@ -179,11 +190,15 @@ async def preprocess_train_dataset(
                 '--save_train_path',
                 save_train_path, 
                 '--fix_name',
-                'True', 
+                fix_name_second, 
                 '--name_output_file',
-                name_output_file
+                name_output_file,
+                '--allow_drop_pseudo_name', 
+                allow_drop_pseudo_name, 
+                '--pseudo_name', 
+                pseudo_name
                 ]
-        cm = ' '.join(command)
+        cm = ' '.join(str(elem) for elem in command)
         print ('running command ', cm)
         process = subprocess.Popen(command, 
                                 stdout=subprocess.PIPE, 
@@ -336,7 +351,8 @@ async def train_targuess(
 
         return reply_success(message = 'Done training and refine mask file, ready for infer (guess) password.',
                              result = {
-                                "train_result_refined_path": fix_path(final_path),
+                                "train_result_refined_path": save_folder_name,
+                                "train_result_refined_full_path": fix_path(final_path),
                                 "url": url}
                                 )
     except Exception as e:

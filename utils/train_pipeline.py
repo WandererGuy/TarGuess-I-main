@@ -45,11 +45,13 @@ def training(data,
     print ('Start training ...')
     for index, (key, value) in tqdm(enumerate(data.items()), 
                                               total = len(data)):
-        
+        total = len(data)
+        if index == total - 1:
+            print ('finished loop')
         try:
             email = key
             password = value['password']
-            name = value['name']
+            name = value['name'].lower()
             gid = value['gid']
             account = value['account']
             phone = value['phone']
@@ -113,8 +115,8 @@ def training(data,
     total = 0 
     for key, value in sorted_dict.items():
         total += value
-    with open (extra_target_train_output_path, 'w') as f_extra:
-        with open (target_train_output_path, 'w') as f:
+    with open (extra_target_train_output_path, 'w', encoding='utf-8', errors='ignore') as f_extra:
+        with open (target_train_output_path, 'w', encoding='utf-8', errors='ignore') as f:
             for key, value in sorted_dict.items():
                 f.write(f'{key}\t{float(value/total)}\n')
                 f_extra.write(f'{key}\t{value}\n')
@@ -126,7 +128,7 @@ def training(data,
 
     # with open('clearer_mask_better.txt', 'w') as file:
     res, res_prob = sort_dict_by_occurence(fill_class_dict)
-    with open (target_train_output_path, 'a') as file:
+    with open (target_train_output_path, 'a', encoding='utf-8', errors='ignore') as file:
         file.write('\n')
         for i in ['D', 'L', 'S']:
             for j in range (1, 50):
@@ -137,7 +139,7 @@ def training(data,
                             first_value = item[first_key]
                             file.write(f'{key}\t{first_key}\t{first_value}\n')
 
-    with open(extra_target_train_output_path, 'a') as file_extra:
+    with open(extra_target_train_output_path, 'a', encoding='utf-8', errors='ignore') as file_extra:
         file_extra.write('\n')
         for i in ['D', 'L', 'S']:
             for j in range (1, 50):
