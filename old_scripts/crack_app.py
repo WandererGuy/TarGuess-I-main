@@ -93,7 +93,7 @@ def main(name='', birth='', email='', accountName='', id='', phone=''):
     print ('running batch file to generate guesses')
     result = subprocess.run(['python', python_file], capture_output=True, text=True)
     print("Output:", result.stdout)
-    if result.stderr == None:
+    if result.stderr != None and result.stderr != '':
         print("Errors:", result.stderr)   
     # with open ("GUESS/src/result_folder/output.txt", "r") as f_output:
     # output = f_output.read()

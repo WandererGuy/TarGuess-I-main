@@ -138,6 +138,8 @@ async def generate_target_wordlist(
         pcfg_wordlist_name = wordlist_name.replace(".txt", "_pcfg.txt")
         target_wordlist_path  = os.path.join(output_wordlist_folder, wordlist_name)
         target_pcfg_wordlist_path = os.path.join(output_wordlist_folder, pcfg_wordlist_name)
+
+
         main_fill_mask(mask_fill_dictionary, sorted_mask_file_path, target_wordlist_path, only_wordlist = True)
 
         make_pcfg_wordlist(mask_fill_dictionary = additional_json_dict, 
@@ -147,10 +149,12 @@ async def generate_target_wordlist(
         url = f"http://{host_ip}:{port_num}/static/generated_target_wordlist/" + wordlist_name
         url_pcfg = f"http://{host_ip}:{port_num}/static/generated_target_wordlist/" + pcfg_wordlist_name
         return reply_success(message = "Result saved successfully", 
-                             result = {"path":fix_path(target_wordlist_path), 
+                             result = {
+                                        "path":fix_path(target_wordlist_path), 
                                        "pcfg_path":fix_path(target_pcfg_wordlist_path),
                                        "url":url,
-                                        "url_pcfg":url_pcfg})
+                                        "url_pcfg":url_pcfg
+                                        })
     except Exception as e:
         return reply_server_error(message = str(e))
     

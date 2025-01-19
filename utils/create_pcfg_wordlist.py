@@ -6,6 +6,7 @@ from itertools import product
 import time 
 
 MAX_VOCAB = 10
+MAX_MASK_NUM = 1000
 def create_wordlist_single_mask(single_mask, mask_fill_dictionary, mask_prob):
     # single_mask = '?d?dbombay?d'
     res = single_mask_analysis(single_mask, mask_fill_dictionary)
@@ -48,7 +49,7 @@ import json
 
 def make_pcfg_wordlist(mask_fill_dictionary, mask_prob_path, destination_pcfg_wordlist_path):
     all_pcfg_wordlist = {}
-    
+    print ('creating pcfg wordlist ...')
     with open(mask_prob_path, 'r') as f:
         t = json.load(f)
         for key, value in tqdm(t.items(), total = len(t.keys())):
@@ -58,9 +59,12 @@ def make_pcfg_wordlist(mask_fill_dictionary, mask_prob_path, destination_pcfg_wo
             single_mask_wordlist_dict = create_wordlist_single_mask(single_mask, mask_fill_dictionary, mask_prob)
             for key, value in single_mask_wordlist_dict.items():
                 all_pcfg_wordlist = add_to_dict(key, value, all_pcfg_wordlist)
-
+            
     sorted_items_desc = sorted(all_pcfg_wordlist.items(), key=lambda item: item[1], reverse=True)
 
+
+    print ('finished creating pcfg wordlist, writing to file ...')
+    print ('total len of pcfg wordlist: ', len(sorted_items_desc))
     with open(destination_pcfg_wordlist_path, 'w') as f:
         for key, value in tqdm(sorted_items_desc, total = len(sorted_items_desc)):
             f.write(f'{key}\t{value}\n')

@@ -103,7 +103,7 @@ def run_masklist(max_mask_generate: str,
                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     stdout, stderr = process.communicate()
     print("Output:", stdout)
-    if stderr:
+    if stderr != '' and stderr != None:
         print("Errors:", stderr)
     
     return file_mask_path, mask_prob_path

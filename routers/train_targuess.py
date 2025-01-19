@@ -249,7 +249,7 @@ async def train_targuess_cpp(
         batch_file = "train_command.bat"
         result = subprocess.run([batch_file], capture_output=True, text=True)
         print("Output:", result.stdout)
-        if result.stderr == None:
+        if result.stderr != None:
             print("Errors:", result.stderr)   
         print ('done running train_command.bat, result in GUESS/src/train_result/OUTPUT_TRAIN.txt')  
         print ('------------------------- refine template mask file for inference -------------------------')
