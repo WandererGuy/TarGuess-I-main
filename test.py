@@ -59,67 +59,121 @@
 
 
 
-def merge_json(json_ls, save_path):
-    big_dict = {}
-    import json 
-    overwritten_keys = []
-    for path in json_ls:
-        with open (path, 'r') as f:
-            t = json.load(f)
-            for key, value in t.items():
-                if key not in big_dict.keys():
-                    big_dict[key] = value
-                else: 
+# def merge_json(json_ls, save_path):
+#     big_dict = {}
+#     import json 
+#     overwritten_keys = []
+#     for path in json_ls:
+#         with open (path, 'r') as f:
+#             t = json.load(f)
+#             for key, value in t.items():
+#                 if key not in big_dict.keys():
+#                     big_dict[key] = value
+#                 else: 
                     
-                    overwritten_keys.append(key)
-            # big_dict.update(t)
-            # overwritten_keys = big_dict.keys() & t.keys()  # Find common keys
-    print("Overwritten keys number:", len(overwritten_keys))  # Output: Overwritten keys: {'b'}
+#                     overwritten_keys.append(key)
+#             # big_dict.update(t)
+#             # overwritten_keys = big_dict.keys() & t.keys()  # Find common keys
+#     print("Overwritten keys number:", len(overwritten_keys))  # Output: Overwritten keys: {'b'}
 
-    with open (save_path, 'w') as f:
-        json.dump(big_dict, f, indent=4)
-
-
-import json 
+#     with open (save_path, 'w') as f:
+#         json.dump(big_dict, f, indent=4)
 
 
-import os 
-import ast 
-file_ls = []
-ls = []
-path = r'C:\Users\Admin\CODE\work\PASSWORD_CRACK\TarGuess-I-main\misc\process_raw_csv\auto_preprocess_API_result\replace_name\test.txt'
-
-with open (path, 'r') as f:
-    lines = f.readlines()
-    for line in lines:
-        line = line.strip('\n')
-        if line.startswith('pro'):
-            file_ls.append(line)
-        if line.startswith('{'):
-            converted_dict = ast.literal_eval(line)
-            ls.append(converted_dict['result']['save_train_path'])
-
-res = list(zip(file_ls, ls))
-for item in res:
-    print (item)
+# import json 
 
 
-save_path = os.path.join('merge_json_replace_name', 'zing.json')
-t = {}
-for item in res:
-    t[item[0]] = item[1]
+# import os 
+# import ast 
+# file_ls = []
+# ls = []
+# path = r'C:\Users\Admin\CODE\work\PASSWORD_CRACK\TarGuess-I-main\misc\process_raw_csv\auto_preprocess_API_result\replace_name\test.txt'
 
-m = 0
-json_ls = []
-for key, value in t.items():
-    if 'zing' in key:
-        json_ls.append(value)
-        with open (value, 'r') as f:
-            k = len(json.load(f))
-            print (k)
-            m += k
-print (m)
+# with open (path, 'r') as f:
+#     lines = f.readlines()
+#     for line in lines:
+#         line = line.strip('\n')
+#         if line.startswith('pro'):
+#             file_ls.append(line)
+#         if line.startswith('{'):
+#             converted_dict = ast.literal_eval(line)
+#             ls.append(converted_dict['result']['save_train_path'])
+
+# res = list(zip(file_ls, ls))
+# for item in res:
+#     print (item)
 
 
-merge_json(json_ls = json_ls, 
-            save_path = save_path)
+# save_path = os.path.join('merge_json_replace_name', 'zing.json')
+# t = {}
+# for item in res:
+#     t[item[0]] = item[1]
+
+# m = 0
+# json_ls = []
+# for key, value in t.items():
+#     if 'zing' in key:
+#         json_ls.append(value)
+#         with open (value, 'r') as f:
+#             k = len(json.load(f))
+#             print (k)
+#             m += k
+# print (m)
+
+
+# merge_json(json_ls = json_ls, 
+#             save_path = save_path)
+
+
+import requests
+
+
+import configparser
+config = configparser.ConfigParser()
+config.read('config/config.ini')
+
+host_ip = config['DEFAULT']['host']
+TARGUESS_PORT_NUM = int(config['DEFAULT']['port_validate_input_server'])
+targuess_url = f"http://{host_ip}:{TARGUESS_PORT_NUM}/validate-input-server/"
+import requests
+def targuess_validate_input_for_app(target_info: dict, targuess_url):
+    '''
+    return 
+        {
+    "status_code": 200,
+    "message": "Result saved successfully",
+    "result": {
+        "path": "C:/Users/Admin/CODE/work/PASSWORD_CRACK/TarGuess-I-main/static/generated_target_wordlist/1da75da8-fc05-4aa8-8424-486ba44182b0.txt",
+        "url": "http://192.168.1.5:4003/static/generated_target_wordlist/1da75da8-fc05-4aa8-8424-486ba44182b0.txt"
+    }
+}
+    '''
+    payload = {
+    'full_name': target_info['full_name'],
+    'birth': target_info['birth'], 
+    'email': target_info['email'],
+    'account_name': target_info['account_name'],
+    'id_num': target_info['id_num'],
+    'phone': target_info['phone'],
+    'other_keywords': target_info['other_keywords']}
+    files=[
+    ]
+    headers = {}
+    response = requests.request("POST", targuess_url, headers=headers, data=payload, files=files)
+    print ('lolllllllllllllllllllllllllllllllllllllllll')
+    print (response.json())
+    return response
+
+
+full_name = "duong duc manh"
+target_info = {
+    "full_name": full_name,
+    "birth": '',
+    "email": '',
+    "account_name": '',
+    "id_num": '',
+    "phone": '',
+    "other_keywords": ''
+}
+
+targuess_validate_input_for_app(target_info, targuess_url)

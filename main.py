@@ -34,6 +34,8 @@ config.read(os.path.join('config','config.ini'))
 host_ip = config['DEFAULT']['host'] 
 port_num = config['DEFAULT']['port'] 
 production = config['DEFAULT']['production']
+script_name = "main"
+
 app = FastAPI()
 app.include_router(tar.router)
 app.include_router(train.router)
@@ -62,8 +64,8 @@ def main():
     sleep(2)
     print('INITIALIZING FASTAPI SERVER')
     if empty_to_false(production) == False: 
-        uvicorn.run("main:app", host=host_ip, port=int(port_num), reload=True, workers=1)
-    else: uvicorn.run("main:app", host=host_ip, port=int(port_num), reload=False, workers=1)
+        uvicorn.run(f"{script_name}:app", host=host_ip, port=int(port_num), reload=True, workers=1)
+    else: uvicorn.run(f"{script_name}:app", host=host_ip, port=int(port_num), reload=False, workers=1)
 
 if __name__ == "__main__":
     main()

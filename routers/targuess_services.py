@@ -6,6 +6,8 @@ from utils.server_utils import *
 from utils.sort_complexity import * 
 from pathlib import Path
 import traceback
+from frontend_validation import target_input_validation, kw_ls_check, is_utf8, empty_to_none
+
 import json 
 from utils.create_pcfg_wordlist import make_pcfg_wordlist
 from utils.fill_mask import main_fill_mask, create_fill_json
@@ -38,7 +40,27 @@ def check_name_valid(name = ''):
             raise MyHTTPException(status_code=400,
                                     message = message)
 
-
+port_validate_input_server = int(config['DEFAULT']['port_validate_input_server'])
+TARGUESS_VALIDATE_INPUT_URL = f"http://{host_ip}:{port_validate_input_server}/validate-input-server/"
+import requests
+def targuess_validate_input_for_app(target_info: dict):
+    if "other_keywords" not in target_info:
+        target_info['other_keywords'] = ''
+    print ('start validating input ...')
+    if target_info['other_keywords'].strip() != '':
+        keyword_ls = target_info['other_keywords'].split(',')
+        new_kw_ls = []
+        for kw in keyword_ls:
+            new_kw_ls.append(kw.replace(' ', ''))
+        res, false_kw = kw_ls_check(new_kw_ls)
+        if not res:
+            return reply_bad_request(f'keyword \'{false_kw}\' must be in same class: all letter, all digit or all special character')
+    # standardize input 
+    for key, value in target_info.items():
+        target_info[key] = empty_to_none(value)
+        if target_info[key] != None:
+            is_utf8(target_info[key])
+    target_input_validation(target_info)
 '''
 normal wordlist :
 - sorted mask file by keyspqce (or complexity)
@@ -95,6 +117,20 @@ async def generate_target_wordlist(
         return reply_bad_request(message = message)
 
 
+    '''
+    validating full scan again 
+    '''
+    target_info = {
+        "full_name": full_name,
+        "birth": birth,
+        "email": email,
+        "account_name": account_name,
+        "id_num": id_num,
+        "phone": phone,
+        "other_keywords": other_keywords
+    }
+    targuess_validate_input_for_app(target_info)
+    print ('validate input done')
 
     print ('start making json fill dictionary')
     folder_parent = os.path.dirname(train_result_refined_path)
@@ -107,6 +143,10 @@ async def generate_target_wordlist(
         fill_mask_path, 
         fill_mask_target_path)
     time.sleep(2)
+
+
+
+
     mask_fill_dictionary, additional_json_dict = create_fill_json(fill_mask_path, fill_mask_target_json_path, additional_json_path)
     
     # with open (fill_mask_target_json_path, 'w') as file:
@@ -195,6 +235,17 @@ async def generate_target_mask_list(
     if not os.path.exists(train_result_refined_path):
         message = f"file_path {train_result_refined_path} does not exist"
         return reply_bad_request(message = message)
+    
+    target_info = {
+        "full_name": full_name,
+        "birth": birth,
+        "email": email,
+        "account_name": account_name,
+        "id_num": id_num,
+        "phone": phone,
+    }
+    targuess_validate_input_for_app(target_info)
+    print ('validate input done')
 
     try:
         output, _ = run_masklist(max_mask_generate, 
