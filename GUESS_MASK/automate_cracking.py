@@ -38,9 +38,15 @@ def replace_format(max_mask_generate: int,
     '''
     name_str, birth, email, phone, account, gid = info_dict['name_str'], info_dict['birth'], info_dict['email'], info_dict['phone'], info_dict['account'], info_dict['gid']
     format_dict = create_format_dict(name_str, birth, email, phone, account, gid)
+    
+        
     raw_lst = []
     new_lst = []
     count = 0 
+    
+    
+    
+    
     for key, value in format_dict.items():
         print (key, '\t', value)
     with open (train_result_refined_path, 'r') as file:
@@ -67,8 +73,8 @@ def replace_format(max_mask_generate: int,
             raw_lst.append(raw)
             new_lst.append(new)
             count += 1
-            print ('count valid mask :', count)
-            print (raw, '\t', new)
+            # print ('count valid mask :', count)
+            # print (raw, '\t', new)
             # print (raw, '\t', new)
     return raw_lst, new_lst
 

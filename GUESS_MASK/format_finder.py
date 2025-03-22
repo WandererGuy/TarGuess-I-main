@@ -20,7 +20,16 @@ def create_format_dict(name_str: list,
     ##### NAME #####
     tmp_5 = tmp_4 = tmp_2 = tmp_1 = tmp_0 = ''
     if len(name_str) == 0 or name_str == ['']:
-        pass
+        all_dict['N'] = ''
+        all_dict['a'] = ''
+        all_dict['b'] = ''
+        all_dict['c'] = ''
+        all_dict['d'] = ''
+        all_dict['f'] = ''
+        all_dict['g'] = ''
+        all_dict['V'] = ''
+        all_dict['W'] = ''
+        all_dict['X'] = ''
             
     else:
         for i in range (len(name_str)):
@@ -51,6 +60,17 @@ def create_format_dict(name_str: list,
         all_dict['X'] = tmp_5 + name_str[0][0]
                                                     ##### BIRTH #####
     if birth == '' or len(birth) != 8:
+        all_dict['O'] = ''
+        all_dict['Q'] = ''
+        all_dict['R'] = ''
+        all_dict['F'] = ''
+        all_dict['H'] = ''
+        all_dict['I'] = ''
+        all_dict['J'] = ''
+        all_dict['K'] = ''
+        all_dict['Y'] = ''
+        all_dict['Z'] = ''
+        all_dict['M'] = ''
         pass
     else:
         all_dict['O'] = birth[4:6]
